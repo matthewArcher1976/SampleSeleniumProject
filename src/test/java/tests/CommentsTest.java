@@ -105,7 +105,5 @@ public class CommentsTest {
         WebElement label = comments.enterNameLabel();
         comments.guestCheckbox().click();
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(label)), "piece of shit");
-
     }
-
 }

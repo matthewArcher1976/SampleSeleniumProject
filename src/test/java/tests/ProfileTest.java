@@ -3,6 +3,7 @@ package tests;
 
 import helpers.Drivers;
 import helpers.Logins;
+import helpers.PageActions;
 import helpers.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -124,7 +125,8 @@ public class ProfileTest {
                 for (String word : words) {
                     if (word.startsWith("@")) {
                         String otherUserName = word.substring(1);
-                        post.findElement(By.cssSelector("a[href]")).click();
+
+                        post.findElement(By.cssSelector("a[class='flex gap-x-2 items-center text-primary']")).click();
                         Waiter.wait(driver).until(ExpectedConditions.urlContains(otherUserName));
                         try {
                             Assert.assertTrue(profilePage.editButton().isDisplayed());
@@ -180,7 +182,7 @@ public class ProfileTest {
     public void HoverEditButton() {
         Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(84, 79, 79, 1)", "Background color before hover should be rgba(84, 79, 79, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.editButton()).perform();
-        Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(68, 64, 64, 1)", "Background color on hover should be rgba(68, 64, 64, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
+        Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(66, 62, 62, 1)", "Background color on hover should be rgba(68, 64, 64, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
     }
 
     @Test
@@ -249,6 +251,7 @@ public class ProfileTest {
 
     @Test
     public void HoverWishlistLink() throws InterruptedException {
+        Thread.sleep(10000);
         Assert.assertTrue(profilePage.amazonLink().isDisplayed(), "Add a link to user's Facebook to proceed with this test");
         Assert.assertEquals(profilePage.amazonLink().getCssValue("background-color"), "rgba(255, 153, 0, 1)", "Background color before hover should be rgba(255, 153, 0, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.amazonLink()).perform();
@@ -274,9 +277,34 @@ public class ProfileTest {
         profilePage.tabFollowing().click();
         Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("[id^='user-card-']"), 0));
         int first = profilePage.allFollowers().size();
-        helpers.PageActions.scrollDown(driver, 2);
+        PageActions.scrollDown(driver, 2);
         int second = profilePage.allFollowers().size();
         Assert.assertTrue(second > first, "Cards do not seem to be loading when you scroll down");
+    }
+
+    @Test
+    public void NFTSubmitWallet(){
+        profilePage.nftTab().click();
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("nft"));
+        PageActions.scrollDown(driver, 1);
+        profilePage.nftWalletInput().sendKeys("0x4675C7e5BaAFBFFbca748158bEcBA61ef3b0a263");
+        profilePage.nftSubmitButton().click();
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profilePage.nftToast())).getText().contains("You request will be processed and we will send you a confirmation e-mail soon."));
+    }
+    @Test
+    public void NFTSubmitWalletInvalid() {
+        profilePage.nftTab().click();
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("nft"));
+        PageActions.scrollDown(driver, 1);
+        profilePage.nftWalletInput().sendKeys("asdfasdf");
+        profilePage.nftSubmitButton().click();
+        Assert.assertTrue(profilePage.nftWalletError().getText().contains("The wallet format is invalid."));
+    }
+    @Test
+    public void NFTtabText() {
+        profilePage.nftTab().click();
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("nft"));
+        Assert.assertTrue(driver.getPageSource().contains(" Once upon a time, if you were one of the lucky, random recipients of the ultra-rare gold bars denominated with the letter V, you were issued a digital certificate of authenticity in the form of a Non-Fungible Token (NFT). "));
     }
 
     @Test
