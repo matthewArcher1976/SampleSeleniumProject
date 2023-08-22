@@ -191,10 +191,10 @@ public class SubmissionCardsTest {
 
     //Can't get these overlay tests to work reliably
     @Test(enabled = true, priority = 1)
-    public void OverlayDownvote() throws InterruptedException {
+    public void OverlayDownvote() {
         WebElement ourCard = card.cardNotDownvoted();
         ourCard.findElement(By.className("fa-thumbs-down")).click();
-        Thread.sleep(1000);//yes
+       // Thread.sleep(1000);//yes
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(card.voteDownOverlay())).isDisplayed(),"Downvote overlay not found");
     }
 

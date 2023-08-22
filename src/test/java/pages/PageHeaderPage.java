@@ -12,12 +12,12 @@ public class PageHeaderPage {
 
     WebDriver driver;
 
-
     public PageHeaderPage(WebDriver driver) {
         this.driver = driver;
     }
 
     //*********************** WebElements *******************************
+
     public WebElement chiveryLink() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-cart-shopping")));
     }
