@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+@SuppressWarnings("unused")
 public class BannedUserPage {
 
     WebDriver driver;
@@ -36,10 +37,6 @@ public class BannedUserPage {
 
     public WebElement reasonsText() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[text()=' Your account has been banned for the following reason: ']")));
-    }
-
-    public WebElement topChiversFollowBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='btn-follow-']"))).findElement(By.className("btn"));
     }
 
 }

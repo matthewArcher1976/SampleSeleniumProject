@@ -1,40 +1,41 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.LoginModalPage;
+import resources.TestConfig;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class SignupTestTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
+    WebDriver driver = Drivers.ChromeSauce();
     LoginModalPage modal = new LoginModalPage(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"url"})
-    public void login(@Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    @BeforeClass
+    public void login() {
+        driver.get(config.url);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void setDriver() {
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
 
-    @Test(enabled = false, priority = 2)
+    @Test()
     public void BannedName() throws InterruptedException {
         ArrayList<String> wordList = helpers.UserNameBlacklist.getWordList();
         ArrayList<String> failed = new ArrayList<>();
@@ -84,7 +85,7 @@ public class SignupTestTest {
         }
     }
 
-    @Test(enabled = true)
+    @Test
     public void TOSNotSelected() {
         modal.loginBtn().click();
         modal.signUpTab().click();
@@ -92,4 +93,13 @@ public class SignupTestTest {
         modal.termsCheckbox().click();
         Assert.assertEquals(modal.termsCheckbox().getAttribute("value"), "true", "TOS Checkbox should be selected after user clicks it");
     }
+
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
+    }
 }
+
+

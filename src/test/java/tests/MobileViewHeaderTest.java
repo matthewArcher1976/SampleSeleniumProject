@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.Dimension;
@@ -11,32 +12,34 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.MobileViewPage;
 import pages.SubmissionCardsPage;
+import resources.TestConfig;
 
-
-@SuppressWarnings("DefaultAnnotationParam")
+@SuppressWarnings("TestFailedLine")
 public class MobileViewHeaderTest {
     WebDriver driver = Drivers.ChromeMobile();
     Logins login = new Logins(driver);
     MobileViewPage mobile = new MobileViewPage(driver);
     SubmissionCardsPage card = new SubmissionCardsPage(driver);
 
+    private static TestConfig config;
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    //************************** Setup ******************************************
+
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
+    public void refresh() {
+        driver.get(config.url);
     }
-
-    @AfterClass
-    public void TearDown() {driver.close();}
 
     //************************** Begin Tests ********************************************
 
@@ -45,14 +48,12 @@ public class MobileViewHeaderTest {
         WebElement avatar = mobile.mobileAvatar();
         Dimension viewportSize = driver.manage().window().getSize();
         int viewportWidth = viewportSize.getWidth();
-
         Point elementLocation = avatar.getLocation();
         int elementX = elementLocation.getX();
         int elementWidth = avatar.getSize().getWidth();
-
         Assert.assertEquals(viewportWidth - elementX - elementWidth, 23, "The avatar is too close or too far to the edge of the screen");
     }
-    @Test(enabled = true)
+    @Test
     public void CommentButtonFeatured() {
         mobile.hamburgerMenu().click();
         mobile.mobileFeatured().click();
@@ -60,13 +61,13 @@ public class MobileViewHeaderTest {
         Assert.assertTrue(card.disqusSection().isDisplayed(), "CommentButtonFeatured - comments did not display");
     }
 
-    @Test(enabled = true)
+    @Test
     public void CommentButtonLatest() {
         card.commentIcon().click();
         Assert.assertTrue(card.disqusSection().isDisplayed(), "CommentButtonLatest - comments did not display");
     }
 
-    @Test(enabled = true)
+    @Test
     public void HamburgerMenuOptionsDisplay() {
         mobile.hamburgerMenu().click();
         WebElement latest = mobile.mobileLatest();
@@ -85,7 +86,7 @@ public class MobileViewHeaderTest {
                 && helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(top)), "Menu Items should not display after closing the menu");
     }
 
-    @Test(enabled = true)
+    @Test
     public void MenuFeatured() throws InterruptedException {
         mobile.hamburgerMenu().click();
         WebElement featured = mobile.mobileFeatured();
@@ -100,7 +101,7 @@ public class MobileViewHeaderTest {
                 && mobile.mobileTop().getCssValue("borderBottomColor").equals("rgba(0, 195, 0, 0.1)"), "Featured  should be selected by now");
     }
 
-    @Test(enabled = true)
+    @Test
     public void MenuFollowing() throws InterruptedException {
         mobile.hamburgerMenu().click();
         WebElement following = mobile.mobileFollowing();
@@ -115,7 +116,7 @@ public class MobileViewHeaderTest {
                 && mobile.mobileTop().getCssValue("borderBottomColor").equals("rgba(0, 195, 0, 0.1)"), "Following should be selected by now");
     }
 
-    @Test(enabled = true)
+    @Test
     public void MenuLatestIsSelected() throws InterruptedException {
         mobile.hamburgerMenu().click();
         Thread.sleep(2000);//debug
@@ -125,7 +126,7 @@ public class MobileViewHeaderTest {
                 && mobile.mobileTop().getCssValue("borderBottomColor").equals("rgba(0, 195, 0, 0.1)"), "Latest should be selected by default");
     }
 
-    @Test(enabled = true)
+    @Test
     public void MenuTopChivers() throws InterruptedException {
         mobile.hamburgerMenu().click();
         WebElement top = mobile.mobileTop();
@@ -140,10 +141,16 @@ public class MobileViewHeaderTest {
                 && mobile.mobileTop().getCssValue("borderBottomColor").equals("rgba(0, 195, 0, 1)"), "Following should be selected by now");
     }
 
-    @Test(enabled = true)
+    @Test
     public void OpenHamburgerMenu() {
         Assert.assertEquals(mobile.hamburgerMenu().getAttribute("aria-expanded"), "false", "Hamburger menu should be closed by default");
         mobile.hamburgerMenu().click();
         Assert.assertEquals(mobile.hamburgerMenu().getAttribute("aria-expanded"), "true", "Hamburger menu should open on tap");
+    }
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 }

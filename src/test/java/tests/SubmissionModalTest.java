@@ -12,11 +12,11 @@ import org.testng.annotations.*;
 import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import pages.SubmissionSingleImagePage;
+import resources.TestConfig;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class SubmissionModalTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -25,27 +25,27 @@ public class SubmissionModalTest {
     SubmissionCardsPage card = new SubmissionCardsPage(driver);
     Actions action = new Actions(driver);
     SubmissionSingleImagePage single = new SubmissionSingleImagePage(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
+    public void setDriver() {
+        driver.get(config.url);
     }
 
-    @AfterClass
-    public void TearDown() {
-        driver.quit();
-    }
-
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ClickTagRedirectToTagPage() throws InterruptedException {
         Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
         WebElement taggedCard = modal.cardWithTag();
@@ -82,7 +82,7 @@ public class SubmissionModalTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ClickCommentsButton() throws InterruptedException {
         modal.firstCard().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
@@ -93,7 +93,7 @@ public class SubmissionModalTest {
         Assert.assertTrue(modal.commentTextInput().isDisplayed(), "Policy text did not display");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ClickCommentsIcon() throws InterruptedException {
         modal.firstCard().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
@@ -103,8 +103,8 @@ public class SubmissionModalTest {
         Assert.assertTrue(modal.commentTextInput().isDisplayed(), "Policy text did not display");
     }
 
-    @Test(enabled = true, priority = 1)
-    public void ClickFBIcon() throws InterruptedException {
+    @Test
+    public void ClickFBIcon() {
         modal.firstCard().click();
         modal.facebookBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
@@ -122,7 +122,7 @@ public class SubmissionModalTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ClickTwitterIcon() {
         modal.firstCard().click();
         PageActions.scrollDown(driver, 1);
@@ -135,8 +135,8 @@ public class SubmissionModalTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 99)
-//checks that the proportions on the card image are the same an actual, breaks the hover tests if run before then, who knows why
+    @Test(priority = 99)
+    //checks that the proportions on the card image are the same an actual, breaks the hover tests if run before then, who knows why
     public void GIFNotCutOff() throws InterruptedException {
         helpers.PageActions.scrollDown(driver, 3);
         WebElement gifCard = card.firstGIF();
@@ -159,7 +159,7 @@ public class SubmissionModalTest {
         Assert.assertEquals(formattedRatio, formattedCardRatio, "GIFNotCutOff - gif may be getting cut off");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void HoverFacebookButton() throws InterruptedException {
         modal.firstCard().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(modal.facebookBtn()));
@@ -170,7 +170,7 @@ public class SubmissionModalTest {
         Assert.assertEquals("rgba(0, 195, 0, 1)", modal.facebookBtn().getCssValue("color"), "Facebook button color on hover is wrong: " + modal.facebookBtn().getCssValue("color"));
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void HoverTwitter() throws InterruptedException {
         modal.firstCard().click();
         System.out.println("Twitter color before " + modal.twitterBtn().getCssValue("color"));
@@ -181,7 +181,7 @@ public class SubmissionModalTest {
 
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ImageChanceBetweenSubsArrowKey() throws InterruptedException {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
@@ -199,7 +199,7 @@ public class SubmissionModalTest {
 		Assert.assertEquals(secondImage, modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", ""), "ImageChanceBetweenSubsArrowKey - Found a different image when navigating back" + secondImage + " , " + modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", ""));
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void NavBetweenSubs() throws InterruptedException {
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
         WebElement card = modal.firstCard();
@@ -218,7 +218,7 @@ public class SubmissionModalTest {
 		Assert.assertEquals(secondCardID, helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void NavBetweenSubsArrowKeys() throws InterruptedException {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
@@ -236,13 +236,13 @@ public class SubmissionModalTest {
 		Assert.assertEquals(secondCardID, helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void RoundedEdgesOnModal() {
         card.firstCard().click();
 		Assert.assertEquals(modal.modalCardFull().getCssValue("border-radius"), "8px", "RoundedEdgesOnModal = the border-radius changed, verify it's intentional");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void StickyHeaderOnModal() {
         modal.firstCard().click();
         modal.commentButton().click();
@@ -250,4 +250,10 @@ public class SubmissionModalTest {
 		Assert.assertTrue(modal.stickyHeader().isDisplayed(), "Sticky header didn't display on scrolling");
     }
 
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
+    }
 }

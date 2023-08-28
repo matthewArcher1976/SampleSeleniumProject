@@ -26,10 +26,8 @@ public class SubmissionModalPage {
     public WebElement cardWithTag() throws InterruptedException {
 
         Thread.sleep(3000);
-
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
         WebElement firstCardWithTag = null;
-
         for (WebElement card : allCards) {
             card.click();
             Thread.sleep(2000);

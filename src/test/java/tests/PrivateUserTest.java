@@ -4,19 +4,16 @@ import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.*;
-import pages.EditProfilePage;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import resources.TestConfig;
 
-@SuppressWarnings("TestFailedLine")
-public class EditProfileAccountTest {
-
-    WebDriver driver = Drivers.ChromeDriver();
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
-
+public class PrivateUserTest {
     private static TestConfig config;
-
+    WebDriver driver = Drivers.ChromeSauce();
+    Logins login = new Logins(driver);
 
     //************************** Setup ******************************************
 
@@ -24,24 +21,22 @@ public class EditProfileAccountTest {
     public static void configs() throws Exception {
         config = Config.getConfig();
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
         login.unpaidLogin(config.unpaidEmail, config.password);
-        Thread.sleep(2000);
-    }
-    @BeforeMethod
-    public void refresh() {
-        driver.get(config.url);
-        profile.userMenu().click();
-        profile.settingsBtn().click();
+        Thread.sleep(1000);
     }
 
-    //************************** Begin Tests ********************************************
-    @Test
-    public void UserName(){
-        profile.userName().sendKeys("a");
+    @BeforeMethod
+    public void setDriver() {
+        driver.get(config.url);
     }
+
+    //************************** Test Cases ****************************
+
+    //TODO - Test all the things related to private accounts
 
     //************************** Teardown ********************************************
 

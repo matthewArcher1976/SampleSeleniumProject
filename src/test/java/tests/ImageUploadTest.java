@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.JavascriptExecutor;
@@ -13,6 +14,7 @@ import org.testng.annotations.*;
 import pages.EditProfilePage;
 import pages.ImageUploadPage;
 import pages.PageHeaderPage;
+import resources.TestConfig;
 
 public class ImageUploadTest {
 
@@ -22,24 +24,24 @@ public class ImageUploadTest {
     PageHeaderPage header = new PageHeaderPage(driver);
     Actions action = new Actions(driver);
     EditProfilePage profile = new EditProfilePage(driver);
+    public static TestConfig config;
 
-    @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    //************************** Setup ******************************************
+
+    @BeforeClass
+    public void getConfig() throws Exception {
+        config = Config.getConfig();
+    }
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void setDriver() {
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
@@ -91,4 +93,10 @@ public class ImageUploadTest {
         }
     }
 
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
+    }
 }

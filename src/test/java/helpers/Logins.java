@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.AdminLoginPage;
 import pages.LoginModalPage;
 
+@SuppressWarnings("unused")
 public class Logins extends LoginModalPage {
 	
 	
@@ -26,14 +27,14 @@ public class Logins extends LoginModalPage {
 	
 	//*********************************** Logins ********************************
 	
-	public void adminLogin(String adminEmail, String adminPassword, WebDriver driver) throws InterruptedException {
+	public void adminLogin(String adminEmail, String adminPassword) throws InterruptedException {
 		admin.emailInput().sendKeys(adminEmail);
 		admin.passwordInput().sendKeys(adminPassword);
 		admin.submitButton().click();
 		Thread.sleep(3000);
 	}
 
-	public void unpaidLogin(String unpaidEmail, String unpaidPassword, WebDriver driver) throws InterruptedException {
+	public void unpaidLogin(String unpaidEmail, String unpaidPassword) throws InterruptedException {
 		login.loginBtn().click();
 		login.email().sendKeys(unpaidEmail);
 		login.password().sendKeys(unpaidPassword);
@@ -41,7 +42,7 @@ public class Logins extends LoginModalPage {
 		Thread.sleep(3000);
 	}
 	
-	public void unpaidLoginMobile(String unpaidEmail, String unpaidPassword, WebDriver driver) throws InterruptedException {
+	public void unpaidLoginMobile(String unpaidEmail, String unpaidPassword) throws InterruptedException {
 		login.loginBtn().click();
 		login.email().sendKeys(unpaidEmail);
 		login.password().sendKeys(unpaidPassword);
@@ -51,7 +52,7 @@ public class Logins extends LoginModalPage {
 		Thread.sleep(5000);
 	}
 	
-	public void logout( WebDriver driver) throws InterruptedException {
+	public void logout() throws InterruptedException {
 		login.userMenu().click();
 		Thread.sleep(2000);
 		login.signOut().click();

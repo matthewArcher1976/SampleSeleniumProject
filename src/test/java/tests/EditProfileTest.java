@@ -1,6 +1,7 @@
 package tests;
 
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import helpers.Waiter;
@@ -14,8 +15,8 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.EditProfilePage;
 import pages.PageHeaderPage;
+import resources.TestConfig;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class EditProfileTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -25,31 +26,29 @@ public class EditProfileTest {
 
     PageHeaderPage header = new PageHeaderPage(driver);
     Actions action = new Actions(driver);
+    private static TestConfig config;
 
-	@BeforeTest
-	@Parameters({"unpaidEmail", "password", "url"})
-	public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-		driver.get(url);
-		login.unpaidLogin(unpaidEmail, password, driver);
-		Thread.sleep(2000);
-	}
+    //************************** Setup ******************************************
+    @BeforeTest
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
+    }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
+    public void setDriver() {
+        driver.get(config.url);
         profile.userMenu().click();
         profile.settingsBtn().click();
     }
 
-    @AfterClass
-    public void TearDown() {
-        driver.close();
-    }
-
     //************************** Begin Tests ********************************************
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void AddMembership() {
         profile.membershipTab().click();
         profile.addMembershipBtn().click();
@@ -67,7 +66,7 @@ public class EditProfileTest {
         }
     }
 
-    @Test(enabled = false, priority = 1)
+    @Test(enabled = false)
     public void BannerPicOver4MB() {
         //The image file is there and the happy path update test works, however when I try this too big file it just hangs and the finder window never closes
         WebElement fileInput = profile.bannerEditBtn();
@@ -78,7 +77,7 @@ public class EditProfileTest {
         Assert.assertTrue(profile.uploadFailToast().isDisplayed(), "BannerPicOver4MB failed");
     }
 
-    @Test(enabled = true, priority = 99)
+    @Test(priority = 99)
     //run last because the finder window will not close
     public void BannerPicUpdate() {
         WebElement fileInput = profile.bannerEditBtn();
@@ -98,7 +97,7 @@ public class EditProfileTest {
         String day = helpers.Randoms.getRandomDay();
         String birthday = profile.monthToNumber(month) + "/" + helpers.Randoms.formatDay(day) + "/" + year;
         profile.birthDayInput().click();
-        profile.birthDayYear(year).click();
+         profile.birthDayYear(year).click();
         profile.birthDayMonth(month).click();
         Thread.sleep(1000);
         profile.birthDayDay(day).click();
@@ -124,7 +123,7 @@ public class EditProfileTest {
         Assert.assertTrue(profile.emailInvalid().isDisplayed(), "Did not get the The Email Must Be A Valid Email Address error message");
 
         profile.emailInput().clear();
-        profile.emailInput().sendKeys("thechivetest@gmail");
+        profile.emailInput().sendKeys(config.unpaidEmail);
         profile.saveProfileBtn().click();
         Assert.assertTrue(profile.emailInvalid().isDisplayed(), "Did not get the The Email Must Be A Valid Email Address error message");
     }
@@ -167,7 +166,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.genderDropdown().getText(), "Other", "Other should be selected");
     }
     @Test
-    public void HoverAccountTab() throws InterruptedException {
+    public void HoverAccountTab() {
         //Inactive
         Assert.assertEquals(profile.accountTab().getCssValue("color"), "rgba(207, 207, 207, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.accountTab().getCssValue("color"));
         action.moveToElement(profile.accountTab()).perform();
@@ -181,7 +180,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.accountTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.accountTab().getCssValue("color"));
     }
     @Test
-    public void HoverEmailTab() throws InterruptedException {
+    public void HoverEmailTab() {
         //Inactive
         Assert.assertEquals(profile.emailTab().getCssValue("color"), "rgba(207, 207, 207, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.emailTab().getCssValue("color"));
         action.moveToElement(profile.emailTab()).perform();
@@ -195,7 +194,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.emailTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.emailTab().getCssValue("color"));
     }
     @Test
-    public void HoverMembershipTab() throws InterruptedException {
+    public void HoverMembershipTab() {
         //Inactive
         Assert.assertEquals(profile.membershipTab().getCssValue("color"), "rgba(207, 207, 207, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.membershipTab().getCssValue("color"));
         action.moveToElement(profile.membershipTab()).perform();
@@ -209,7 +208,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.membershipTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.membershipTab().getCssValue("color"));
     }
     @Test
-    public void HoverProfileTab() throws InterruptedException {
+    public void HoverProfileTab() {
         //Active
         Assert.assertEquals(profile.profileTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.profileTab().getCssValue("color"));
         action.moveToElement(profile.profileTab()).perform();
@@ -238,9 +237,8 @@ public class EditProfileTest {
         action.moveToElement(profile.socialLinksTab()).perform();
         Assert.assertEquals(profile.socialLinksTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while active should be rgba(0, 158, 0, 1), found: " + profile.socialLinksTab().getCssValue("color"));
     }
-    @Test(enabled = false)//Notifications tab removed
+    @Test(enabled = false)//Notifications tab removed, may be reintroduced
     public void Notifications() throws InterruptedException {
-
         profile.notificationsTab().click();
 
         if (profile.notificationsToggle().getAttribute("value").equals("false")) {
@@ -263,7 +261,7 @@ public class EditProfileTest {
     public void PasswordChangeMismatch() {
         //Enter mismatched passwords
         profile.accountTab().click();
-        profile.password().sendKeys("Chive12345");
+        profile.password().sendKeys(config.password);
         profile.passwordVerify().sendKeys("asdf");
         profile.saveProfileBtn().click();
         Assert.assertTrue(profile.passwordError().isDisplayed(), "Password error text not found");
@@ -299,19 +297,16 @@ public class EditProfileTest {
     @Test(priority = 99)
     public void RedirectLoggedOutUser() throws InterruptedException {
         Waiter.wait(driver).until(ExpectedConditions.urlContains("settings"));
-        login.logout(driver);
+        login.logout();
         header.menuFollowing().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("auth")), "User was not redirected to the login when they tried to access settings while logged out");
     }
 
     @Test
-    @Parameters({"url"})
-    public void UpdateUserName(@Optional("https://qa.chivetesting.com/") String url) {
+    public void UpdateUserName() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-
-        Waiter.wait(driver).until(ExpectedConditions.urlMatches("https://qa.chive-testing.com/.+"));
-
+        Waiter.wait(driver).until(ExpectedConditions.urlMatches(config.url));
         String ourName = helpers.GetInteger.getUsernameFromURL(driver.getCurrentUrl());
         String newName = helpers.Randoms.getRandomString(10);
         profile.editProfileBtn().click();
@@ -378,5 +373,10 @@ public class EditProfileTest {
         profile.saveProfileBtn().click();
         Assert.assertTrue(profile.updateSuccess().isDisplayed(), "Did not see the Your profile has been successfully updated! message");
     }
+    //************************** Teardown ********************************************
 
+    @AfterClass
+    public void TearDown() {
+        driver.close();
+    }
 }

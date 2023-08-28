@@ -81,7 +81,7 @@ public class EditProfilePage {
     }
 
     public WebElement birthDayInput() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("dob")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("date-dob")));
     }
 
     public WebElement birthDayDay(String day) {

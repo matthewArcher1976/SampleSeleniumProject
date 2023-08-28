@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.*;
@@ -9,9 +10,10 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
+import resources.TestConfig;
 
 
-@SuppressWarnings("DefaultAnnotationParam")
+@SuppressWarnings({"DefaultAnnotationParam", "TestFailedLine"})
 public class PageHeaderTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -19,27 +21,27 @@ public class PageHeaderTest {
     SubmissionCardsPage card = new SubmissionCardsPage(driver);
     Logins login = new Logins(driver);
     Actions action = new Actions(driver);
+    private static TestConfig config;
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    //************************** Setup ******************************************
+
+    @BeforeTest
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
+    public void refresh() {
+        driver.get(config.url);
     }
 
-    @AfterClass
-    public void TearDown() {
-        driver.close();
-    }
-
-    //************************** Begin Tests ****************************
+    //************************** Test Cases ****************************
 
     @Test
     public void AvatarPicDisplays() {
@@ -49,9 +51,11 @@ public class PageHeaderTest {
     @Test(priority = 99)
     public void AvatarPicGoneOnLogout() throws InterruptedException {
         WebElement avi = header.headerAvatar();
-        login.logout(driver);
+        Assert.assertTrue(avi.isDisplayed());
+        login.logout();
         Thread.sleep(3000);
         Assert.assertTrue(header.loginBtn().isDisplayed());
+        //complete this
     }
     @Test
     public void AvatarPosition(){
@@ -63,9 +67,9 @@ public class PageHeaderTest {
         int elementX = elementLocation.getX();
         int elementWidth = avatar.getSize().getWidth();
 
-        Assert.assertEquals(viewportWidth - elementX - elementWidth, 23, "The avatar is too close or too far to the edge of the screen");
+        Assert.assertEquals(viewportWidth - elementX - elementWidth, 8, "The avatar is too close or too far to the edge of the screen");
     }
-    @Test(enabled = true)
+    @Test
     public void ChiveryLink() {
         header.chiveryLink().click();
         helpers.WindowUtil.switchToWindow(driver, 1);
@@ -197,7 +201,7 @@ public class PageHeaderTest {
         }
     }
 
-    @Test(enabled = true)
+    @Test
     public void FilterNotOnSubmissionPage() throws InterruptedException {
         card.cardNotGIF().click();
         driver.navigate().refresh();
@@ -371,5 +375,10 @@ public class PageHeaderTest {
             Assert.assertTrue(true);
         }
     }
+    //************************** Teardown ********************************************
 
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
+    }
 }

@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+@SuppressWarnings({"UnnecessaryBoxing", "unused", "BoxingBoxedValue"})
 public class CustomExpectedConditions {
 
    public static ExpectedCondition<Boolean> textToDisappear(final By locator, final String text) {

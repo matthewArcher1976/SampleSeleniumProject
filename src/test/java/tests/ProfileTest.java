@@ -1,10 +1,7 @@
 package tests;
 
 
-import helpers.Drivers;
-import helpers.Logins;
-import helpers.PageActions;
-import helpers.Waiter;
+import helpers.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -17,10 +14,10 @@ import pages.EditProfilePage;
 import pages.PageHeaderPage;
 import pages.ProfilePage;
 import pages.SubmissionCardsPage;
+import resources.TestConfig;
 
 import java.util.List;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class ProfileTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -30,34 +27,35 @@ public class ProfileTest {
     PageHeaderPage header = new PageHeaderPage(driver);
     SubmissionCardsPage card = new SubmissionCardsPage(driver);
     Actions action = new Actions(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
+    public void setDriver() throws InterruptedException {
+        driver.get(config.url);
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         Thread.sleep(3000);
     }
 
-    @AfterClass
-    public void TearDown() {
-        driver.close();
-    }
-
     //************************** Begin Tests ********************************************
-    @Test(enabled = true, priority = 1)
-    @Parameters({"url"})
-    public void BlockUser(@Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
+
+    @Test
+    public void BlockUser() throws InterruptedException {
+        driver.get(config.url);
         card.firstCard().findElement(By.cssSelector("a[href]")).click();
         profilePage.blockBtn().click();
         Thread.sleep(3000);//yes
@@ -74,10 +72,9 @@ public class ProfileTest {
     }
 
     @Test(enabled = false)//It's just a 404 for a banned user now so not really testable
-    @Parameters({"url", "bannedUsername"})
-    public void BannedProfileShowsBanned(@Optional("https://qa.chive-testing.com") String url, @Optional("BannedUser") String bannedUsername) throws InterruptedException {
-        driver.get(url + bannedUsername);
-        Waiter.wait(driver).until(ExpectedConditions.urlContains(bannedUsername));
+    public void BannedUserIs404() throws InterruptedException {
+        driver.get(config.url + config.bannedUsername);
+        Waiter.wait(driver).until(ExpectedConditions.urlContains(config.bannedUsername));
         Thread.sleep(1000);
         Assert.assertTrue(profilePage.profile404GIF().isDisplayed() && profilePage.profile404text().isDisplayed(), "Didn't see 404 page for banned user");
     }
@@ -182,7 +179,7 @@ public class ProfileTest {
     public void HoverEditButton() {
         Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(84, 79, 79, 1)", "Background color before hover should be rgba(84, 79, 79, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.editButton()).perform();
-        Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(66, 62, 62, 1)", "Background color on hover should be rgba(68, 64, 64, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
+        Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(68, 64, 64, 1)", "Background color on hover should be rgba(68, 64, 64, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
     }
 
     @Test
@@ -259,10 +256,9 @@ public class ProfileTest {
         Assert.assertEquals(profilePage.amazonLink().getCssValue("background-color"), "rgba(66, 62, 62, 1)", "Background color on hover should be rgba(66, 62, 62, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
     }
 
-    @Test(enabled = true)
-    @Parameters({"userWithFollowersQA", "url"})
-    public void InfiniteScrollFollowers(@Optional("ca_pinup_girl") String userWithFollowersQA, @Optional("https://qa.chive-testing.com/") String url) throws InterruptedException {
-        driver.get(url + userWithFollowersQA);
+    @Test
+    public void InfiniteScrollFollowers() throws InterruptedException {
+        driver.get(config.url + "ca_pinup_girl"); //user with followers
         profilePage.tabFollowers().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("followers"));
         int first = profilePage.allFollowers().size();
@@ -283,7 +279,7 @@ public class ProfileTest {
     }
 
     @Test
-    public void NFTSubmitWallet(){
+    public void NFTSubmitWallet() {
         profilePage.nftTab().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("nft"));
         PageActions.scrollDown(driver, 1);
@@ -291,6 +287,7 @@ public class ProfileTest {
         profilePage.nftSubmitButton().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profilePage.nftToast())).getText().contains("You request will be processed and we will send you a confirmation e-mail soon."));
     }
+
     @Test
     public void NFTSubmitWalletInvalid() {
         profilePage.nftTab().click();
@@ -300,6 +297,7 @@ public class ProfileTest {
         profilePage.nftSubmitButton().click();
         Assert.assertTrue(profilePage.nftWalletError().getText().contains("The wallet format is invalid."));
     }
+
     @Test
     public void NFTtabText() {
         profilePage.nftTab().click();
@@ -308,10 +306,9 @@ public class ProfileTest {
     }
 
     @Test
-    @Parameters({"url"})
-    public void ProfileIs404(@Optional("https://qa.chive-testing.com/") String url) {
+    public void ProfileIs404() {
         String badUser = helpers.Randoms.getRandomString(20);
-        driver.get(url + badUser);
+        driver.get(config.url + badUser);
         Waiter.wait(driver).until(ExpectedConditions.urlContains(badUser));
         Assert.assertTrue(profilePage.profile404text().getText().contains("Whatever you were hoping to find isn't here.") && profilePage.profile404GIF().isDisplayed(), "Did not see the 404 page for a bad profile url");
     }
@@ -334,6 +331,13 @@ public class ProfileTest {
         for (WebElement post : userPosts) {
             Assert.assertTrue(post.getText().contains(userName), "Found someone else's post in user's profile");
         }
+    }
+
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 
 }
