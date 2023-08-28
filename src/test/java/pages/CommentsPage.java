@@ -27,6 +27,9 @@ public class CommentsPage {
     public WebElement commentTextPlaceholder() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("placeholder")));
     }
+    public WebElement disqusFrame() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id^= 'dsq-'")));
+    }
     public WebElement emailInput() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='email']")));
     }
@@ -51,8 +54,6 @@ public class CommentsPage {
     public WebElement submitCommentBtn() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[type='submit']")));
     }
-
-
 
     //************Actions*****************
     public void switchToCaptchaFrame() {

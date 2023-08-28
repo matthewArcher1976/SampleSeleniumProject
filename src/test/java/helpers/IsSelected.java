@@ -1,15 +1,12 @@
 package helpers;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 public class IsSelected {
 
 	public static boolean isIconSelected(WebElement element) {
-		WebElement button = element;
-		String s = button.getAttribute("class");
-		//System.out.println(s + " is the class found in isIconSelected");
+		String s = element.getAttribute("class");
 		Boolean filled = null;
 		if(s.contains("text-white")) {
 			filled = false;
@@ -21,10 +18,6 @@ public class IsSelected {
 		}
 		return filled;
 	}
-	
-	public static boolean isElementVisible(WebElement element, WebDriver driver) {
-	  
-	    return element.isDisplayed();
-	}
+
 
 }

@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -10,34 +11,36 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.TopChiversPage;
+import resources.TestConfig;
 
 import java.util.List;
 
+@SuppressWarnings("TestFailedLine")
 public class TopChiversTest {
     WebDriver driver = Drivers.ChromeDriver();
     TopChiversPage top = new TopChiversPage(driver);
     Logins login = new Logins(driver);
     Actions action = new Actions(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    @BeforeTest
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
+    public void setDriver() throws InterruptedException {
+        driver.get(config.url);
         top.topChiversTab().click();
         Thread.sleep(3000);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
     }
 
     //************************** Begin Tests ********************************************
@@ -62,7 +65,6 @@ public class TopChiversTest {
 
     @Test
     public void FollowButtonHover() throws InterruptedException {
-
         if (top.topChiversFollowBtn().getText().contentEquals("FOLLOWING")) {
             top.topChiversFollowBtn().click();
             Thread.sleep(4000);
@@ -209,7 +211,6 @@ public class TopChiversTest {
 
     @Test
     public void TopChiversRowElements() throws InterruptedException {
-
         Thread.sleep(2000);
         List<WebElement> rows = top.allRows();
         for (WebElement row : rows) {
@@ -257,6 +258,12 @@ public class TopChiversTest {
         }
     }
 
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
+    }
 }
 
 

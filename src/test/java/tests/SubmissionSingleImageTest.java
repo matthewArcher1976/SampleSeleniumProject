@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -13,12 +14,12 @@ import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionSingleImagePage;
+import resources.TestConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class SubmissionSingleImageTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -27,36 +28,37 @@ public class SubmissionSingleImageTest {
     PageHeaderPage header = new PageHeaderPage(driver);
     Actions action = new Actions(driver);
     Logins login = new Logins(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
+    public void setDriver() throws InterruptedException {
+        driver.get(config.url);
         Thread.sleep(2000);
-    }
-    @AfterClass
-    public void TearDown() {
-        driver.close();
     }
 
     //************************** Begin Tests *******************************************
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void AvatarImage() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
         Assert.assertTrue(single.avatar().isDisplayed(), "AvatarImage didn't display");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void DDumpDoesNotDisplay() {
         Assert.assertTrue(header.dopamineDump().isDisplayed(), "Dopamine Dump header missing");
         action.moveToElement(card.firstCard()).click().perform();
@@ -69,7 +71,7 @@ public class SubmissionSingleImageTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FavoriteButton() throws InterruptedException {
         //Favorite a post from the single page, verify the vote persists
         WebElement submission = card.cardNotFavorited();
@@ -98,7 +100,7 @@ public class SubmissionSingleImageTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FiltersDoNotDisplay() {
         helpers.Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), '(change filter)')]")));
         action.moveToElement(card.firstCard()).click().perform();
@@ -111,7 +113,7 @@ public class SubmissionSingleImageTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ImageMaxWidth600() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -123,7 +125,7 @@ public class SubmissionSingleImageTest {
         Assert.assertTrue(width <= 600 && height <= 1200, "ImageDisplays failed");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ReportPostIconHover() throws InterruptedException {
         header.headerAvatar().click();
         header.yourProfileBtn().click();
@@ -141,7 +143,7 @@ public class SubmissionSingleImageTest {
         Assert.assertEquals(flag.getCssValue("color"), "rgba(0, 195, 0, 1)", "Report flag should change color on hover");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ShareFacebook() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -152,7 +154,7 @@ public class SubmissionSingleImageTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ShareTwitter() throws InterruptedException {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -164,7 +166,7 @@ public class SubmissionSingleImageTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void SocialLinksFacebook() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -175,7 +177,7 @@ public class SubmissionSingleImageTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void SocialLinksInsta() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -186,7 +188,7 @@ public class SubmissionSingleImageTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void SocialLinksTwitter() throws InterruptedException {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -198,7 +200,7 @@ public class SubmissionSingleImageTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void SubmissionTagsDisplay() throws InterruptedException {
         WebElement taggedCard = card.cardWithTags();
         List<WebElement> tags = card.allTags();
@@ -218,7 +220,7 @@ public class SubmissionSingleImageTest {
         Assert.assertEquals(tagStrings, singleTagStrings, "The tags on the modal and single page don't match");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void TitleDisplays() {
         String postTitle = card.submissionTitle().getText();
         action.moveToElement(card.firstCard()).click().perform();
@@ -226,21 +228,22 @@ public class SubmissionSingleImageTest {
         Assert.assertTrue(driver.getTitle().contains(postTitle), "Title for submission was wrong or did not display");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
+
     public void TrendingDisplays() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
         Assert.assertTrue(single.trendArrowIcon().isDisplayed() && single.trendingText().isDisplayed(), "Missing the Trending text and icon");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void TrendingTagsDisplay() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
         Assert.assertFalse(single.trendingTags().isEmpty(), "Missing the Trending tags");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void URLLoadsSingleImagePage() {
         WebElement subCard = card.firstCard();
         action.moveToElement(subCard).click().perform();
@@ -253,7 +256,7 @@ public class SubmissionSingleImageTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void UsersNameDisplays() {
         WebElement ourCard = card.firstCard();
         System.out.println(ourCard.getAttribute("class"));
@@ -264,14 +267,14 @@ public class SubmissionSingleImageTest {
         Assert.assertEquals(userName, userNameSingle, "User name for submission was wrong or did not display");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void VerifiedDisplays() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
         Assert.assertTrue(single.verifiedCheckIcon().isDisplayed() && single.verifiedText().isDisplayed(), "Missing the Verified text and icon");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void VerifiedUserDate() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -280,7 +283,7 @@ public class SubmissionSingleImageTest {
                 && !single.verifiedDate().getText().isBlank(), "Missing the Verified text and icon");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void VerifiedUserDisplays() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -289,7 +292,7 @@ public class SubmissionSingleImageTest {
                 && !single.verifiedText().getText().isBlank(), "Missing the Verified text and icon");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void VoteDownButton() throws InterruptedException {
         //Downvote a post from the single page, verify the vote persists
         WebElement submission = card.cardNotDownvoted();
@@ -318,7 +321,7 @@ public class SubmissionSingleImageTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void VoteUpButton() throws InterruptedException {
         //Like a post from the single page, verify the vote persists
         WebElement submission = card.cardNotUpvoted();
@@ -343,5 +346,12 @@ public class SubmissionSingleImageTest {
             submission.findElement(By.className("fa-thumbs-up")).click();
             Assert.fail("Upvote from single page did not persist on Latest list");
         }
+    }
+
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 }

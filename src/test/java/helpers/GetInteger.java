@@ -12,8 +12,7 @@ public class GetInteger {
 	public static int getIntFromMixedString(String s) {
 	    try (Scanner in = new Scanner(s).useDelimiter("[^0-9]+")) {
 	        if (in.hasNextInt()) {
-	            int integer = in.nextInt();
-	            return integer;
+				return in.nextInt();
 	        } else {
 	            throw new InputMismatchException("Input string does not contain an integer.");
 	        }
@@ -31,12 +30,7 @@ public class GetInteger {
 	    }
 	}
 
-	public static int intStringToInt(WebElement element) {
-		String s =element.getText();
-		int i = Integer.parseInt(s);
-		return i;
-	}
-	
+
 	public static String getIdFromUrl(String url) {
 	    String[] urlParts = url.split("/");
 	    String lastPart = urlParts[urlParts.length - 1];

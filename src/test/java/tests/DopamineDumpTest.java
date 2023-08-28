@@ -1,10 +1,10 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import helpers.Waiter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,12 +12,12 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
+import resources.TestConfig;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class DopamineDumpTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -25,36 +25,37 @@ public class DopamineDumpTest {
     SubmissionCardsPage card = new SubmissionCardsPage(driver);
     PageHeaderPage header = new PageHeaderPage(driver);
     Logins login = new Logins(driver);
+    private static TestConfig config;
 
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void refresh() {
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
-    @Test(enabled = true)
+
+    @Test
     public void CommentButtonFeatured() {
         header.menuFeatured().click();
         card.commentBtn().click();
         Assert.assertTrue(card.disqusSection().isDisplayed(), "CommentButtonFeatured -Comments did not open");
     }
 
-    @Test(enabled = true)
+    @Test
     public void FeaturedCardsDisplay() {
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 6));
         header.menuFeatured().click();
@@ -73,7 +74,7 @@ public class DopamineDumpTest {
     }
 
     @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "ConstantValue"})
-    @Test(enabled = true)
+    @Test
     public void NoDuplicates() {
         header.menuFeatured().click();
         helpers.PageActions.scrollDown(driver, 3);
@@ -89,13 +90,20 @@ public class DopamineDumpTest {
         Assert.assertTrue(noDupes, "Duplicate DD posts found");//pass test if no dupes found
     }
 
-    @Test(enabled = true)
+    @Test
     public void SingleDumpPage() {
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 6));
         header.menuFeatured().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         card.featuredIcon().click();
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlMatches(".*/\\d+.*")), "SingleDumpPage - URL does not contain the dump number");
+    }
+
+    //************************* Teardown ***************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 
 }

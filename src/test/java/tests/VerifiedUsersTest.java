@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.WebDriver;
@@ -8,33 +9,36 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.EditProfilePage;
 import pages.ProfilePage;
+import resources.TestConfig;
 
+@SuppressWarnings("TestFailedLine")
 public class VerifiedUsersTest {
 
     WebDriver driver = Drivers.ChromeDriver();
     ProfilePage profilePage = new ProfilePage(driver);
     EditProfilePage profile = new EditProfilePage(driver);
     Logins login = new Logins(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"verifiedEmail", "password", "url"})
-    public void login(@Optional("thechivetest+verified@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+
+    @BeforeTest
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
+    public void setDriver() {
+        driver.get(config.url);
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
     }
 
     //************************** Begin Tests ********************************************
@@ -70,5 +74,10 @@ public class VerifiedUsersTest {
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
+    //************************** Teardown ********************************************
 
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
+    }
 }

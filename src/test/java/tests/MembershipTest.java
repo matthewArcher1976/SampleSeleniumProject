@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import helpers.Waiter;
@@ -10,34 +11,34 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.EditProfilePage;
+import resources.TestConfig;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class MembershipTest {
 
     WebDriver driver = Drivers.ChromeDriver();
     Actions action = new Actions(driver);
     EditProfilePage profile = new EditProfilePage(driver);
     Logins login = new Logins(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
-        Thread.sleep(1000);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
+    public void refresh() {
+        driver.get(config.url);
         profile.userMenu().click();
         profile.settingsBtn().click();
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
     }
 
     //************************** Begin Tests ********************************************
@@ -55,7 +56,7 @@ public class MembershipTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void CreditCardInputs() throws InterruptedException {
         profile.membershipTab().click();
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe")));
@@ -66,9 +67,8 @@ public class MembershipTest {
         Assert.assertTrue(profile.membershipCreditCardExp().isDisplayed() && profile.membershipCreditCardExp().isEnabled(), "CC Exp Input Not found");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void CreditCCNumber() {
-
         profile.membershipTab().click();
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe")));
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[scrolling='no']")));//yo dawg, we heard you like iframes
@@ -86,5 +86,11 @@ public class MembershipTest {
         action.moveToElement(profile.addMembershipBtn()).perform();
         Thread.sleep(2000);//Yes, you get different values if you don't wait
         Assert.assertEquals(profile.addMembershipBtn().getCssValue("background-color"), "rgba(0, 158, 0, 1)", "Color on hover while active should be rgba(0, 158, 0, 1), found: " + profile.profileTab().getCssValue("color"));
+    }
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 }

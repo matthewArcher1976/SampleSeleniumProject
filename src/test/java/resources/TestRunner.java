@@ -1,7 +1,8 @@
-package tests;
+package resources;
 
 import listeners.SauceLabsListener;
 import org.testng.TestNG;
+import tests.HelloWorldTest;
 
 public class TestRunner {
     public static void main(String[] args) {

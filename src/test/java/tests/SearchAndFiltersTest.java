@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.CustomExpectedConditions;
 import helpers.Drivers;
 import helpers.Logins;
@@ -12,10 +13,10 @@ import pages.PageHeaderPage;
 import pages.SearchAndFiltersPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
+import resources.TestConfig;
 
 import java.util.List;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class SearchAndFiltersTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -26,28 +27,28 @@ public class SearchAndFiltersTest {
     SubmissionModalPage modal = new SubmissionModalPage(driver);
     Actions action = new Actions(driver);
     String searchTerm = "theCHIVERBrady";
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void setDriver() throws InterruptedException {
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FilterHotness() throws InterruptedException {
         header.filterChange().click();
         search.filterHumanity().click();
@@ -80,7 +81,7 @@ public class SearchAndFiltersTest {
     }
 
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FilterHumanity() throws InterruptedException {
         header.filterChange().click();
         search.filterHotness().click();
@@ -114,7 +115,7 @@ public class SearchAndFiltersTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FilterHumor() {
         header.filterChange().click();
         search.filterHumanity().click();
@@ -126,7 +127,7 @@ public class SearchAndFiltersTest {
                 && !driver.getCurrentUrl().contains("category=Humanity&filters="), "URL should only contain Humor");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FollowButtonDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();
@@ -135,7 +136,7 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(search.followBtn().isDisplayed(), "Did not find follow button");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void HashTagExactMatchDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();
@@ -143,7 +144,7 @@ public class SearchAndFiltersTest {
         Assert.assertEquals(search.resultsTag().getText(), "theCHIVERBrady", "HashTagExactMatchDisplays - found wrong hashtag");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void HashTagPartialMatchDisplays() throws InterruptedException {
         search.magnifyIcon().click();
         search.searchInput().click();
@@ -158,7 +159,7 @@ public class SearchAndFiltersTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void InfiniteScrollingSearch() throws InterruptedException {
         search.magnifyIcon().click();
         search.searchInput().click();
@@ -177,7 +178,7 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(secondTags > firstTags && secondUsers > firstUsers, "Results do not seem to be loading when you scroll down");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ResultsTextDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();
@@ -185,7 +186,7 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(search.searchResultHeader().getText().contains("Here's what we found for"), "ResultsTextDisplays - Did not find results Text");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void UsersPartialMatchDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();
@@ -204,8 +205,8 @@ public class SearchAndFiltersTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
-    public void VerifiedFilterFeatured() throws InterruptedException {
+    @Test
+    public void VerifiedFilterFeatured() {
         boolean hasCheck = true;
         header.menuFeatured().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
@@ -229,7 +230,7 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(hasCheck, "Found unverified user on feature page");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void VerifiedFilterFollowing() {
         boolean hasCheck = true;
         header.menuFollowing().click();
@@ -258,7 +259,7 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(hasCheck, "Found a card from unverified user on following page");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void VerifiedFilterLatest() {
         boolean hasCheck = true;
         header.filterChange().click();
@@ -279,5 +280,10 @@ public class SearchAndFiltersTest {
         }
         Assert.assertTrue(hasCheck, "Found a card from unverified user on latest");
     }
+    //************************** Teardown ********************************************
 
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
+    }
 }

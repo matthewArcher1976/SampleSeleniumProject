@@ -12,6 +12,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
+@SuppressWarnings({"unused", "UnnecessaryLocalVariable", "MissingSerialAnnotation"})
 public class Drivers {
 
 	public static WebDriver ChromeDriver() {
@@ -26,7 +27,7 @@ public class Drivers {
 	    ChromeOptions browserOptions = new ChromeOptions();
 	    browserOptions.setPlatformName("Windows 11");
 	    browserOptions.setBrowserVersion("latest");
-	    
+
 	    Map<String, Object> sauceOptions = new HashMap<>();
 	    sauceOptions.put("username", "oauth-matt.archer-ff614");
 	    sauceOptions.put("accessKey", "48c2e9ca-6c85-470e-a332-588e7e6fde98");

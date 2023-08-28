@@ -72,7 +72,7 @@ public class PageActions {
 	    for (int i = 0; i < times; i++) {
 	        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 	        try {
-	            Thread.sleep(2000); 
+	            Thread.sleep(2000);
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
 	        }
@@ -81,7 +81,6 @@ public class PageActions {
 
 	public static void scrollTouch(WebDriver driver, int startX, int startY, int endX, int endY, int times) {
 		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-
 		for (int i = 0; i < times; i++) {
 			Sequence scrollDown = new Sequence(finger, 1);
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), startX, startY));

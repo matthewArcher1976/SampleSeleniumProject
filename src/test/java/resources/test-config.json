@@ -1,0 +1,13 @@
+{
+  "adminEmail": "thechivetest+admin@gmail.com",
+  "bannedEmail": "thechivetest+banned@gmail.com",
+  "bannedUsername": "BannedUser",
+  "driver": "Drivers.Chromedriver()",
+  "password": "Chive1234",
+  "unpaidEmail": "thechivetest@gmail.com",
+  "url": "https://i.thechive.com/",
+  "privateEmail": "thechivetest+private@gmail.com",
+  "facebookEmail": "matt.archer@chivemediagroup.com",
+  "googleEmail": "thechivetest@gmail.com",
+  "adminURL": "https://i.thechive.com/admin/dashboards/main"
+}

@@ -1,48 +1,50 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
+import helpers.PageActions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 import pages.CommentsPage;
-import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
+import resources.TestConfig;
 
 public class CommentsTest {
 
     WebDriver driver = Drivers.ChromeDriver();
-    Actions action = new Actions(driver);
+
     CommentsPage comments = new CommentsPage(driver);
 
     Logins login = new Logins(driver);
     SubmissionModalPage modal = new SubmissionModalPage(driver);
     SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+
+    @BeforeTest
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void refresh() {
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
@@ -50,7 +52,8 @@ public class CommentsTest {
     @Test
     public void ClickShowComments() throws InterruptedException {
         card.firstCard().click();
-        modal.commentButton().click();
+        PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
+        PageActions.findElementWithScrollingElement(driver, comments.disqusFrame());
         comments.switchToDisqusFrame();
         Thread.sleep(3000);
         Assert.assertTrue(comments.commentTextInput().isDisplayed(), "Did not find the comment policy block");
@@ -59,7 +62,7 @@ public class CommentsTest {
     @Test
     public void EnterNameEmailPasswordLabels() throws InterruptedException {
         card.firstCard().click();
-        modal.commentButton().click();
+        PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
         comments.switchToDisqusFrame();
         Thread.sleep(3000);
         comments.commentTextPlaceholder().click();
@@ -75,7 +78,7 @@ public class CommentsTest {
     @Test
     public void LeaveGuestComment() throws InterruptedException {
         card.firstCard().click();
-        modal.commentButton().click();
+        PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
         comments.switchToDisqusFrame();
         comments.commentTextInput().sendKeys(helpers.Randoms.getRandomString(20));
         comments.submitCommentBtn().click();
@@ -93,17 +96,16 @@ public class CommentsTest {
         //Not submitting it because spam
     }
 
-    @Test(enabled = false)
+    @Test()
     public void sandbox() throws InterruptedException {
         card.firstCard().click();
-        modal.commentButton().click();
-        modal.switchToDisqusFrame();
-        try {comments.commentTextPlaceholder().click();
-            }catch (Exception ignored){}
-        comments.commentTextInput().sendKeys("asdf");
-        action.moveToElement(comments.submitCommentBtn()).click().perform();
-        WebElement label = comments.enterNameLabel();
-        comments.guestCheckbox().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(label)), "piece of shit");
+        PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
+    }
+
+    //************************* Teardown ***************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 }

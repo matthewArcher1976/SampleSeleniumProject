@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.GetInteger;
 import helpers.Logins;
@@ -13,11 +14,11 @@ import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.ProfilePage;
 import pages.SubmissionCardsPage;
+import resources.TestConfig;
 
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class SubmissionCardsTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -26,24 +27,24 @@ public class SubmissionCardsTest {
     ProfilePage profile = new ProfilePage(driver);
     Logins login = new Logins(driver);
     Actions action = new Actions(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void setDriver() {
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
@@ -83,7 +84,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(helpers.Waiter.wait(driver).until((ExpectedConditions.attributeContains(card.downvoteBtn(), "class", "text-white"))), "Checked upvote button did not turn white after clicking it");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FilterPageHotness() {
         pageHeader.filterHotness().click();
         //	Thread.sleep(3000);//remove with bug fix
@@ -91,7 +92,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(driver.findElement(By.linkText("Hotness")).isDisplayed(), "FilterPageHotness - found a card not tagged Hotness");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FilterPageHumanity() throws InterruptedException {
         pageHeader.filterHumanity().click();
         Thread.sleep(3000);//remove with bug fix
@@ -99,7 +100,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(driver.findElement(By.linkText("Humanity")).isDisplayed(), "FilterPageHumanity - found a card not tagged Hotness");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void FilterPageHumor() {
         pageHeader.filterHumor().click();
         //Thread.sleep(3000);//remove with bug fix
@@ -107,15 +108,14 @@ public class SubmissionCardsTest {
         Assert.assertTrue(driver.findElement(By.linkText("Humor")).isDisplayed(), "FilterPageHumor - found a card not tagged Hotness");
     }
 
-    @Test(enabled = true, priority = 2)
-    @Parameters({"url"})
-    public void FollowingShowsFollowedUsers(@Optional("https://qa.chive-testing.com/") String url) throws InterruptedException {
+    @Test
+    public void FollowingShowsFollowedUsers() throws InterruptedException {
         pageHeader.menuFollowing().click();
         helpers.PageActions.scrollDown(driver, 1);
         driver.navigate().refresh();//I don't know why but it's getting random usernames if I don't refresh
         Set<String> followedUsers = card.getAllUserNames();
         for (String user : followedUsers) {
-            driver.get(url + user.replace("@", ""));
+            driver.get(config.url + user.replace("@", ""));
             Thread.sleep(3000);//can't get it to work without this
             Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.followButton().findElement(By.className("fa-check")))).isDisplayed(), "Found an unfollowed user in the Following posts: " + user);
             driver.navigate().back();
@@ -132,7 +132,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(second > first, "Cards do not seem to be loading when you scroll down");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void MouseoversVoteBtns() throws InterruptedException {
         Actions a = new Actions(driver);
         //see if the upvote button is selected then unselect it if it is
@@ -151,7 +151,7 @@ public class SubmissionCardsTest {
         Assert.assertEquals(card.downvoteBtn().getCssValue("color"), "rgba(0, 195, 0, 1)", "Downvote button color did not change on mouseover");
     }
 
-    @Test(enabled = true, priority = 1)// TODO - fix this, border-color may work
+    @Test
     public void MouseOverFavoriteBtn() throws InterruptedException {
         Actions a = new Actions(driver);
         if (card.isSelected(card.favoriteBtn())) {
@@ -163,7 +163,7 @@ public class SubmissionCardsTest {
         Assert.assertEquals(card.favoriteBtn().getCssValue("color"), "rgba(0, 195, 0, 1)", "Favorite button color did not change on mouseover");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void MouseOverCommentBtn() throws InterruptedException {
         Actions a = new Actions(driver);
         a.moveToElement(card.commentIcon()).perform();
@@ -171,7 +171,7 @@ public class SubmissionCardsTest {
         Assert.assertEquals(card.commentIcon().getCssValue("color"), "rgba(0, 195, 0, 1)", "Comment button color did not change on mouseover ");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void MouseOverGIF() throws InterruptedException {
         helpers.PageActions.scrollDown(driver, 3);
         WebElement ourGIF = card.firstGIF();
@@ -181,7 +181,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(driver.findElement(By.id(ourGIFid)).findElement(By.className("overflow-hidden")).getAttribute("class").contains("invisible"), "Still see the GIF icon after mouseover on the GIF");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void MouseOverReportBtn() throws InterruptedException {
         Actions a = new Actions(driver);
         a.moveToElement(card.reportBtn()).perform();
@@ -190,7 +190,7 @@ public class SubmissionCardsTest {
     }
 
     //Can't get these overlay tests to work reliably
-    @Test(enabled = true, priority = 1)
+    @Test
     public void OverlayDownvote() {
         WebElement ourCard = card.cardNotDownvoted();
         ourCard.findElement(By.className("fa-thumbs-down")).click();
@@ -198,7 +198,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(card.voteDownOverlay())).isDisplayed(),"Downvote overlay not found");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void OverlayFavorite() throws InterruptedException {
         WebElement ourCard = card.cardNotFavorited();
         ourCard.findElement(By.className("fa-heart")).click();
@@ -206,7 +206,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(card.voteUpOverlay().isDisplayed(), "Upvote overlay not found");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void OverlayUpvote() throws InterruptedException {
         WebElement ourCard = card.cardNotUpvoted();
         ourCard.findElement(By.className("fa-thumbs-up")).click();
@@ -214,7 +214,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(card.voteUpOverlay().isDisplayed(), "Upvote overlay not found");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ReportPostButtons() {
         card.reportBtn().click();
         Assert.assertTrue(card.reportOffensive().isEnabled()
@@ -223,14 +223,14 @@ public class SubmissionCardsTest {
                 && card.reportOther().isEnabled(), "ReportPost - report modal buttons not found or enabled");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ReportPostText() {
         card.reportBtn().click();
         Assert.assertTrue(card.reportModalText().getAttribute("innerText").contains("Does this kind of stuff bother you? Does it contain stuff it shouldn't? Let us know, we'll take care of it.")
                 && card.reportModalHeader().getAttribute("innerText").contains("Report"), "Didn't find the report modal text");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void SubmissionImageWidth() throws InterruptedException {
         helpers.PageActions.scrollDown(driver, 2);
         Thread.sleep(2000);
@@ -241,7 +241,7 @@ public class SubmissionCardsTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void SubmissionURLMatchesCard() throws InterruptedException {
         WebElement ourCard = card.cardNotGIF();
         String subID = ourCard.getAttribute("id");
@@ -253,8 +253,7 @@ public class SubmissionCardsTest {
         Assert.assertEquals(subInt, urlInt, "The post id didn't match the url");
     }
 
-    @Test(enabled = true, priority = 1)
-    @Parameters({"unpaidEmail", "password"})
+    @Test
     //working manually but the button isn't changing color in the automated test, also stale element exception for some reason
     public void UpvoteButton() {
         //Upvote Button is already checked
@@ -264,7 +263,7 @@ public class SubmissionCardsTest {
         Assert.assertFalse(ourCard.getAttribute("class").contains("text-white"), "Checked upvote button did not turn white after clicking it ");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void VoteCounter() throws InterruptedException {
         WebElement ourCard = card.cardNotUpvoted();
         String ourID = ourCard.getAttribute("id");
@@ -274,5 +273,11 @@ public class SubmissionCardsTest {
         driver.navigate().refresh();//for some reason the counter doesn't increment after clicking in the automated test though it does when you try manually, this refresh makes it work though
         int votes2 = Integer.parseInt(driver.findElement(By.id(ourID)).findElement(By.cssSelector("div[id^='vote-counter']")).getText());
         Assert.assertTrue(votes2 > votes1, "VoteCounter - counter did not increment, votes1 is " + votes1 + " and votes2 is " + votes2);
+    }
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 }

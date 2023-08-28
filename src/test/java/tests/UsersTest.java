@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -9,40 +10,40 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.AdminUsersPage;
+import resources.TestConfig;
 
 import java.util.List;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class UsersTest {
 
     WebDriver driver = Drivers.ChromeDriver();
     AdminUsersPage users = new AdminUsersPage(driver);
     Logins login = new Logins(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
 
     @BeforeTest
-    @Parameters({"adminEmail", "password", "url"})
-    public void login(@Optional("thechivetest+admin@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
+
+    @BeforeClass
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"adminURL"})
-    public void setDriver(@Optional("https://qa.chive-testing.com/admin/dashboards/main") String adminURL) {
-        driver.get(adminURL);
-
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void setDriver() {
+        driver.get(config.adminURL);
     }
 
 //************************** Begin Tests ********************************************
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ActionsDropdownBanUser() throws InterruptedException {
 
         users.menuExpandUsers().click();
@@ -75,7 +76,7 @@ public class UsersTest {
 
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void ActionsDropdownDisplays() throws InterruptedException {
         // Thread.sleep(999999999);
         users.menuExpandUsers().click();
@@ -92,7 +93,7 @@ public class UsersTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void AllUsersPage() {
         users.menuExpandUsers().click();
         users.menuAllUsers().click();
@@ -105,7 +106,7 @@ public class UsersTest {
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void UseriChivePageLink() throws InterruptedException {
         users.menuExpandUsers().click();
         users.menuAllUsers().click();
@@ -128,5 +129,10 @@ public class UsersTest {
         }
     }
 
+    //************************** Teardown ********************************************
 
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
+    }
 }

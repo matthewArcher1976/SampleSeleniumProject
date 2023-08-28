@@ -1,15 +1,20 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import pages.*;
+import resources.TestConfig;
 
-@SuppressWarnings("DefaultAnnotationParam")
+
 public class LoginModalTest {
 
     WebDriver driver = Drivers.ChromeDriver();
@@ -18,22 +23,23 @@ public class LoginModalTest {
     PageHeaderPage header = new PageHeaderPage(driver);
     SubmissionCardsPage card = new SubmissionCardsPage(driver);
     ImageUploadPage upload = new ImageUploadPage(driver);
-
     SubmissionModalPage modal = new SubmissionModalPage(driver);
+    private static TestConfig config;
 
-    @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
+    //*********************** Setup *********************************
+    @BeforeClass
+    public void setConfig() throws Exception {
+        config = Config.getConfig();
     }
 
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    @BeforeMethod
+    public void setDriver() {
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
-    @Test(enabled = true, priority = 1)
+
+    @Test
     public void ForgotPasswordText() throws InterruptedException {
         header.loginBtn().click();
         Thread.sleep(2000);
@@ -59,20 +65,20 @@ public class LoginModalTest {
         Thread.sleep(2000);
         login.forgotPassword().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
-        login.email().sendKeys("thechivetest@gmail.com");
+        login.email().sendKeys(config.unpaidEmail);
         login.resetPasswordEmailMe().click();
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We have emailed your password reset link. If you do not find it in your inbox, please double check your spam folder.")
                 && login.updateSuccess().getText().contains("We have emailed your password reset link."), "ForgotPasswordValidEmail - success toast not found");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void LoginOpensOnDownvote() throws InterruptedException {
         card.firstCard().findElement(By.className("fa-thumbs-down")).click();
         Thread.sleep(3000);
         Assert.assertTrue(login.signIn().isDisplayed(), "User not logged in");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void LoginOpensOnDownvoteModalView() throws InterruptedException {
         card.firstCard().click();
         modal.modalDislikeBtn().click();
@@ -80,15 +86,14 @@ public class LoginModalTest {
         Assert.assertTrue(login.signIn().isDisplayed(), "Downvote on modal didn't prompt login");
     }
 
-    @Test(enabled = true, priority = 1)
-    @Parameters({"unpaidEmail", "password"})
+    @Test
     public void LoginOpensOnFavorite() throws InterruptedException {
         card.firstCard().findElement(By.className("fa-heart")).click();
         Thread.sleep(2000);
         Assert.assertTrue(login.signIn().isDisplayed(), "Downvote on modal didn't prompt login");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void LoginOpensOnFollowButton() throws InterruptedException {
         card.firstCard().findElement(By.cssSelector("a[href]")).click();
         profile.followButton().click();
@@ -96,44 +101,48 @@ public class LoginModalTest {
         Assert.assertTrue(login.signIn().isDisplayed(), "LoginOpensOnFollowButton - didn't open login modal");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void LoginOpensOnFollowing() throws InterruptedException {
         header.menuFollowing().click();
         Thread.sleep(2000);
         Assert.assertTrue(login.signIn().isDisplayed(), "LoginOpensOnFollowing - didn't see login modal");
     }
 
-    @Test(enabled = true, priority = 1)
-    @Parameters({"unpaidEmail", "password"})
-    public void LoginOpensOnSubmit(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password) throws InterruptedException {
+    @Test
+    public void LoginOpensOnSubmit() throws InterruptedException {
         header.submitBtn().click();
-        login.email().sendKeys(unpaidEmail);
-        login.password().sendKeys(password);
+        login.email().sendKeys(config.unpaidEmail);
+        login.password().sendKeys(config.password);
         login.signIn().click();
         Thread.sleep(2000);//yes
         try {
             Assert.assertTrue(upload.dragDrop().isDisplayed());
-            login.logout(driver);
+            login.logout();
         } catch (AssertionError e) {
             System.out.println("LoginOpensOnSubmit - didn't see submit page on login");
-            login.logout(driver);
+            login.logout();
         }
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void LoginOpensOnUpvote() throws InterruptedException {
         card.firstCard().findElement(By.className("fa-thumbs-up")).click();
         Thread.sleep(2000);
         Assert.assertTrue(login.signIn().isDisplayed(), "LoginOpensOnUpvote - didn't see login modal");
     }
 
-    @Test(enabled = true, priority = 1)
+    @Test
     public void LoginOpensOnUpvoteModalView() throws InterruptedException {
         card.firstCard().click();
         Thread.sleep(2000);
         modal.modalLikeBtn().click();
         Thread.sleep(2000);
         Assert.assertTrue(login.signIn().isDisplayed(), "Downvote on modal didn't prompt login");
+    }
+    //************************** Teardown ********************************************
 
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 }

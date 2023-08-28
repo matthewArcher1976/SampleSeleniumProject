@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -7,44 +8,45 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.LoginModalPage;
 import pages.PageHeaderPage;
+import resources.TestConfig;
 
-@SuppressWarnings("DefaultAnnotationParam")
 public class LoginFaceBookTest {
 
     WebDriver driver = Drivers.ChromeDriver();
 
     LoginModalPage modal = new LoginModalPage(driver);
     PageHeaderPage header = new PageHeaderPage(driver);
+    private static TestConfig config;
 
-    @BeforeTest
-    @Parameters({"url"})
-    public void login(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
-    }
+    //*********************** Setup *********************************
+    @BeforeClass
+    public void setConfig() throws Exception {
+        config = Config.getConfig();
+      }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void setDriver(){
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
 
-    @Test(enabled = true, priority = 99)
-    @Parameters({"facebookEmail", "password"})
-    public void FaceBookLoginValid(@Optional("matt.archer@chivemediagroup.com") String facebookEmail, @Optional("Chive1234") String password) {
+    @Test(priority = 99)
+    public void FaceBookLoginValid() {
         header.loginBtn().click();
         modal.loginFacebook().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("Facebook"));
-        modal.facebookEmail().sendKeys(facebookEmail);
-        modal.facebookPassword().sendKeys(password);
+        modal.facebookEmail().sendKeys(config.facebookEmail);
+        modal.facebookPassword().sendKeys(config.password);
         modal.facebookLoginBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(1));
         Assert.assertTrue(header.userMenu().isDisplayed(), "FaceBookLoginValid - User is not logged in");
+    }
+
+    //************************** Teardown ********************************************
+
+    @AfterClass
+    public void TearDown() {
+        driver.quit();
     }
 }

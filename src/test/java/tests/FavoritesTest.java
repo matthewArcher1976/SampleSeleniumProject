@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Config;
 import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
+import resources.TestConfig;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,33 +26,32 @@ public class FavoritesTest {
     ProfilePage profile = new ProfilePage(driver);
     SubmissionCardsPage cards = new SubmissionCardsPage(driver);
     SubmissionModalPage modal = new SubmissionModalPage(driver);
+    private static TestConfig config;
+
+    //************************** Setup ******************************************
+    @BeforeTest
+    public static void configs() throws Exception {
+        config = Config.getConfig();
+    }
 
     @BeforeTest
-    @Parameters({"unpaidEmail", "password", "url"})
-    public void login(@Optional("thechivetest@gmail.com") String unpaidEmail, @Optional("Chive1234") String password, @Optional("https://qa.chive-testing.com") String url) throws InterruptedException {
-        driver.get(url);
-        login.unpaidLogin(unpaidEmail, password, driver);
+    public void login() throws InterruptedException {
+        driver.get(config.url);
+        login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
-    @Parameters({"url"})
-    public void setDriver(@Optional("https://qa.chive-testing.com") String url) {
-        driver.get(url);
-    }
-
-    @AfterClass
-    public void TearDown() {
-        driver.close();
+    public void setDriver() {
+        driver.get(config.url);
     }
 
     //************************** Begin Tests ********************************************
 
-    @Test(priority = 1)
+    @Test
     public void FavoriteDisplaysOnProfile() throws InterruptedException {
         header.userMenu().click();
         header.yourProfileBtn().click();
-
         String yourName = ("@" + helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()));
         header.menuLatest().click();
         Thread.sleep(2000);//yes
@@ -87,9 +88,8 @@ public class FavoritesTest {
         Assert.assertTrue(cardFound, "Your favorited card did not show up on your Favorites feed ");
     }
 
-    @Test(enabled = true, priority = 1)
-    @Parameters()
-    public void FaveIconFillsWhenClicked() throws InterruptedException {
+    @Test
+    public void FaveIconFillsWhenClicked() {
         WebElement ourCard = cards.cardNotFavorited();
         String id = cards.cardNotFavorited().getAttribute("id");
         Assert.assertEquals(ourCard.findElement(By.className("fa-heart")).getCssValue("color"), "rgba(255, 255, 255, 1)", "Background color of icon should be rgba(255, 255, 255, 1) when not favorited");
@@ -99,23 +99,22 @@ public class FavoritesTest {
 
     }
 
-    @Test(priority = 99)
+    @Test(priority = 2)
     public void FavoriteGoneOnLogout() throws InterruptedException {
 
         boolean filled = favorites.isHeartFilled();
         if (!filled) {
             favorites.toggleFave().click();
         }
-        login.logout(driver);
+        login.logout();
         header.menuLatest().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("login")));
         driver.navigate().refresh();
         Assert.assertFalse(favorites.isHeartFilled(), "The favorite icon should not be filled for logged out user");
     }
 
-    @Test(priority = 1)
-    @Parameters()
-    public void NoDupesInFavorites() throws InterruptedException {
+    @Test
+        public void NoDupesInFavorites() throws InterruptedException {
         header.userMenu().click();
         header.yourProfileBtn().click();
         profile.tabFavorite().click();
@@ -133,5 +132,10 @@ public class FavoritesTest {
         }
         Assert.assertFalse(hasDuplicates, "Duplicate id found in favorites");
     }
+    //************************** Teardown ********************************************
 
+    @AfterClass
+    public void TearDown() {
+        driver.close();
+    }
 }
