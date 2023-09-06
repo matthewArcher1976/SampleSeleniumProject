@@ -7,7 +7,7 @@ public class UserNameBlacklist {
     	
     	
     public static ArrayList<String> getWordList() {
-    	ArrayList<String> wordList = new ArrayList<String>();
+    	ArrayList<String> wordList = new ArrayList<>();
     	wordList.add("activity");
     	wordList.add("activities");
     	wordList.add("admin");
