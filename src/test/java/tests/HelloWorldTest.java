@@ -20,7 +20,6 @@ public class HelloWorldTest {
 
     WebDriver driver;
     private static TestConfig config;
-    private boolean allTestsPassed;
 
 
     @BeforeTest

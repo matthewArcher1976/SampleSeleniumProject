@@ -1,7 +1,6 @@
 package resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import resources.TestConfig;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

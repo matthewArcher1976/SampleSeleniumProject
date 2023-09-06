@@ -47,17 +47,17 @@ public class SauceLabsListener extends TestListenerAdapter {
 
     public static void updateSauceLabsStatus(String jobId, boolean passed) {
         try (StringEntity entity = new StringEntity("{\"passed\": " + passed + "}", ContentType.APPLICATION_JSON)) {
-            executeHttpPut(SAUCE_LABS_URL + jobId, AUTH_STRING, entity);
+            executeHttpPut(SAUCE_LABS_URL + jobId, entity);
             log("Successfully updated Sauce Labs job status.");
         } catch (IOException e) {
             log("Failed to update Sauce Labs job status: " + e.getMessage());
         }
     }
 
-    private static void executeHttpPut(String url, String auth, HttpEntity entity) throws IOException {
+    private static void executeHttpPut(String url, HttpEntity entity) throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpPut putRequest = new HttpPut(url);
-            putRequest.setHeader("Authorization", auth);
+            putRequest.setHeader("Authorization", SauceLabsListener.AUTH_STRING);
             putRequest.setHeader("Content-Type", "application/json");
             putRequest.setEntity(entity); // <--- This line sets the entity for the request
             try (CloseableHttpResponse response = httpClient.execute(putRequest)) {
