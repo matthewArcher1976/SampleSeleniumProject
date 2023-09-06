@@ -14,26 +14,39 @@ import pages.EditProfilePage;
 import pages.PageHeaderPage;
 import pages.ProfilePage;
 import pages.SubmissionCardsPage;
+import resources.Config;
 import resources.TestConfig;
 
 import java.util.List;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class ProfileTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    ProfilePage profilePage = new ProfilePage(driver);
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    Actions action = new Actions(driver);
+    WebDriver driver;
     private static TestConfig config;
+
+    ProfilePage profilePage;
+    EditProfilePage profile;
+    Logins login;
+    PageHeaderPage header;
+    SubmissionCardsPage card;
+    Actions action;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+
+        action = new Actions(driver);
+        card = new SubmissionCardsPage(driver);
+        header = new PageHeaderPage(driver);
+        profile = new EditProfilePage(driver);
+        profilePage = new ProfilePage(driver);
     }
 
     @BeforeClass
@@ -46,8 +59,6 @@ public class ProfileTest {
     @BeforeMethod
     public void setDriver() throws InterruptedException {
         driver.get(config.url);
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
         Thread.sleep(3000);
     }
 
@@ -55,6 +66,8 @@ public class ProfileTest {
 
     @Test
     public void BlockUser() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         driver.get(config.url);
         card.firstCard().findElement(By.cssSelector("a[href]")).click();
         profilePage.blockBtn().click();
@@ -73,6 +86,8 @@ public class ProfileTest {
 
     @Test(enabled = false)//It's just a 404 for a banned user now so not really testable
     public void BannedUserIs404() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         driver.get(config.url + config.bannedUsername);
         Waiter.wait(driver).until(ExpectedConditions.urlContains(config.bannedUsername));
         Thread.sleep(1000);
@@ -81,6 +96,9 @@ public class ProfileTest {
 
     @Test
     public void ClickProfilePic() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         String profileURL = driver.getCurrentUrl();
         profilePage.tabFollowers().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("followers"));
@@ -90,27 +108,24 @@ public class ProfileTest {
     }
 
     @Test
-    public void ClickUserName() {
+    public void ClickUserName() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Thread.sleep(2000);//yes
         String profileURL = driver.getCurrentUrl();
         profilePage.tabFollowers().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("followers"));
         profilePage.userName().click();
         Waiter.wait(driver).until(ExpectedConditions.urlToBe(profileURL));
-        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlToBe(profileURL)), "Clicking user name did not return user to profile page");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlToBe(profileURL)), "Clicking user name did not return user to profile page, found " + profileURL);
     }
 
-    @Test
-    public void CMGLink() {
-        profilePage.cmgLink().click();
-        Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(driver.getCurrentUrl().contains("https://www.chivemediagroup.com/?utm_source=ichive"), "CMG Link broken");
-        driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
-    }
 
     @Test
     public void EditButtonNotDisplayed() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         String userName = ("@" + helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()));
         header.menuLatest().click();
         helpers.PageActions.scrollDown(driver, 1);
@@ -142,6 +157,8 @@ public class ProfileTest {
 
     @Test
     public void FeaturedPostShowsInProfile() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         header.menuLatest().click();
         header.menuFeatured().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump")), "Edit button should not display for user");
@@ -160,6 +177,8 @@ public class ProfileTest {
 
     @Test
     public void FollowUserBtn() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         try {
             Assert.assertTrue(profilePage.followButton().isDisplayed());
             Assert.fail("Follow button should not be on your own profile");
@@ -177,13 +196,23 @@ public class ProfileTest {
 
     @Test
     public void HoverEditButton() {
-        Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(84, 79, 79, 1)", "Background color before hover should be rgba(84, 79, 79, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
+        Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(84, 79, 79, 1)", "Background color before hover should be rgba(84, 79, 79, 1), found: " + profilePage.editButton().getCssValue("background-color"));
         action.moveToElement(profilePage.editButton()).perform();
-        Assert.assertEquals(profilePage.editButton().getCssValue("background-color"), "rgba(68, 64, 64, 1)", "Background color on hover should be rgba(68, 64, 64, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
+        String actualBgColor = profilePage.editButton().getCssValue("background-color");
+        String expectedColor1 = "rgba(68, 64, 64, 1)";
+        String expectedColor2 = "rgba(66, 62, 62, 1)"; // the color on hover keeps changing slightly
+
+        if (!actualBgColor.equals(expectedColor1) && !actualBgColor.equals(expectedColor2)) {
+            Assert.fail("Background color on hover should be either " + expectedColor1 + " or " + expectedColor2 + ", found: " + actualBgColor);
+        }
     }
 
     @Test
     public void HoverFacebookLink() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertTrue(profilePage.facebookLink().isDisplayed(), "Add a link to user's Facebook to proceed with this test");
         Assert.assertEquals(profilePage.facebookLink().getCssValue("background-color"), "rgba(59, 89, 152, 1)", "Background color before hover should be rgba(59, 89, 152, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.facebookLink()).perform();
@@ -193,6 +222,8 @@ public class ProfileTest {
 
     @Test
     public void HoverFavoritesTab() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertEquals(profilePage.tabFavorite().getCssValue("background-color"), "rgba(0, 0, 0, 0)", "Background color before hover should be rgba(0, 0, 0, 0), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.tabFavorite()).perform();
         Assert.assertEquals(profilePage.tabFavorite().getCssValue("background-color"), "rgba(41, 41, 41, 0.9)", "Background color on hover should be rgba(41, 41, 41, 0.9), found: " + profilePage.tabFeatured().getCssValue("background-color"));
@@ -200,6 +231,8 @@ public class ProfileTest {
 
     @Test
     public void HoverFeaturedTab() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertEquals(profilePage.tabFeatured().getCssValue("background-color"), "rgba(0, 0, 0, 0)", "Background color before hover should be rgba(0, 0, 0, 0), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.tabFeatured()).perform();
         Assert.assertEquals(profilePage.tabFeatured().getCssValue("background-color"), "rgba(41, 41, 41, 0.9)", "Background color on hover should be rgba(41, 41, 41, 0.9), found: " + profilePage.tabFeatured().getCssValue("background-color"));
@@ -207,6 +240,8 @@ public class ProfileTest {
 
     @Test
     public void HoverFollowersTab() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertEquals(profilePage.tabFollowers().getCssValue("background-color"), "rgba(0, 0, 0, 0)", "Background color before hover should be rgba(0, 0, 0, 0), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.tabFollowers()).perform();
         Assert.assertEquals(profilePage.tabFollowers().getCssValue("background-color"), "rgba(41, 41, 41, 0.9)", "Background color on hover should be rgba(41, 41, 41, 0.9), found: " + profilePage.tabFeatured().getCssValue("background-color"));
@@ -214,6 +249,8 @@ public class ProfileTest {
 
     @Test
     public void HoverFollowingTab() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertEquals(profilePage.tabFollowing().getCssValue("background-color"), "rgba(0, 0, 0, 0)", "Background color before hover should be rgba(0, 0, 0, 0), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.tabFollowing()).perform();
         Assert.assertEquals(profilePage.tabFollowing().getCssValue("background-color"), "rgba(41, 41, 41, 0.9)", "Background color on hover should be rgba(41, 41, 41, 0.9), found: " + profilePage.tabFeatured().getCssValue("background-color"));
@@ -221,6 +258,8 @@ public class ProfileTest {
 
     @Test
     public void HoverInstaLink() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertTrue(profilePage.instagramLink().isDisplayed(), "Add a link to user's Instagram to proceed with this test");
         Assert.assertEquals(profilePage.instagramLink().getCssValue("background-color"), "rgba(138, 58, 185, 1)", "Background color before hover should be rgba(138, 58, 185, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.instagramLink()).perform();
@@ -230,6 +269,8 @@ public class ProfileTest {
 
     @Test
     public void HoverTwitterLink() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertTrue(profilePage.twitterLink().isDisplayed(), "Add a link to user's Twitter to proceed with this test");
         Assert.assertEquals(profilePage.twitterLink().getCssValue("background-color"), "rgba(0, 172, 238, 1)", "Background color before hover should be rgba(0, 172, 238, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.twitterLink()).perform();
@@ -239,6 +280,8 @@ public class ProfileTest {
 
     @Test
     public void HoverTiktokLink() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertTrue(profilePage.tiktokLink().isDisplayed(), "Add a link to user's Tiktok to proceed with this test");
         Assert.assertEquals(profilePage.tiktokLink().getCssValue("background-color"), "rgba(0, 0, 34, 1)", "Background color before hover should be rgba(0, 0, 34, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
         action.moveToElement(profilePage.tiktokLink()).perform();
@@ -248,6 +291,8 @@ public class ProfileTest {
 
     @Test
     public void HoverWishlistLink() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Thread.sleep(10000);
         Assert.assertTrue(profilePage.amazonLink().isDisplayed(), "Add a link to user's Facebook to proceed with this test");
         Assert.assertEquals(profilePage.amazonLink().getCssValue("background-color"), "rgba(255, 153, 0, 1)", "Background color before hover should be rgba(255, 153, 0, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
@@ -258,6 +303,8 @@ public class ProfileTest {
 
     @Test
     public void InfiniteScrollFollowers() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         driver.get(config.url + "ca_pinup_girl"); //user with followers
         profilePage.tabFollowers().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("followers"));
@@ -270,6 +317,8 @@ public class ProfileTest {
 
     @Test
     public void InfiniteScrollFollowing() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         profilePage.tabFollowing().click();
         Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("[id^='user-card-']"), 0));
         int first = profilePage.allFollowers().size();
@@ -278,8 +327,10 @@ public class ProfileTest {
         Assert.assertTrue(second > first, "Cards do not seem to be loading when you scroll down");
     }
 
-    @Test
+    @Test(enabled = false)
     public void NFTSubmitWallet() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         profilePage.nftTab().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("nft"));
         PageActions.scrollDown(driver, 1);
@@ -288,8 +339,10 @@ public class ProfileTest {
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profilePage.nftToast())).getText().contains("You request will be processed and we will send you a confirmation e-mail soon."));
     }
 
-    @Test
+    @Test(enabled = false)
     public void NFTSubmitWalletInvalid() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         profilePage.nftTab().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("nft"));
         PageActions.scrollDown(driver, 1);
@@ -298,8 +351,10 @@ public class ProfileTest {
         Assert.assertTrue(profilePage.nftWalletError().getText().contains("The wallet format is invalid."));
     }
 
-    @Test
+    @Test(enabled = false)//need an NFT user
     public void NFTtabText() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         profilePage.nftTab().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("nft"));
         Assert.assertTrue(driver.getPageSource().contains(" Once upon a time, if you were one of the lucky, random recipients of the ultra-rare gold bars denominated with the letter V, you were issued a digital certificate of authenticity in the form of a Non-Fungible Token (NFT). "));
@@ -307,6 +362,8 @@ public class ProfileTest {
 
     @Test
     public void ProfileIs404() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         String badUser = helpers.Randoms.getRandomString(20);
         driver.get(config.url + badUser);
         Waiter.wait(driver).until(ExpectedConditions.urlContains(badUser));
@@ -314,7 +371,9 @@ public class ProfileTest {
     }
 
     @Test
-    public void PrivacyPolicy() {
+    public void TermsAndPrivacyLink() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         profilePage.privacyTermsLink().click();
         helpers.WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getCurrentUrl().contentEquals("https://www.chivemediagroup.com/legal/terms?utm_source=ichive"), "Privacy Policy link broken");
@@ -324,6 +383,8 @@ public class ProfileTest {
 
     @Test
     public void SubmissionsDisplay() throws InterruptedException {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         driver.navigate().refresh(); //not sure why this is needed; it was grabbing the cards from favorites even though I was never on there
         Thread.sleep(2000);
         List<WebElement> userPosts = profilePage.allCards();

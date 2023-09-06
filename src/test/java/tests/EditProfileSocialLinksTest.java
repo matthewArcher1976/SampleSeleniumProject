@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -14,22 +13,30 @@ import pages.EditProfilePage;
 import pages.ProfilePage;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
 
+@Listeners(listeners.SauceLabsListener.class)
 public class EditProfileSocialLinksTest {
-
-    WebDriver driver = Drivers.ChromeDriver();
-    ProfilePage profilePage = new ProfilePage(driver);
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
-    Actions action = new Actions(driver);
+    WebDriver driver;
     private static TestConfig config;
+    Actions action;
+    Logins login;
+    EditProfilePage profile;
+
+    ProfilePage profilePage;
 
     //************************** Setup ******************************************
+
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        action = new Actions(driver);
+        login = new Logins(driver);
+        profile = new EditProfilePage(driver);
+        profilePage = new ProfilePage(driver);
     }
-    
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
@@ -37,17 +44,17 @@ public class EditProfileSocialLinksTest {
     }
 
     @BeforeMethod
-    public void setDriver() {
+    public void refresh() {
         driver.get(config.url);
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
+
     }
 
     //************************** Begin Tests ********************************************
 
     @Test
     public void AmazonEditCancel() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.amazonEditBtn().click();
         Assert.assertTrue(profile.amazonEditBtnCancel().isDisplayed(), "AmazonEditCancel - Did not see the edit cancel button");
@@ -58,7 +65,8 @@ public class EditProfileSocialLinksTest {
     @Test
 
     public void AmazonLink() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.amazonEditBtn().click();
         profile.amazonInput().clear();
@@ -87,7 +95,7 @@ public class EditProfileSocialLinksTest {
         } catch (TimeoutException e) {
             driver.close();
             helpers.WindowUtil.switchToWindow(driver, 0);
-            Assert.fail();
+            Assert.fail("Did not find Amazon window");
         }
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
@@ -96,7 +104,8 @@ public class EditProfileSocialLinksTest {
     @Test
 
     public void AmazonLinkBadURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.amazonEditBtn().click();
         profile.amazonInput().clear();
@@ -109,7 +118,8 @@ public class EditProfileSocialLinksTest {
 
 //Nothing I do changes when I mouseover the element or not, even though the tooltip is not visible
     public void AmazonLinkHover() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         WebElement toolTip = profile.amazonTooltip();
         System.out.println(toolTip.getCssValue("color"));
@@ -119,7 +129,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void AmazonLinkShortened() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.amazonEditBtn().click();
         profile.amazonInput().clear();
@@ -131,8 +142,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void FaceBookLink() {
-        //enter your FB username
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.facebookInput().clear();
         profile.facebookInput().sendKeys("asdf");
@@ -153,7 +164,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void FaceBookLinkBadURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.facebookInput().clear();
         profile.facebookInput().sendKeys("https://www.faceXXXEbook.com/@asdf");
@@ -163,7 +175,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void FaceBookLinkPartialURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.facebookInput().clear();
         profile.facebookInput().sendKeys("facebook.com/asdf");
@@ -186,7 +199,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void FaceBookLinkWholeURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.facebookInput().clear();
         profile.facebookInput().sendKeys("http://www.facebook.com/asdf");
@@ -208,7 +222,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void FaceBookUserHandle() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.facebookInput().clear();
         profile.facebookInput().sendKeys("@asdf");
@@ -218,8 +233,9 @@ public class EditProfileSocialLinksTest {
     }
 
     @Test
-    public void instagramLink() {
-        profile.editProfileBtn().click();
+    public void InstagramLink() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.instagramInput().clear();
         profile.instagramInput().sendKeys("asdf");
@@ -237,8 +253,12 @@ public class EditProfileSocialLinksTest {
         helpers.WindowUtil.switchToWindow(driver, 1);
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(instaHandle));
 
-        Assert.assertTrue(driver.getTitle().contains("Instagram photos and videos")
-                && driver.getTitle().contains(instaHandle), "Did not find Insta window");
+        if (!config.driverType.contains("Sauce")) {//getting error 429 when I try this on sauce
+            Assert.assertTrue(driver.getTitle().contains("Instagram")
+                    && driver.getTitle().contains(instaHandle), "Did not find Insta window");
+        } else {
+            Assert.assertTrue(driver.getCurrentUrl().contains("instagram"), "Did not open instagram page");
+        }
 
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
@@ -246,7 +266,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void InstaLinkBadURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.instagramInput().clear();
         profile.instagramInput().sendKeys("https://www.instagram.com/qwerty/asdf");
@@ -256,7 +277,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void InstaLinkWholeURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.instagramInput().clear();
         profile.instagramInput().sendKeys("https://www.instagram.com/asdf");
@@ -272,15 +294,21 @@ public class EditProfileSocialLinksTest {
         profilePage.instagramLink().click();
         helpers.WindowUtil.switchToWindow(driver, 1);
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(instaHandle));
-        Assert.assertTrue(driver.getTitle().contains("Instagram photos and videos")
-                && driver.getTitle().contains(instaHandle), "Did not find Insta window");
+        if (!config.driverType.contains("Sauce")) {//getting error 429 when I try this on sauce
+            Assert.assertTrue(driver.getTitle().contains("Instagram")
+                    && driver.getTitle().contains(instaHandle), "Did not find Insta window");
+        } else {
+            Assert.assertTrue(driver.getCurrentUrl().contains("instagram"), "Did not open instagram page");
+        }
+
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
     public void InstaLinkUserHandle() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.instagramInput().clear();
         profile.instagramInput().sendKeys("@asdf");
@@ -290,7 +318,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void TikTokLink() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("asdf");
@@ -315,19 +344,20 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void TiktokBadURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("https://www.tiktok.com/qwerty/asdf");
         profile.saveProfileBtn().click();
         // Thread.sleep(10000);
         Assert.assertTrue(helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(profile.tiktokBadURL())).isDisplayed(), "Should have rejected bad Tiktok link");
-
     }
 
     @Test
     public void TiktokUserHandle() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("@asdf");
@@ -337,7 +367,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void TikTokLinkWholeURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("https://www.tiktok.com/@asdf");
@@ -361,7 +392,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void TwitterBadURL() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.twitterInput().clear();
         profile.twitterInput().sendKeys("https://www.twitter.com/qwerty/asdf");
@@ -371,7 +403,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void TwitterLink() throws InterruptedException {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.twitterInput().clear();
         profile.twitterInput().sendKeys("asdf");
@@ -393,7 +426,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void TwitterLinkWholeURL() throws InterruptedException {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.twitterInput().clear();
         profile.twitterInput().sendKeys("https://www.twitter.com/asdf");
@@ -415,7 +449,8 @@ public class EditProfileSocialLinksTest {
 
     @Test
     public void WebsiteInputNotFound() {
-        profile.editProfileBtn().click();
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.socialLinksTab().click();
         try {
             Assert.assertTrue(profile.websiteInput().isDisplayed());

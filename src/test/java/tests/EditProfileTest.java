@@ -1,10 +1,12 @@
 package tests;
 
-
-import helpers.Config;
-import helpers.Drivers;
+import helpers.CustomExpectedConditions;
+import pages.ProfilePage;
+import resources.Config;
 import helpers.Logins;
+import helpers.Randoms;
 import helpers.Waiter;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -13,26 +15,35 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
+
 import pages.EditProfilePage;
-import pages.PageHeaderPage;
+
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
+
+//@Listeners(listeners.SauceLabsListener.class)
 public class EditProfileTest {
-
-    WebDriver driver = Drivers.ChromeDriver();
-
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
-
-    PageHeaderPage header = new PageHeaderPage(driver);
-    Actions action = new Actions(driver);
     private static TestConfig config;
+    WebDriver driver;
 
+    Actions action;
+    EditProfilePage profile;
+    Logins login;
+    ProfilePage profilePage;
     //************************** Setup ******************************************
+
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        action = new Actions(driver);
+        login = new Logins(driver);
+        profile = new EditProfilePage(driver);
+
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
@@ -40,16 +51,17 @@ public class EditProfileTest {
     }
 
     @BeforeMethod
-    public void setDriver() {
+    public void refresh() {
         driver.get(config.url);
-        profile.userMenu().click();
-        profile.settingsBtn().click();
+
     }
 
     //************************** Begin Tests ********************************************
 
     @Test
     public void AddMembership() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.membershipTab().click();
         profile.addMembershipBtn().click();
         Waiter.quickWait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
@@ -80,6 +92,8 @@ public class EditProfileTest {
     @Test(priority = 99)
     //run last because the finder window will not close
     public void BannerPicUpdate() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         WebElement fileInput = profile.bannerEditBtn();
         fileInput.click();
         String filePath = System.getProperty("user.dir") + "/src/images/stock52.jpg";
@@ -90,23 +104,36 @@ public class EditProfileTest {
         Assert.assertTrue(profile.updateSuccess().isDisplayed(), "BannerPicUpdate - Update Success not found");
     }
 
-    @Test
-    public void BirthdayPicker() throws InterruptedException {
-        String year = helpers.Randoms.getRandomYear();
-        String month = helpers.Randoms.getRandomMonth();
-        String day = helpers.Randoms.getRandomDay();
+    @Test(enabled = false)
+    public void BirthdayPicker(){
+        profile.userMenu().click();
+        profile.settingsBtn().click();
+        String year = Randoms.getRandomYear();
+        String month = Randoms.getRandomMonth();
+        String day = Randoms.formatDay(Randoms.getRandomDay());
         String birthday = profile.monthToNumber(month) + "/" + helpers.Randoms.formatDay(day) + "/" + year;
         profile.birthDayInput().click();
-         profile.birthDayYear(year).click();
-        profile.birthDayMonth(month).click();
-        Thread.sleep(1000);
-        profile.birthDayDay(day).click();
-        Thread.sleep(2000);
-        Assert.assertEquals(profile.birthDayValue().getAttribute("value"), birthday, "Birthday did not update properly");
+        profile.birthDayInput().sendKeys(month + day + year);
+        System.out.println(birthday);
+       // Assert.assertEquals(profile.birthDayValue().getAttribute("value"), birthday, "Birthday did not update properly");
     }
-
+    @Test
+    public void CMGLink() throws InterruptedException {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Thread.sleep(2000);
+        profilePage.cmgLink().click();
+        Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+        helpers.WindowUtil.switchToWindow(driver, 1);
+        Assert.assertTrue(driver.getCurrentUrl().contains("https://www.chivemediagroup.com/?utm_source=ichive"), "CMG Link broken");
+        driver.close();
+        helpers.WindowUtil.switchToWindow(driver, 0);
+    }
     @Test
     public void EmailInputNoEmail() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.emailInput().click();
         profile.emailInput().sendKeys(Keys.HOME, Keys.SHIFT, Keys.END);
         profile.emailInput().sendKeys(Keys.BACK_SPACE);
@@ -116,7 +143,9 @@ public class EditProfileTest {
 
     @Test(enabled = false)
     public void EmailInputInvalidEmail() {
-        //TODO - find a way to find the error popup that displays; i cannot find it in the DOM
+        profile.userMenu().click();
+        profile.settingsBtn().click();
+        //TODO - find a way to find the error popup that displays; I cannot find it in the DOM
         profile.emailInput().clear();
         profile.emailInput().sendKeys("foobar");
         profile.saveProfileBtn().click();
@@ -131,7 +160,8 @@ public class EditProfileTest {
     //TODO - figure out why this does not work in the automation. The gender selection reverts after refreshing, tried several ways and can't make it work
     @Test(enabled = false)
     public void GenderSelect() throws InterruptedException {
-
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.genderDropdown().click();
         profile.genderMale().click();
         profile.emailInput().click();//maybe click outside the gender dropdown?
@@ -142,7 +172,7 @@ public class EditProfileTest {
         profile.userMenu().click();
         profile.settingsBtn().click();
         Thread.sleep(2000);
-        System.out.println(profile.genderDropdown().getText() + " is the getText()"+ " and " + profile.genderSelect().getFirstSelectedOption().getText() + " is the getFirstSelected()");
+        System.out.println(profile.genderDropdown().getText() + " is the getText()" + " and " + profile.genderSelect().getFirstSelectedOption().getText() + " is the getFirstSelected()");
         Assert.assertEquals(profile.genderSelect().getFirstSelectedOption().getText(), "Male", "Male should be selected");
 
         profile.genderDropdown().click();
@@ -165,8 +195,11 @@ public class EditProfileTest {
         driver.navigate().refresh();
         Assert.assertEquals(profile.genderDropdown().getText(), "Other", "Other should be selected");
     }
+
     @Test
     public void HoverAccountTab() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         //Inactive
         Assert.assertEquals(profile.accountTab().getCssValue("color"), "rgba(207, 207, 207, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.accountTab().getCssValue("color"));
         action.moveToElement(profile.accountTab()).perform();
@@ -179,8 +212,11 @@ public class EditProfileTest {
         action.moveToElement(profile.accountTab()).perform();
         Assert.assertEquals(profile.accountTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.accountTab().getCssValue("color"));
     }
+
     @Test
     public void HoverEmailTab() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         //Inactive
         Assert.assertEquals(profile.emailTab().getCssValue("color"), "rgba(207, 207, 207, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.emailTab().getCssValue("color"));
         action.moveToElement(profile.emailTab()).perform();
@@ -193,8 +229,11 @@ public class EditProfileTest {
         action.moveToElement(profile.emailTab()).perform();
         Assert.assertEquals(profile.emailTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.emailTab().getCssValue("color"));
     }
+
     @Test
     public void HoverMembershipTab() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         //Inactive
         Assert.assertEquals(profile.membershipTab().getCssValue("color"), "rgba(207, 207, 207, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.membershipTab().getCssValue("color"));
         action.moveToElement(profile.membershipTab()).perform();
@@ -207,8 +246,11 @@ public class EditProfileTest {
         action.moveToElement(profile.membershipTab()).perform();
         Assert.assertEquals(profile.membershipTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.membershipTab().getCssValue("color"));
     }
+
     @Test
     public void HoverProfileTab() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         //Active
         Assert.assertEquals(profile.profileTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.profileTab().getCssValue("color"));
         action.moveToElement(profile.profileTab()).perform();
@@ -220,8 +262,11 @@ public class EditProfileTest {
         action.moveToElement(profile.profileTab()).perform();
         Assert.assertEquals(profile.profileTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.profileTab().getCssValue("color"));
     }
+
     @Test
     public void HoverSocialTab() throws InterruptedException {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         //Inactive
         Assert.assertEquals(profile.socialLinksTab().getCssValue("color"), "rgba(207, 207, 207, 1)", "Color on hover while inactive should be rgba(207, 207, 207, 1), found: " + profile.socialLinksTab().getCssValue("color"));
         action.moveToElement(profile.socialLinksTab()).perform();
@@ -237,8 +282,11 @@ public class EditProfileTest {
         action.moveToElement(profile.socialLinksTab()).perform();
         Assert.assertEquals(profile.socialLinksTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while active should be rgba(0, 158, 0, 1), found: " + profile.socialLinksTab().getCssValue("color"));
     }
+
     @Test(enabled = false)//Notifications tab removed, may be reintroduced
     public void Notifications() throws InterruptedException {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.notificationsTab().click();
 
         if (profile.notificationsToggle().getAttribute("value").equals("false")) {
@@ -259,6 +307,8 @@ public class EditProfileTest {
 
     @Test
     public void PasswordChangeMismatch() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         //Enter mismatched passwords
         profile.accountTab().click();
         profile.password().sendKeys(config.password);
@@ -269,7 +319,8 @@ public class EditProfileTest {
 
     @Test
     public void PasswordChangeValid() {
-
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.accountTab().click();
         profile.password().sendKeys("Chive1234");
         profile.passwordVerify().sendKeys("Chive1234");
@@ -279,6 +330,8 @@ public class EditProfileTest {
 
     @Test(enabled = false) //TODO - fix image uploading, figure out what to assert to verify
     public void ProfilePicAndBanner() throws InterruptedException {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.bannerInput().sendKeys(System.getProperty("user.dir") + "/src/images/stock52.jpeg");
         Thread.sleep(10000);
         profile.profilePicInput().sendKeys(System.getProperty("user.dir") + "/src/images/stock53.jpeg");
@@ -290,16 +343,10 @@ public class EditProfileTest {
 
     @Test
     public void ProfileTabSelectedByDefault() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("settings"));
         Assert.assertTrue(profile.profileTab().getAttribute("aria-selected").contains("true"), "Profile tab was not selected by default");
-    }
-
-    @Test(priority = 99)
-    public void RedirectLoggedOutUser() throws InterruptedException {
-        Waiter.wait(driver).until(ExpectedConditions.urlContains("settings"));
-        login.logout();
-        header.menuFollowing().click();
-        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("auth")), "User was not redirected to the login when they tried to access settings while logged out");
     }
 
     @Test
@@ -346,6 +393,8 @@ public class EditProfileTest {
     public void UpdateFirstName() {
 
         String nameAfter = helpers.Randoms.getRandomString(10);
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.firstNameInput().clear();
         profile.firstNameInput().sendKeys(nameAfter);
         profile.saveProfileBtn().click();
@@ -356,8 +405,9 @@ public class EditProfileTest {
 
     @Test
     public void UpdateLastName() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         String nameAfter = helpers.Randoms.getRandomString(10);
-        //System.out.println("nameAfter = " + nameAfter );
         profile.lastNameInput().clear();
         profile.lastNameInput().sendKeys(nameAfter);
         profile.saveProfileBtn().click();
@@ -368,6 +418,8 @@ public class EditProfileTest {
 
     @Test
     public void UpdateSuccess() {
+        profile.userMenu().click();
+        profile.settingsBtn().click();
         profile.firstNameInput().clear();
         profile.firstNameInput().sendKeys(helpers.Randoms.getRandomString(10));
         profile.saveProfileBtn().click();

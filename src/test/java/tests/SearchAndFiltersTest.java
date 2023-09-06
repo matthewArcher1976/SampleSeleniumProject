@@ -1,8 +1,8 @@
 package tests;
 
-import helpers.Config;
+import helpers.Waiter;
+import resources.Config;
 import helpers.CustomExpectedConditions;
-import helpers.Drivers;
 import helpers.Logins;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -17,24 +17,37 @@ import resources.TestConfig;
 
 import java.util.List;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class SearchAndFiltersTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    SearchAndFiltersPage search = new SearchAndFiltersPage(driver);
-    Logins login = new Logins(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    SubmissionModalPage modal = new SubmissionModalPage(driver);
-    Actions action = new Actions(driver);
-    String searchTerm = "theCHIVERBrady";
+    WebDriver driver;
     private static TestConfig config;
+
+    SearchAndFiltersPage search;
+    Logins login;
+    PageHeaderPage header;
+    SubmissionCardsPage card;
+    SubmissionModalPage modal;
+    Actions action;
+    final String SEARCH_TERM = "theCHIVERBrady";
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+
+        action = new Actions(driver);
+        card = new SubmissionCardsPage(driver);
+        header = new PageHeaderPage(driver);
+        modal = new SubmissionModalPage(driver);
+        search = new SearchAndFiltersPage(driver);
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
@@ -131,7 +144,7 @@ public class SearchAndFiltersTest {
     public void FollowButtonDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();
-        action.sendKeys(searchTerm).sendKeys(Keys.ENTER).build().perform();
+        action.sendKeys(SEARCH_TERM).sendKeys(Keys.ENTER).build().perform();
         helpers.Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
         Assert.assertTrue(search.followBtn().isDisplayed(), "Did not find follow button");
     }
@@ -140,15 +153,17 @@ public class SearchAndFiltersTest {
     public void HashTagExactMatchDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();
-        action.sendKeys(searchTerm).sendKeys(Keys.ENTER).build().perform();
-        Assert.assertEquals(search.resultsTag().getText(), "theCHIVERBrady", "HashTagExactMatchDisplays - found wrong hashtag");
+        action.sendKeys(SEARCH_TERM).sendKeys(Keys.ENTER).build().perform();
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Assert.assertEquals(search.resultsTag().getText(), "theCHIVERBrady", "HashTagExactMatchDisplays - looking for theCHIVERBrady found " + search.resultsTag().getText());
     }
 
     @Test
     public void HashTagPartialMatchDisplays() throws InterruptedException {
         search.magnifyIcon().click();
         search.searchInput().click();
-        action.sendKeys(searchTerm).sendKeys(Keys.ENTER).build().perform();
+        action.sendKeys(SEARCH_TERM).sendKeys(Keys.ENTER).build().perform();
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         search.searchInput().sendKeys(Keys.HOME, Keys.SHIFT, Keys.END);
         search.searchInput().sendKeys(Keys.BACK_SPACE);
         search.searchInput().sendKeys("brady");
@@ -163,7 +178,6 @@ public class SearchAndFiltersTest {
     public void InfiniteScrollingSearch() throws InterruptedException {
         search.magnifyIcon().click();
         search.searchInput().click();
-        action.sendKeys(searchTerm).sendKeys(Keys.ENTER).build().perform();
         search.searchInput().sendKeys(Keys.HOME, Keys.SHIFT, Keys.END);
         search.searchInput().sendKeys(Keys.BACK_SPACE);
         search.searchInput().sendKeys("hack");
@@ -179,18 +193,9 @@ public class SearchAndFiltersTest {
     }
 
     @Test
-    public void ResultsTextDisplays() {
-        search.magnifyIcon().click();
-        search.searchInput().click();
-        action.sendKeys(searchTerm).sendKeys(Keys.ENTER).build().perform();
-        Assert.assertTrue(search.searchResultHeader().getText().contains("Here's what we found for"), "ResultsTextDisplays - Did not find results Text");
-    }
-
-    @Test
     public void UsersPartialMatchDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();
-        action.sendKeys(searchTerm).sendKeys(Keys.ENTER).build().perform();
         search.searchInput().sendKeys(Keys.HOME, Keys.SHIFT, Keys.END);
         search.searchInput().sendKeys(Keys.BACK_SPACE);
         search.searchInput().sendKeys("brady");

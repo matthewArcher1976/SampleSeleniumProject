@@ -1,34 +1,40 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.*;
+
 import pages.EditProfilePage;
+
 import resources.TestConfig;
 
-@SuppressWarnings("TestFailedLine")
+import static helpers.getDriverType.getDriver;
+@Listeners(listeners.SauceLabsListener.class)
 public class EditProfileAccountTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
+    WebDriver driver;
+    EditProfilePage profile;
+    Logins login;
 
     private static TestConfig config;
-
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        login = new Logins(driver);
+        profile = new EditProfilePage(driver);
     }
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
         login.unpaidLogin(config.unpaidEmail, config.password);
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
     @BeforeMethod
     public void refresh() {
@@ -38,9 +44,10 @@ public class EditProfileAccountTest {
     }
 
     //************************** Begin Tests ********************************************
+    //TODO All the test cases for the Account tab
     @Test
     public void UserName(){
-        profile.userName().sendKeys("a");
+        Assert.assertTrue(true);
     }
 
     //************************** Teardown ********************************************

@@ -16,7 +16,7 @@ public class MobileViewPage {
     //******************** Elements ***********************
 
     public WebElement hamburgerMenu() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[id^='headlessui-disclosure-button-']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[id*='headlessui-disclosure-button-']")));
     }
 
     public WebElement mobileAvatar() {

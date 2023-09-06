@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class ProfilePage {
     //TODO - profile page, not the edit
     private final WebDriver driver;
@@ -45,7 +44,7 @@ public class ProfilePage {
     }
 
     public WebElement cmgLink() {
-        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.linkText("Chive Media Group")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.partialLinkText("Chive Media Group")));
     }
 
     public WebElement editButton() {

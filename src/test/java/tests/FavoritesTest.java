@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -16,22 +15,33 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class FavoritesTest {
-
-    WebDriver driver = Drivers.ChromeDriver();
-
-    FavoritesPage favorites = new FavoritesPage(driver);
-    Logins login = new Logins(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
-    ProfilePage profile = new ProfilePage(driver);
-    SubmissionCardsPage cards = new SubmissionCardsPage(driver);
-    SubmissionModalPage modal = new SubmissionModalPage(driver);
     private static TestConfig config;
+    WebDriver driver;
+
+    FavoritesPage favorites;
+    Logins login;
+    PageHeaderPage header;
+    ProfilePage profile;
+    SubmissionCardsPage cards;
+    SubmissionModalPage modal;
 
     //************************** Setup ******************************************
+
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+
+        cards = new SubmissionCardsPage(driver);
+        favorites = new FavoritesPage(driver);
+        header = new PageHeaderPage(driver);
+        modal = new SubmissionModalPage(driver);
+        profile = new ProfilePage(driver);
     }
 
     @BeforeTest
@@ -42,7 +52,7 @@ public class FavoritesTest {
     }
 
     @BeforeMethod
-    public void setDriver() {
+    public void refresh() {
         driver.get(config.url);
     }
 
@@ -114,7 +124,7 @@ public class FavoritesTest {
     }
 
     @Test
-        public void NoDupesInFavorites() throws InterruptedException {
+    public void NoDupesInFavorites() throws InterruptedException {
         header.userMenu().click();
         header.yourProfileBtn().click();
         profile.tabFavorite().click();

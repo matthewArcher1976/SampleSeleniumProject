@@ -1,59 +1,99 @@
 package listeners;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.testng.ITestContext;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
-import tests.HelloWorldTest;
+
+import java.io.IOException;
+import java.util.Base64;
 
 public class SauceLabsListener extends TestListenerAdapter {
+    private static final String SAUCE_LABS_URL = "https://saucelabs.com/rest/v1/oauth-matt.archer-ff614/jobs/";
+    private static final String AUTH_STRING = "Basic " + java.util.Base64.getEncoder().encodeToString("oauth-matt.archer-ff614:48c2e9ca-6c85-470e-a332-588e7e6fde98".getBytes());
+
+    @Override
+    public void onTestStart(ITestResult result) {
+        log("Test is starting: " + result.getMethod().getMethodName());
+    }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        logTestFailure(result);
+        logTestStatus(result, "Failed");
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        logTestSuccess(result);
+        logTestStatus(result, "Passed");
     }
 
-    private void logTestFailure(ITestResult result) {
+    private void logTestStatus(ITestResult result, String status) {
         String methodName = result.getMethod().getMethodName();
-        String errorMessage = result.getThrowable().getMessage();
-        String stackTrace = result.getThrowable().getStackTrace().toString();
+        log("Test Case: " + methodName);
+        log("Status: " + status);
 
-        // Log test failure details
-        System.out.println("Test Case: " + methodName);
-        System.out.println("Status: Failed");
-        System.out.println("Error Message: " + errorMessage);
-        System.out.println("Stack Trace: " + stackTrace);
+        String jobId = (String) result.getTestContext().getAttribute("JobId");
 
-        // Set custom job metadata in Sauce Labs
-        setSauceMetadata(methodName, "Failed", errorMessage, stackTrace);
+        updateSauceLabsStatus(jobId, "Passed".equals(status));
     }
 
-    private void logTestSuccess(ITestResult result) {
-        String methodName = result.getMethod().getMethodName();
-
-        // Log test success details
-        System.out.println("Test Case: " + methodName);
-        System.out.println("Status: Passed");
-
-        // Set custom job metadata in Sauce Labs
-        setSauceMetadata(methodName, "Passed", "", "");
+    public static void updateSauceLabsStatus(String jobId, boolean passed) {
+        try (StringEntity entity = new StringEntity("{\"passed\": " + passed + "}", ContentType.APPLICATION_JSON)) {
+            executeHttpPut(SAUCE_LABS_URL + jobId, AUTH_STRING, entity);
+            log("Successfully updated Sauce Labs job status.");
+        } catch (IOException e) {
+            log("Failed to update Sauce Labs job status: " + e.getMessage());
+        }
     }
 
-    private void setSauceMetadata(String methodName, String status, String errorMessage, String stackTrace) {
-        // Get the WebDriver instance from your test class
-        WebDriver driver = HelloWorldTest.getDriver(); // Replace with your actual WebDriver instance
+    private static void executeHttpPut(String url, String auth, HttpEntity entity) throws IOException {
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpPut putRequest = new HttpPut(url);
+            putRequest.setHeader("Authorization", auth);
+            putRequest.setHeader("Content-Type", "application/json");
+            putRequest.setEntity(entity); // <--- This line sets the entity for the request
+            try (CloseableHttpResponse response = httpClient.execute(putRequest)) {
+                handleResponse(response);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public static void updateSauceTestName(String jobId, String testName) throws IOException {
+        String auth = "Basic " + new String(Base64.getEncoder().encode(("oauth-matt.archer-ff614:48c2e9ca-6c85-470e-a332-588e7e6fde98").getBytes()));
+        String url = "https://saucelabs.com/rest/v1/username/jobs/" + jobId;
 
-        // Execute JavaScript to set custom metadata in Sauce Labs
-        ((JavascriptExecutor) driver).executeScript("sauce:context=" + methodName);
-        ((JavascriptExecutor) driver).executeScript("sauce:job-result=" + status);
-        ((JavascriptExecutor) driver).executeScript("sauce:job-name=" + methodName);
-        ((JavascriptExecutor) driver).executeScript("sauce:metadata=Error Message: " + errorMessage);
-        ((JavascriptExecutor) driver).executeScript("sauce:metadata=Stack Trace: " + stackTrace);
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPut putRequest = new HttpPut(url);
+        putRequest.setHeader("Authorization", auth);
+        putRequest.setHeader("Content-Type", "application/json");
+
+        String json = "{\"name\":\"" + testName + "\"}";
+        HttpEntity entity = new StringEntity(json);
+        putRequest.setEntity(entity);
+
+        CloseableHttpResponse response = httpClient.execute(putRequest);
+        // Handle the response
+    }
+
+
+    private static void handleResponse(CloseableHttpResponse response) throws IOException, ParseException {
+        if (response.getCode() == HttpStatus.SC_OK) {
+            log("HTTP request successful.");
+        } else {
+            log("HTTP request failed. Response: " + EntityUtils.toString(response.getEntity()));
+        }
+    }
+
+    private static void log(String message) {
+        System.out.println(message);
     }
 }

@@ -3,6 +3,12 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 test-output/
+encodings.xml
+misc.xml
+uiDesigner.xml
+vcs.xml
+workspace.xml
+Project_Default.xml
 
 ### IntelliJ IDEA ###
 .idea/compiler.xml

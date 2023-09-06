@@ -1,34 +1,39 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pages.BannedUserPage;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
 
-@SuppressWarnings("DefaultAnnotationParam")
+
+@Listeners(listeners.SauceLabsListener.class)
 public class BannedUserTest {
-    WebDriver driver = Drivers.ChromeDriver();
-    Logins login = new Logins(driver);
-    BannedUserPage banned = new BannedUserPage(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
-    private static TestConfig config;
+    WebDriver driver;
+    Logins login;
+    BannedUserPage banned;
+    SubmissionCardsPage card;
+    PageHeaderPage header;
+    TestConfig config;
+
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
        config = Config.getConfig();
+       driver = getDriver(config.driverType);
+       login = new Logins(driver);
+       banned = new BannedUserPage(driver);
+       card = new SubmissionCardsPage(driver);
+       header = new PageHeaderPage(driver);
+
     }
 
     @BeforeClass
@@ -89,7 +94,7 @@ public class BannedUserTest {
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
     }
 
-    @Test(enabled = true, priority = 99)
+    @Test(priority = 99)
 
     public void SignoutBannedTest() {
         driver.get(config.url);

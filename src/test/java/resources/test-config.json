@@ -1,13 +1,17 @@
 {
   "adminEmail": "thechivetest+admin@gmail.com",
+  "adminURL": "https://i.thechive.com/admin/dashboards/main",
   "bannedEmail": "thechivetest+banned@gmail.com",
   "bannedUsername": "BannedUser",
-  "driver": "Drivers.Chromedriver()",
-  "password": "Chive1234",
-  "unpaidEmail": "thechivetest@gmail.com",
-  "url": "https://i.thechive.com/",
-  "privateEmail": "thechivetest+private@gmail.com",
+  "chivetteEmail": "thechivetest+chivette@gmail.com",
+  "driverType": "ChromeDriver",
+  "driverTypeMobile": "ChromeMobile",
   "facebookEmail": "matt.archer@chivemediagroup.com",
   "googleEmail": "thechivetest@gmail.com",
-  "adminURL": "https://i.thechive.com/admin/dashboards/main"
+  "password": "Chive1234",
+  "privateEmail": "thechivetest+private@gmail.com",
+  "unpaidEmail": "thechivetest@gmail.com",
+  "url": "https://qa-i.thechive.com/",
+  "verifiedEmail": "thechivetest+verified@gmail.com"
+
 }

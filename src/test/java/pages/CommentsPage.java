@@ -28,7 +28,7 @@ public class CommentsPage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("placeholder")));
     }
     public WebElement disqusFrame() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id^= 'dsq-'")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id*= 'dsq-'")));
     }
     public WebElement emailInput() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='email']")));

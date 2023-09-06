@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
@@ -14,20 +13,27 @@ import pages.MobileViewPage;
 import pages.SubmissionCardsPage;
 import resources.TestConfig;
 
-@SuppressWarnings("TestFailedLine")
-public class MobileViewHeaderTest {
-    WebDriver driver = Drivers.ChromeMobile();
-    Logins login = new Logins(driver);
-    MobileViewPage mobile = new MobileViewPage(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
+import static helpers.getDriverType.getDriver;
 
+@Listeners(listeners.SauceLabsListener.class)
+public class MobileViewHeaderTest {
+    WebDriver driver;
+    Logins login;
+    MobileViewPage mobile;
+    SubmissionCardsPage card;
     private static TestConfig config;
 
-    @BeforeTest
-    public static void configs() throws Exception {
-        config = Config.getConfig();
-    }
     //************************** Setup ******************************************
+
+    @BeforeTest
+    public void configs() throws Exception {
+        config = Config.getConfig();
+        driver = getDriver(config.driverTypeMobile);
+
+        card = new SubmissionCardsPage(driver);
+        login = new Logins(driver);
+        mobile = new MobileViewPage(driver);
+    }
 
     @BeforeClass
     public void login() throws InterruptedException {
@@ -38,12 +44,14 @@ public class MobileViewHeaderTest {
 
     @BeforeMethod
     public void refresh() {
+
         driver.get(config.url);
+        driver.manage().window().setSize(new Dimension(380, 844));
     }
 
     //************************** Begin Tests ********************************************
 
-    @Test
+    @Test(enabled = false)//the ad frames changed this, no longer relevant
     public void AvatarPosition(){
         WebElement avatar = mobile.mobileAvatar();
         Dimension viewportSize = driver.manage().window().getSize();

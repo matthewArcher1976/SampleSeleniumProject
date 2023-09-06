@@ -1,7 +1,6 @@
-package tests;
+package admintests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,24 +13,32 @@ import resources.TestConfig;
 
 import java.util.List;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class UsersTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    AdminUsersPage users = new AdminUsersPage(driver);
-    Logins login = new Logins(driver);
+    WebDriver driver;
     private static TestConfig config;
+
+    AdminUsersPage users;
+    Logins login;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+
+        users = new AdminUsersPage(driver);
     }
 
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.adminEmail, config.password);
         Thread.sleep(1000);
     }
 
@@ -42,12 +49,11 @@ public class UsersTest {
 
 //************************** Begin Tests ********************************************
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     public void ActionsDropdownBanUser() throws InterruptedException {
 
         users.menuExpandUsers().click();
-
+        Thread.sleep(5000);
         users.menuAllUsers().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("tr"), 10));
         String user = helpers.Admin.getUserByRow(driver, users.unbannedUserRow());

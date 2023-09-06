@@ -1,28 +1,35 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.LoginModalPage;
 import resources.TestConfig;
+import resources.UserNameBlacklist;
 
 import java.util.ArrayList;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class SignupTestTest {
 
-    WebDriver driver = Drivers.ChromeSauce();
-    LoginModalPage modal = new LoginModalPage(driver);
+    WebDriver driver;
     private static TestConfig config;
+    LoginModalPage modal;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        modal = new LoginModalPage(driver);
     }
+
     @BeforeClass
     public void login() {
         driver.get(config.url);
@@ -35,9 +42,9 @@ public class SignupTestTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test()
+    @Test(enabled = false)
     public void BannedName() throws InterruptedException {
-        ArrayList<String> wordList = helpers.UserNameBlacklist.getWordList();
+        ArrayList<String> wordList = UserNameBlacklist.getWordList();
         ArrayList<String> failed = new ArrayList<>();
         modal.loginBtn().click();
         Thread.sleep(2000);

@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import helpers.Waiter;
 import org.openqa.selenium.By;
@@ -18,20 +17,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class DopamineDumpTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
+    WebDriver driver;
 
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
-    Logins login = new Logins(driver);
+    SubmissionCardsPage card;
+    PageHeaderPage header;
+    Logins login;
     private static TestConfig config;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public  void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        card = new SubmissionCardsPage(driver);
+        header = new PageHeaderPage(driver);
+        login = new Logins(driver);
     }
 
     @BeforeClass

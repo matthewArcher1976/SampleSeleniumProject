@@ -1,4 +1,4 @@
-package helpers;
+package resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import resources.TestConfig;

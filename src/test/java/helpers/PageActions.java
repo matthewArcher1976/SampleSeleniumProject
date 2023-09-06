@@ -79,7 +79,7 @@ public class PageActions {
 	    }
 	}
 
-	public static void scrollTouch(WebDriver driver, int startX, int startY, int endX, int endY, int times) {
+	public static void touchScroll(WebDriver driver, int startX, int startY, int endX, int endY, int times) {
 		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
 		for (int i = 0; i < times; i++) {
 			Sequence scrollDown = new Sequence(finger, 1);
@@ -91,4 +91,69 @@ public class PageActions {
 			((Interactive) driver).perform(Arrays.asList(scrollDown));
 		}
 	}
+
+	public static void swipeDown(WebDriver driver, int times) {
+		Dimension d = driver.manage().window().getSize();
+		int x = d.getWidth() / 2;
+		int startY = (int)(d.getHeight() * .20);
+		int endY = (int)(d.getHeight() * 0.8);
+
+		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+		for (int i = 0; i < times; i++) {
+			Sequence scrollDown = new Sequence(finger, 1);
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), x, startY));
+			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), x, endY));
+			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+			((Interactive) driver).perform(Arrays.asList(scrollDown));
+		}
+	}
+
+	public static void swipeUp(WebDriver driver, int times) {
+		Dimension d = driver.manage().window().getSize();
+		int x = d.getWidth()/2;
+		int startY = (int)(d.getHeight() * .80);
+		int endY = (int)(startY - d.getHeight() * 0.20);
+		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+		for (int i = 0; i < times; i++) {
+			Sequence scrollDown = new Sequence(finger, 1);
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), x, startY));
+			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), x, endY));
+			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+			((Interactive) driver).perform(Arrays.asList(scrollDown));
+		}
+	}
+	public static void swipeLeft(WebDriver driver, int times) {
+		Dimension d = driver.manage().window().getSize();
+		int y = d.getHeight()/2;
+		int startX = (int)(d.getWidth() * .80);
+		int endX = (int)(startX + d.getWidth() * 0.2);
+		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+
+		for (int i = 0; i < times; i++) {
+			Sequence scrollDown = new Sequence(finger, 1);
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(200), PointerInput.Origin.viewport(), startX, y));
+			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(2000), PointerInput.Origin.viewport(), startX, y));
+			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+			((Interactive) driver).perform(Arrays.asList(scrollDown));
+		}
+	}
+	public static void swipeRight(WebDriver driver, int times) {
+		Dimension d = driver.manage().window().getSize();
+		int y = d.getHeight()/2;
+		int startX = d.getWidth()/2;
+		int endX = (int)(startX - d.getWidth() * 0.4);
+		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+		for (int i = 0; i < times; i++) {
+			Sequence scrollDown = new Sequence(finger, 1);
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), startX, y));
+			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), startX, y));
+			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+			((Interactive) driver).perform(Arrays.asList(scrollDown));
+		}
+	}
+
 }
