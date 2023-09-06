@@ -12,14 +12,13 @@ public class Randoms {
             int index = (int) (rnd.nextFloat() * RANDCHARS.length());
             randomString.append(RANDCHARS.charAt(index));
         }
-        String randomStringStr = randomString.toString();
-        return randomStringStr;
+		return randomString.toString();
     }
 	
 	//Get a day of the month
 	public static String getRandomDay() {
 	    Random rnd = new Random();
-	    int randomNum = rnd.nextInt(28) + 1;
+	    int randomNum = rnd.nextInt(10, 28) + 1;
 	    return Integer.toString(randomNum);
 	}
 	//convert to 01, 02 format

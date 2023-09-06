@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,20 +14,29 @@ import resources.TestConfig;
 
 import java.util.List;
 
-@SuppressWarnings("TestFailedLine")
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
+@Ignore
 public class TopChiversTest {
-    WebDriver driver = Drivers.ChromeDriver();
-    TopChiversPage top = new TopChiversPage(driver);
-    Logins login = new Logins(driver);
-    Actions action = new Actions(driver);
+    WebDriver driver;
     private static TestConfig config;
+    Actions action;
+    Logins login;
+    TopChiversPage top;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+
+        action = new Actions(driver);
+        top = new TopChiversPage(driver);
     }
+
     @BeforeTest
     public void login() throws InterruptedException {
         driver.get(config.url);

@@ -33,6 +33,7 @@ public class Drivers {
 	    sauceOptions.put("accessKey", "48c2e9ca-6c85-470e-a332-588e7e6fde98");
 	    sauceOptions.put("build", "selenium-build-373YO");
 	    sauceOptions.put("name", "iChive Tests");
+		sauceOptions.put("screenResolution", "2560x1600");
 	    
 	    browserOptions.setCapability("sauce:options", sauceOptions);
 	    browserOptions.addArguments("--disable-blink-features=AutomationControlled");

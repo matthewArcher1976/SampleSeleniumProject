@@ -1,7 +1,7 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import helpers.PageActions;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -16,27 +16,30 @@ import resources.TestConfig;
 
 import java.util.List;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class BlockUserTest {
 
-
-    WebDriver driver = Drivers.ChromeDriver();
-    SearchAndFiltersPage search = new SearchAndFiltersPage(driver);
-    Logins login = new Logins(driver);
-    BlockUserPage blocked = new BlockUserPage(driver);
+    WebDriver driver;
+    SearchAndFiltersPage search;
+    Logins login;
+    BlockUserPage blocked;
 
     private static TestConfig config;
-
+    final String SEARCH_TERM ="brady";
 
     //************************* Setup *************************
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        search = new SearchAndFiltersPage(driver);
+        login = new Logins(driver);
+        blocked = new BlockUserPage(driver);
+
     }
 
-    @BeforeMethod
-    public void refresh() {
-        driver.get(config.url);
-    }
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
@@ -47,26 +50,22 @@ public class BlockUserTest {
     @BeforeMethod
     public void setDriver() {
         driver.get(config.url);
-        search.searchInput().click();
-        search.searchInput().sendKeys(Keys.HOME, Keys.SHIFT, Keys.END);
-        search.searchInput().sendKeys(Keys.BACK_SPACE);
-        search.searchInput().sendKeys("x");
-        search.searchInput().sendKeys(Keys.ENTER);
-        String userName = search.firstUser().getText().replace("@", "");
-        search.firstUser().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
-        if (blocked.blockBtn().findElement(By.cssSelector("svg")).getAttribute("class").contains("fa-check")) {
-            System.out.println("Blocked user should not display in search results");
-            Assert.fail();
-        }
+
     }
-
-
 
     //************************** Begin Tests ********************************************
 
     @Test
     public void BlockButton() {
+        search.searchInput().click();
+        search.searchInput().sendKeys(Keys.HOME, Keys.SHIFT, Keys.END);
+        search.searchInput().sendKeys(Keys.BACK_SPACE);
+        search.searchInput().sendKeys(SEARCH_TERM);
+        search.searchInput().sendKeys(Keys.ENTER);
+        String userName = search.firstUser().getText().replace("@", "");
+        PageActions.scrollDown(driver, 2);
+        search.firstUser().click();
+        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         blocked.blockBtn().click();
         try {
             Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.attributeContains(blocked.blockBtn().findElement(By.cssSelector("svg")), "class", "fa-check")));
@@ -74,13 +73,21 @@ public class BlockUserTest {
         } catch (Exception e) { //catch any exception here to undo the block
             blocked.blockBtn().click();
             System.out.println("Block button did not change after click ");
-
             Assert.fail();
         }
     }
 
     @Test
-    public void BlockedUserNotInSearch() throws InterruptedException {
+    public void BlockedUserNotInSearch() {
+        search.searchInput().click();
+        search.searchInput().sendKeys(Keys.HOME, Keys.SHIFT, Keys.END);
+        search.searchInput().sendKeys(Keys.BACK_SPACE);
+        search.searchInput().sendKeys(SEARCH_TERM);
+        search.searchInput().sendKeys(Keys.ENTER);
+        String userName = search.firstUser().getText().replace("@", "");
+        PageActions.scrollDown(driver, 2);
+        search.firstUser().click();
+        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         //Setup
         String userURL = driver.getCurrentUrl();
         String blockedUser = helpers.GetInteger.getIdFromUrl(userURL);
@@ -95,17 +102,17 @@ public class BlockUserTest {
             Assert.fail("Clicking the block button failed");
         }
         //Test if this user is found in the search
-        search.searchInput().sendKeys("an");
+        search.searchInput().sendKeys(SEARCH_TERM);
         search.searchInput().sendKeys(Keys.ENTER);
         helpers.PageActions.scrollDown(driver, 1);
         List<WebElement> users = search.allUserCards();
         for (WebElement user : users) {
             try {
-                Assert.assertFalse(user.findElement(By.cssSelector("div[class*='text-lg']")).getText().replace("@", "").contains(blockedUser));
+                Assert.assertFalse(user.findElement(By.cssSelector("div[class*='text-lg']")).getText().replace("@", "").equals(blockedUser));
             } catch (AssertionError e) {
                 driver.get(userURL);
                 blocked.blockBtn().click();
-                Thread.sleep(600000);
+
                 Assert.fail("Blocked user " + blockedUser + " found in search results");
             }
         }

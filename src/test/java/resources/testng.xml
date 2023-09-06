@@ -3,14 +3,13 @@
 <suite name="All Test Suite">
 
     <listeners>
-        <listener class-name="listeners.SauceLabsTestListener"/>
+        <listener class-name="listeners.SauceLabsListener"/>
     </listeners>
 
-    <!--suppress XmlDefaultAttributeValue -->
-    <test verbose="2" preserve-order="true" name="/Users/mattarcher/IdeaProjects/iChiveTests/src/test">
+    <test verbose="2" name="iChiveTests">
         <packages>
             <package name="tests"/>
         </packages>
-
     </test>
+
 </suite>

@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -11,27 +10,35 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import pages.EditProfilePage;
-import pages.ImageUploadPage;
-import pages.PageHeaderPage;
+import pages.*;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
+@Listeners(listeners.SauceLabsListener.class)
 public class ImageUploadTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    Logins login = new Logins(driver);
-    ImageUploadPage upload = new ImageUploadPage(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
-    Actions action = new Actions(driver);
-    EditProfilePage profile = new EditProfilePage(driver);
+    WebDriver driver;
     public static TestConfig config;
+
+    Logins login;
+    ImageUploadPage upload;
+    PageHeaderPage header;
+    Actions action;
+    EditProfilePage profile;
 
     //************************** Setup ******************************************
 
-    @BeforeClass
+    @BeforeTest
     public void getConfig() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        action = new Actions(driver);
+        header = new PageHeaderPage(driver);
+        profile = new EditProfilePage(driver);
+        upload = new ImageUploadPage(driver);
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);

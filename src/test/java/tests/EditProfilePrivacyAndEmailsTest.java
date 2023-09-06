@@ -1,31 +1,39 @@
 package tests;
 
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import helpers.PageActions;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.EditProfilePage;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
 
-@Listeners(org.testng.reporters.EmailableReporter.class)
+@Listeners(listeners.SauceLabsListener.class)
 public class EditProfilePrivacyAndEmailsTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
+    WebDriver driver;
     private static TestConfig config;
+
+    Actions action;
+    EditProfilePage profile;
+    Logins login;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+
+        action = new Actions(driver);
+        profile = new EditProfilePage(driver);
     }
 
     @BeforeClass
@@ -45,8 +53,10 @@ public class EditProfilePrivacyAndEmailsTest {
 
     @Test
     public void EmailHotnessDaily() {
+        action.scrollByAmount(0, 300);
         profile.emailTab().click();
         Boolean onOff = profile.emailHotnessDaily().isSelected();
+        PageActions.scrollDown(driver, 1);
         profile.emailHotnessDaily().click();
         profile.saveEmailPrefBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));

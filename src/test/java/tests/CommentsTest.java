@@ -1,38 +1,45 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import helpers.PageActions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pages.CommentsPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class CommentsTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-
-    CommentsPage comments = new CommentsPage(driver);
-
-    Logins login = new Logins(driver);
-    SubmissionModalPage modal = new SubmissionModalPage(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
+    WebDriver driver;
+    Actions action;
+    CommentsPage comments;
+    Logins login;
+    SubmissionModalPage modal;
+    SubmissionCardsPage card;
     private static TestConfig config;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        action = new Actions(driver);
+
+        card = new SubmissionCardsPage(driver);
+        comments = new CommentsPage(driver);
+        login = new Logins(driver);
+        modal = new SubmissionModalPage(driver);
     }
 
     @BeforeTest
@@ -53,8 +60,11 @@ public class CommentsTest {
     public void ClickShowComments() throws InterruptedException {
         card.firstCard().click();
         PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
+
+        action.moveToElement(modal.image()).scrollToElement(comments.disqusFrame()).perform();
+        PageActions.scrollDown(driver, 2);
+
         PageActions.findElementWithScrollingElement(driver, comments.disqusFrame());
-        comments.switchToDisqusFrame();
         Thread.sleep(3000);
         Assert.assertTrue(comments.commentTextInput().isDisplayed(), "Did not find the comment policy block");
     }

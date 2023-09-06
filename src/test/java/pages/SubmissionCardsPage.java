@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("unused")
 public class SubmissionCardsPage {
 
     WebDriver driver;
@@ -20,7 +19,6 @@ public class SubmissionCardsPage {
     }
 
     //*********************** WebElements *******************************
-
 
     public List<WebElement> allCards() {
         return driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));

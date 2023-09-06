@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -10,18 +9,25 @@ import pages.LoginModalPage;
 import pages.PageHeaderPage;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class LoginFaceBookTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
+    WebDriver driver;
+    LoginModalPage login;
+    PageHeaderPage header;
 
-    LoginModalPage modal = new LoginModalPage(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
     private static TestConfig config;
 
     //*********************** Setup *********************************
     @BeforeClass
     public void setConfig() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        header = new PageHeaderPage(driver);
+        login = new LoginModalPage(driver);
       }
 
     @BeforeMethod
@@ -34,11 +40,11 @@ public class LoginFaceBookTest {
     @Test(priority = 99)
     public void FaceBookLoginValid() {
         header.loginBtn().click();
-        modal.loginFacebook().click();
+        login.loginFacebook().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("Facebook"));
-        modal.facebookEmail().sendKeys(config.facebookEmail);
-        modal.facebookPassword().sendKeys(config.password);
-        modal.facebookLoginBtn().click();
+        login.facebookEmail().sendKeys(config.facebookEmail);
+        login.facebookPassword().sendKeys(config.password);
+        login.facebookLoginBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(1));
         Assert.assertTrue(header.userMenu().isDisplayed(), "FaceBookLoginValid - User is not logged in");
     }

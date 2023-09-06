@@ -1,7 +1,8 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import helpers.Waiter;
+import helpers.WindowUtil;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -12,24 +13,33 @@ import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
 
-@SuppressWarnings({"DefaultAnnotationParam", "TestFailedLine"})
+
+@Listeners(listeners.SauceLabsListener.class)
 public class PageHeaderTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    PageHeaderPage header = new PageHeaderPage(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    Logins login = new Logins(driver);
-    Actions action = new Actions(driver);
+    WebDriver driver;
     private static TestConfig config;
+    PageHeaderPage header;
+    SubmissionCardsPage card;
+    Logins login;
+    Actions action;
 
-    @BeforeTest
-    public static void configs() throws Exception {
-        config = Config.getConfig();
-    }
     //************************** Setup ******************************************
 
     @BeforeTest
+    public void configs() throws Exception {
+        config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        action = new Actions(driver);
+        card = new SubmissionCardsPage(driver);
+        header = new PageHeaderPage(driver);
+        login = new Logins(driver);
+    }
+
+    @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
         login.unpaidLogin(config.unpaidEmail, config.password);
@@ -57,7 +67,7 @@ public class PageHeaderTest {
         Assert.assertTrue(header.loginBtn().isDisplayed());
         //complete this
     }
-    @Test
+    @Test(enabled = false)//ad frames changed this, no longer relevant
     public void AvatarPosition(){
         WebElement avatar = header.headerAvatar();
         Dimension viewportSize = driver.manage().window().getSize();
@@ -118,9 +128,9 @@ public class PageHeaderTest {
     public void DopamineCounter() throws InterruptedException {
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.dopamineDump()));
         String time1 = header.dopamineDumpHour() + header.dopamineDumpMinute() + header.dopamineDumpSecond();
-        Thread.sleep(5000);//let it count down
+        Thread.sleep(10000);//let it count down
         String time2 = header.dopamineDumpHour() + header.dopamineDumpMinute() + header.dopamineDumpSecond();
-        Assert.assertTrue(Integer.parseInt(time1) > Integer.parseInt(time2), "Timer is not counting down");
+        Assert.assertTrue(Integer.parseInt(time1) > Integer.parseInt(time2), "Timer is not counting down, time1 is " + time1 + " and time2 is " + time2);
     }
 
     @Test
@@ -241,7 +251,7 @@ public class PageHeaderTest {
         }
     }
 
-    @Test(enabled = true)
+    @Test()
     public void HoverFeaturedColorChange() throws InterruptedException {
         Assert.assertEquals(header.menuFeatured().getCssValue("borderBottomColor"), "rgba(0, 0, 0, 0)", "Underline might be showing when you're not hovered over Latest");
         action.moveToElement(header.menuFeatured()).perform();
@@ -249,7 +259,7 @@ public class PageHeaderTest {
         Assert.assertEquals(helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.menuFeatured())).getCssValue("borderBottomColor"), "rgba(0, 195, 0, 1)", "Underline might not be showing when you're hovered over Featured");
     }
 
-    @Test(enabled = true)
+    @Test()
     public void HoverFollowingColorChange() throws InterruptedException {
         Assert.assertEquals(header.menuFollowing().getCssValue("borderBottomColor"), "rgba(0, 0, 0, 0)", "Underline might be showing when you're hovered over Following");
         action.moveToElement(header.menuFollowing()).perform();
@@ -257,7 +267,7 @@ public class PageHeaderTest {
         Assert.assertEquals(header.menuFollowing().getCssValue("borderBottomColor"), "rgba(0, 195, 0, 1)", "Underline might not be showing when you're hovered over Following");
     }
 
-    @Test(enabled = true)
+    @Test()
     public void HoverLatestColorChange() throws InterruptedException {
         //It now stays highlighted when you're not hovered over it
         header.menuFeatured().click();
@@ -286,7 +296,7 @@ public class PageHeaderTest {
         Assert.assertEquals(signout.getCssValue("background-color"), "rgba(0, 195, 0, 1)", "Signout did not change color on hover");
     }
 
-    @Test(enabled = true)
+    @Test()
     public void HoverTopChiversColorChange() throws InterruptedException {
         Assert.assertEquals(header.menuTopChivers().getCssValue("borderBottomColor"), "rgba(0, 0, 0, 0)", "Underline might be showing when you're not hovered over Top Chivers");
         action.moveToElement(header.menuTopChivers()).perform();
@@ -315,7 +325,7 @@ public class PageHeaderTest {
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.ichiveLogo())).isDisplayed(), "Logo is not visible");
     }
 
-    @Test(enabled = true)
+    @Test()
     public void LinksCharities() {
         header.linkMenu().click();
         header.dropDownCharities().click();
@@ -327,45 +337,46 @@ public class PageHeaderTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true)
+    @Test()
     public void LinksChive() {
         header.linkMenu().click();
         header.dropDownChive().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        Waiter.quickWait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("thechive"))
                 && driver.getCurrentUrl().contains("utm_source"), "LinksChive - Link is broken");
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true, priority = 1)
-    public void ChiveryLinkTest() {
+    @Test
+    public void LinksChivery() {
+
         header.chiveryLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getCurrentUrl().contains("utm_source=ichive"), "Chivery link is broken");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true)
+    @Test()
     public void LinksChiveTV() {
         header.linkMenu().click();
         header.dropDownChivery().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("thechivery"))
                 && driver.getCurrentUrl().contains("utm_source"), "LinksChivery - link is broken");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(enabled = true)
+    @Test()
     public void MenuLatest() {
         Assert.assertTrue(header.menuLatest().getAttribute("aria-current").contains("page"), "Latest Tab not selected by default");
     }
 
-    @Test(enabled = true)
+    @Test()
     public void TrophyIconIsGone() {
         try {
             header.trophyIcon().click();

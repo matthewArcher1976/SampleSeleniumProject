@@ -63,7 +63,7 @@ public class SubmissionModalPage {
     }
 
     public WebElement disqusFrame() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id^= 'dsq-'")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id^='dsq-'")));
     }
 
     public WebElement firstCard() {
@@ -77,7 +77,9 @@ public class SubmissionModalPage {
     public WebElement gotItBtn() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("comment-policy-refresh__button")));
     }
-
+    public WebElement image() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[id^='submission-image-'")));
+    }
     public WebElement modalCard() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("card-body")));
     }

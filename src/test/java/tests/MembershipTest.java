@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import helpers.Waiter;
 import org.openqa.selenium.By;
@@ -13,19 +12,27 @@ import org.testng.annotations.*;
 import pages.EditProfilePage;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class MembershipTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    Actions action = new Actions(driver);
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
+    WebDriver driver;
     private static TestConfig config;
+
+    Actions action;
+    EditProfilePage profile;
+    Logins login;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        login = new Logins(driver);
+        profile = new EditProfilePage(driver);
     }
 
     @BeforeClass

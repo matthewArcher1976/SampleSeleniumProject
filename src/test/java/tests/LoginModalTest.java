@@ -1,35 +1,42 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import pages.*;
 import resources.TestConfig;
 
+import static helpers.getDriverType.getDriver;
 
+@Listeners(listeners.SauceLabsListener.class)
 public class LoginModalTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    ProfilePage profile = new ProfilePage(driver);
-    Logins login = new Logins(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    ImageUploadPage upload = new ImageUploadPage(driver);
-    SubmissionModalPage modal = new SubmissionModalPage(driver);
+    WebDriver driver;
+    ImageUploadPage upload;
+    Logins login;
+    PageHeaderPage header;
+    ProfilePage profile;
+
+    SubmissionCardsPage card;
+    SubmissionModalPage modal;
     private static TestConfig config;
 
     //*********************** Setup *********************************
     @BeforeClass
     public void setConfig() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+
+        card = new SubmissionCardsPage(driver);
+        header = new PageHeaderPage(driver);
+        login = new Logins(driver);
+        profile = new ProfilePage(driver);
+        modal = new SubmissionModalPage(driver);
+        upload = new ImageUploadPage(driver);
     }
 
     @BeforeMethod

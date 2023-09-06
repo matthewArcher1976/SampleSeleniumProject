@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,45 +10,53 @@ import pages.EditProfilePage;
 import pages.ProfilePage;
 import resources.TestConfig;
 
-@SuppressWarnings("TestFailedLine")
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class ChivettesTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    ProfilePage profilePage = new ProfilePage(driver);
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
+    WebDriver driver;
+    ProfilePage profilePage;
+    EditProfilePage profile;
+    Logins login;
     private static TestConfig config;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+        profilePage = new ProfilePage(driver);
+        profile = new EditProfilePage(driver);
+
     }
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.chivetteEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
     public void refresh() {
         driver.get(config.url);
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
+
     }
 
     //************************** Begin Tests ********************************************
 
     @Test
     public void ChivetteIconTest() {
+        profile.userMenu().click();
+        profile.yourProfileBtn().click();
         Assert.assertTrue(profilePage.chivetteIcon().isDisplayed(), "Did not find Chivette icon by username");
     }
 
     @Test
     public void WebSiteInputDisplays() {
-        profile.yourProfileBtn().click();
+        profile.userMenu().click();
         profile.settingsBtn().click();
         profile.socialLinksTab().click();
         Assert.assertTrue(profile.websiteInput().isDisplayed(), "Did not find website input");
@@ -57,7 +64,7 @@ public class ChivettesTest {
 
     @Test
     public void WebSiteLink() {
-        profile.yourProfileBtn().click();
+        profile.userMenu().click();
         profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.websiteInput().clear();

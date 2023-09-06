@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,34 +10,40 @@ import pages.EditProfilePage;
 import pages.ProfilePage;
 import resources.TestConfig;
 
-@SuppressWarnings("TestFailedLine")
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class VerifiedUsersTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    ProfilePage profilePage = new ProfilePage(driver);
-    EditProfilePage profile = new EditProfilePage(driver);
-    Logins login = new Logins(driver);
+    WebDriver driver;
+    ProfilePage profilePage;
+    EditProfilePage profile;
+    Logins login;
     private static TestConfig config;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+
+        profile = new EditProfilePage(driver);
+        profilePage = new ProfilePage(driver);
     }
 
-    @BeforeTest
+    @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.verifiedEmail, config.password);
         Thread.sleep(1000);
     }
 
     @BeforeMethod
     public void setDriver() {
         driver.get(config.url);
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
+
     }
 
     //************************** Begin Tests ********************************************
@@ -50,6 +55,7 @@ public class VerifiedUsersTest {
 
     @Test
     public void WebSiteInputDisplays() {
+        profile.userMenu().click();
         profile.yourProfileBtn().click();
         profile.settingsBtn().click();
         profile.socialLinksTab().click();
@@ -58,7 +64,7 @@ public class VerifiedUsersTest {
 
     @Test
     public void WebSiteLink() {
-        profile.yourProfileBtn().click();
+        profile.userMenu().click();
         profile.settingsBtn().click();
         profile.socialLinksTab().click();
         profile.websiteInput().clear();

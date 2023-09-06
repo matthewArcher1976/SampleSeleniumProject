@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.Config;
-import helpers.Drivers;
+import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -20,22 +19,33 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class SubmissionSingleImageTest {
 
-    WebDriver driver = Drivers.ChromeDriver();
-    SubmissionSingleImagePage single = new SubmissionSingleImagePage(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    PageHeaderPage header = new PageHeaderPage(driver);
-    Actions action = new Actions(driver);
-    Logins login = new Logins(driver);
+    WebDriver driver;
+    SubmissionSingleImagePage single;
+    SubmissionCardsPage card;
+    PageHeaderPage header;
+    Actions action;
+    Logins login;
     private static TestConfig config;
 
     //************************** Setup ******************************************
 
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverType);
+        login = new Logins(driver);
+
+        action = new Actions(driver);
+        card = new SubmissionCardsPage(driver);
+        header = new PageHeaderPage(driver);
+        single = new SubmissionSingleImagePage(driver);
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
@@ -113,7 +123,7 @@ public class SubmissionSingleImageTest {
         }
     }
 
-    @Test
+    @Test(enabled = false)//we changed this to display at a higher resolution
     public void ImageMaxWidth600() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -122,7 +132,8 @@ public class SubmissionSingleImageTest {
         driver.manage().window().fullscreen();
         int width = Integer.parseInt(single.sourceImage().getCssValue("width").replaceAll("[^0-9]", ""));
         int height = Integer.parseInt(single.sourceImage().getCssValue("height").replaceAll("[^0-9]", ""));
-        Assert.assertTrue(width <= 600 && height <= 1200, "ImageDisplays failed");
+
+        Assert.assertTrue(width <= 600 && height <= 1200, "ImageDisplays failed, found " + width + " for the width and " + height + " for the height");
     }
 
     @Test
@@ -225,6 +236,7 @@ public class SubmissionSingleImageTest {
         String postTitle = card.submissionTitle().getText();
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
+        System.out.println("postTitle is " + postTitle + " getTitle() is " + driver.getTitle());
         Assert.assertTrue(driver.getTitle().contains(postTitle), "Title for submission was wrong or did not display");
     }
 
@@ -302,15 +314,15 @@ public class SubmissionSingleImageTest {
         single.downvoteBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.attributeContains(single.downvoteBtn(), "class", "text-white")));
         // the click on Latest keeps missing for some reason
-        int tries = 0;
+       /* int tries = 0;
         boolean isUrlContainsSubmissionID = driver.getCurrentUrl().contains(submissionID);
         while (isUrlContainsSubmissionID && tries < 3) {
             header.menuLatest().click();
             Thread.sleep(2000);
             isUrlContainsSubmissionID = driver.getCurrentUrl().contains(submissionID);
             tries++;
-        }
-        helpers.PageActions.scrollDown(driver, 2);
+        }*/
+        driver.get(config.url);
         submission = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-" + submissionID)));
         try {
             Assert.assertTrue(helpers.IsSelected.isIconSelected(submission.findElement(By.className("fa-thumbs-down"))));
@@ -330,15 +342,7 @@ public class SubmissionSingleImageTest {
         driver.navigate().refresh();
         single.upvoteBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.attributeContains(single.upvoteBtn(), "class", "text-white")));
-        int tries = 0;
-        boolean isUrlContainsSubmissionID = driver.getCurrentUrl().contains(submissionID);
-        while (isUrlContainsSubmissionID && tries < 3) {
-            header.menuLatest().click();
-            Thread.sleep(2000);
-            isUrlContainsSubmissionID = driver.getCurrentUrl().contains(submissionID);
-            tries++;
-        }
-        helpers.PageActions.scrollDown(driver, 2);
+        driver.get(config.url);
         submission = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-" + submissionID)));
         try {
             Assert.assertTrue(helpers.IsSelected.isIconSelected(submission.findElement(By.className("fa-thumbs-up"))), "Upvote from single page did not persist on Latest list");

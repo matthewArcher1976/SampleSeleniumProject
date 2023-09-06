@@ -1,42 +1,51 @@
 package tests;
 
-import helpers.*;
+import helpers.CustomExpectedConditions;
+import helpers.Logins;
+import helpers.PageActions;
+import helpers.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.Interactive;
-import org.openqa.selenium.interactions.PointerInput;
-import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import pages.SubmissionSingleImagePage;
+import resources.Config;
 import resources.TestConfig;
 
 import java.text.DecimalFormat;
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings({"TestFailedLine", "ArraysAsListWithZeroOrOneArgument"})
+import static helpers.getDriverType.getDriver;
+
+@Listeners(listeners.SauceLabsListener.class)
 public class MobileSubmissionModalTest {
 
-    WebDriver driver = Drivers.ChromeMobile();
-    SubmissionModalPage modal = new SubmissionModalPage(driver);
-    Logins login = new Logins(driver);
-    SubmissionCardsPage card = new SubmissionCardsPage(driver);
-    Actions action = new Actions(driver);
-    SubmissionSingleImagePage single = new SubmissionSingleImagePage(driver);
+    WebDriver driver;
+    SubmissionModalPage modal;
+    Logins login;
+    SubmissionCardsPage card;
+    Actions action;
+    SubmissionSingleImagePage single;
     private static TestConfig config;
     
     //************************** Setup ******************************************
     @BeforeTest
-    public static void configs() throws Exception {
+    public void configs() throws Exception {
         config = Config.getConfig();
+        driver = getDriver(config.driverTypeMobile);
+
+        action = new Actions(driver);
+        card = new SubmissionCardsPage(driver);
+        login = new Logins(driver);
+        modal = new SubmissionModalPage(driver);
+        single = new SubmissionSingleImagePage(driver);
+
     }
 
     @BeforeClass
@@ -53,12 +62,13 @@ public class MobileSubmissionModalTest {
 
     @Test
     public void ClickTagRedirectToTagPage() throws InterruptedException {
-        Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
-        WebElement taggedCard = card.cardNotGIF();
-        action.moveToElement(taggedCard).click().perform();
-        PageActions.scrollDown(driver, 1);
+        card.firstCard().click();
+        PageActions.swipeUp(driver, 2);
+        Thread.sleep(2000);
         String tagName = (modal.tag().getText());
+        System.out.println(tagName);
         modal.tag().click();
+        Thread.sleep(2000);
         Waiter.wait(driver).until(ExpectedConditions.urlContains(tagName));
         Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
         Thread.sleep(3000);//still need it
@@ -93,20 +103,11 @@ public class MobileSubmissionModalTest {
     public void ClickCommentsButton() throws InterruptedException {
         modal.firstCard().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
-
         PageActions.findElementWithScrollingElement(driver, modal.commentButton());
-
         modal.commentIcon().click();
-        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-        Sequence scrollDown = new Sequence(finger, 0);
-        scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), 500, 500));
-        scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
-        scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), 500, 700));
-        scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-
-        ((Interactive) driver).perform(Arrays.asList(scrollDown));
-
+        PageActions.swipeUp(driver, 2);
         modal.switchToDisqusFrame();
+        Thread.sleep(2000);//yes
         action.sendKeys(Keys.PAGE_DOWN).perform();
         Assert.assertTrue(modal.commentTextInput().isDisplayed(), "Policy text did not display");
     }
@@ -116,6 +117,7 @@ public class MobileSubmissionModalTest {
         modal.firstCard().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
         modal.commentIcon().click();
+        //PageActions.scrollDown();
         helpers.PageActions.findElementWithScrolling(driver, By.cssSelector("iframe[id^='dsq-']"));
         modal.switchToDisqusFrame();
         Assert.assertTrue(modal.commentTextInput().isDisplayed(), "Policy text did not display");
@@ -144,7 +146,7 @@ public class MobileSubmissionModalTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(priority = 99)
+    @Test(priority = 1)
     //checks that the proportions on the card image are the same an actual, breaks the hover tests if run before then, IDK knows why
     public void GIFNotCutOff() throws InterruptedException {
         helpers.PageActions.scrollDown(driver, 3);
@@ -258,6 +260,13 @@ public class MobileSubmissionModalTest {
         Assert.assertTrue(modal.stickyHeader().isDisplayed(), "Sticky header didn't display on scrolling");
     }
 
+    @Test(enabled = false)
+    public void Sandbox() throws InterruptedException {
+       modal.firstCard().click();
+        Thread.sleep(1000);
+        PageActions.swipeLeft(driver, 30);
+
+    }
     //************************** Teardown ********************************************
 
     @AfterClass

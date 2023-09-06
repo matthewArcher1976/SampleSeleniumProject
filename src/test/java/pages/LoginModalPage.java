@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-@SuppressWarnings("unused")
 public class LoginModalPage {
 
     private WebDriver driver;
