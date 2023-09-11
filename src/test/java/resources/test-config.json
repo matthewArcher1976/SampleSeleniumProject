@@ -11,7 +11,7 @@
   "password": "Chive1234",
   "privateEmail": "thechivetest+private@gmail.com",
   "unpaidEmail": "thechivetest@gmail.com",
-  "url": "https://qa-i.thechive.com/",
+  "url": "https://stage-i.thechive.com/",
   "verifiedEmail": "thechivetest+verified@gmail.com"
 
 }

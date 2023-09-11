@@ -148,7 +148,7 @@ public class PageHeaderPage {
     }
 
     public WebElement userMenu() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[data-id='header-user-menu']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("btn-circle")));
     }
 
     public WebElement yourProfileBtn() {

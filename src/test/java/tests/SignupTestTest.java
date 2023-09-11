@@ -11,7 +11,7 @@ import resources.UserNameBlacklist;
 
 import java.util.ArrayList;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class SignupTestTest {

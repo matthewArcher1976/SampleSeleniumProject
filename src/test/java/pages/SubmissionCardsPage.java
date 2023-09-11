@@ -230,7 +230,9 @@ public class SubmissionCardsPage {
     public WebElement favoriteOverlay() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='card-image-overlay']")));
     }
-
+    public WebElement featuredCommentIcon() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-heart")));
+    }
     public WebElement featuredIcon() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='featured ichive icon']")));
     }

@@ -13,7 +13,7 @@ import resources.TestConfig;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class HelloWorldTest {

@@ -12,7 +12,7 @@ import org.testng.annotations.*;
 import pages.EditProfilePage;
 import resources.TestConfig;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class MembershipTest {
@@ -77,8 +77,9 @@ public class MembershipTest {
     @Test
     public void CreditCCNumber() {
         profile.membershipTab().click();
-        Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe")));
+        Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[src='/settings/membership-manage']")));
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[scrolling='no']")));//yo dawg, we heard you like iframes
+        Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe")));
         profile.membershipCreditCardsTab().click();
         profile.membershipAddCardBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[sandbox='allow-scripts allow-same-origin']")));

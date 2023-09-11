@@ -10,7 +10,7 @@ import org.testng.annotations.*;
 import pages.*;
 import resources.TestConfig;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class LoginModalTest {

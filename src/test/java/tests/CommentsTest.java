@@ -14,7 +14,7 @@ import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import resources.TestConfig;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class CommentsTest {

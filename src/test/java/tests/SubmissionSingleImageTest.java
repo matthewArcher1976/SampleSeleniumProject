@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class SubmissionSingleImageTest {
@@ -305,7 +305,7 @@ public class SubmissionSingleImageTest {
     }
 
     @Test
-    public void VoteDownButton() throws InterruptedException {
+    public void VoteDownButton() {
         //Downvote a post from the single page, verify the vote persists
         WebElement submission = card.cardNotDownvoted();
         String submissionID = helpers.GetInteger.getIntFromMixedStringAsString(submission.getAttribute("id"));
@@ -334,7 +334,7 @@ public class SubmissionSingleImageTest {
     }
 
     @Test
-    public void VoteUpButton() throws InterruptedException {
+    public void VoteUpButton() {
         //Like a post from the single page, verify the vote persists
         WebElement submission = card.cardNotUpvoted();
         String submissionID = helpers.GetInteger.getIntFromMixedStringAsString(submission.getAttribute("id"));

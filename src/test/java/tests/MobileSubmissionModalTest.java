@@ -21,7 +21,7 @@ import resources.TestConfig;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class MobileSubmissionModalTest {
@@ -113,12 +113,11 @@ public class MobileSubmissionModalTest {
     }
 
     @Test
-    public void ClickCommentsIcon() throws InterruptedException {
+    public void ClickCommentsIcon() {
         modal.firstCard().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
         modal.commentIcon().click();
-        //PageActions.scrollDown();
-        helpers.PageActions.findElementWithScrolling(driver, By.cssSelector("iframe[id^='dsq-']"));
+        PageActions.swipeUp(driver, 3);
         modal.switchToDisqusFrame();
         Assert.assertTrue(modal.commentTextInput().isDisplayed(), "Policy text did not display");
     }
@@ -198,6 +197,7 @@ public class MobileSubmissionModalTest {
         Thread.sleep(4000);//remove once 731 is fixed
         String firstImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
+        Thread.sleep(20000);
         String secondImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         Assert.assertNotEquals(firstImage, secondImage, "ImageChanceBetweenSubsArrowKey - Found the same image after navigating right");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
@@ -209,7 +209,7 @@ public class MobileSubmissionModalTest {
         Assert.assertEquals(secondImage, modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", ""), "ImageChanceBetweenSubsArrowKey - Found a different image when navigating back" + secondImage + " , " + modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", ""));
     }
 
-    @Test
+    @Test(enabled = false)//no more right left nav buttons
     public void NavBetweenSubs() throws InterruptedException {
         Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
         WebElement card = modal.firstCard();

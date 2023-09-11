@@ -18,7 +18,7 @@ import resources.TestConfig;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class SubmissionModalTest {
