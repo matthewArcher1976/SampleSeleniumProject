@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.CustomExpectedConditions;
 import helpers.Waiter;
 import helpers.WindowUtil;
 import resources.Config;
@@ -13,7 +14,7 @@ import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import resources.TestConfig;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 
 @Listeners(listeners.SauceLabsListener.class)
@@ -155,6 +156,7 @@ public class PageHeaderTest {
     @Test
     public void FilterDisplaysOnFollowing() {
         header.menuFollowing().click();
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         Assert.assertTrue(header.filterChange().isDisplayed()
                 && header.filterHumor().isDisplayed()
                 && header.filterHotness().isDisplayed()

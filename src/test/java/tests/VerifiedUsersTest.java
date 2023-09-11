@@ -10,7 +10,7 @@ import pages.EditProfilePage;
 import pages.ProfilePage;
 import resources.TestConfig;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class VerifiedUsersTest {
@@ -56,7 +56,6 @@ public class VerifiedUsersTest {
     @Test
     public void WebSiteInputDisplays() {
         profile.userMenu().click();
-        profile.yourProfileBtn().click();
         profile.settingsBtn().click();
         profile.socialLinksTab().click();
         Assert.assertTrue(profile.websiteInput().isDisplayed(), "Did not find website input");

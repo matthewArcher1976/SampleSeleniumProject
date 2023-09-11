@@ -18,7 +18,7 @@ import resources.TestConfig;
 import java.util.List;
 import java.util.Set;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class SubmissionCardsTest {

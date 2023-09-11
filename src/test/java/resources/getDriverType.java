@@ -1,5 +1,6 @@
-package helpers;
+package resources;
 
+import helpers.Drivers;
 import org.openqa.selenium.WebDriver;
 
 public class getDriverType {

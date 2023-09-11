@@ -16,7 +16,7 @@ import resources.TestConfig;
 
 import java.util.List;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class BlockUserTest {
@@ -108,7 +108,7 @@ public class BlockUserTest {
         List<WebElement> users = search.allUserCards();
         for (WebElement user : users) {
             try {
-                Assert.assertFalse(user.findElement(By.cssSelector("div[class*='text-lg']")).getText().replace("@", "").equals(blockedUser));
+                Assert.assertNotEquals(blockedUser, user.findElement(By.cssSelector("div[class*='text-lg']")).getText().replace("@", ""));
             } catch (AssertionError e) {
                 driver.get(userURL);
                 blocked.blockBtn().click();

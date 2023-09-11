@@ -8,10 +8,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.AdminLoginPage;
 import pages.LoginModalPage;
 
-@SuppressWarnings("unused")
 public class Logins extends LoginModalPage {
-	
-	
+
 	public Logins(WebDriver driver) {
 		super(driver);
 	}

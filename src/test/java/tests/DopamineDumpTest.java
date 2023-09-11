@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class DopamineDumpTest {
@@ -58,7 +58,8 @@ public class DopamineDumpTest {
     @Test
     public void CommentButtonFeatured() {
         header.menuFeatured().click();
-        card.commentBtn().click();
+        card.featuredCommentIcon().click();
+
         Assert.assertTrue(card.disqusSection().isDisplayed(), "CommentButtonFeatured -Comments did not open");
     }
 

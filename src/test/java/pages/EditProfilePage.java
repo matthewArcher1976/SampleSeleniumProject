@@ -105,7 +105,12 @@ public class EditProfilePage {
     public WebElement editProfileBtn() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("edit-profile-button")));
     }
-
+    public WebElement emailCharities() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("chive_charities-enable")));
+    }
+    public WebElement emailChiveNation() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("chive_nation-enable")));
+    }
     public WebElement emailHotnessDaily() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("thechive_hotness-daily")));
     }
@@ -169,7 +174,9 @@ public class EditProfilePage {
     public WebElement emailTab() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.linkText("Email Preferences")));
     }
-
+    public WebElement emailWilliamMurray() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("wmg-enable")));
+    }
     public WebElement facebookBadURL() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'The facebook format is invalid.')]")));
     }

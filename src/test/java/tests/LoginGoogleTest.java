@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Waiter;
 import resources.Config;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,7 +10,7 @@ import pages.LoginModalPage;
 import pages.PageHeaderPage;
 import resources.TestConfig;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class LoginGoogleTest {
@@ -52,16 +53,17 @@ public class LoginGoogleTest {
     public void GoogleLoginValid() throws InterruptedException {
         header.loginBtn().click();
         loginModal.loginGoogle().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("Google"));
+        Waiter.wait(driver).until(ExpectedConditions.titleContains("Google"));
         loginModal.googleEmailInput().sendKeys(config.unpaidEmail);
         loginModal.googleEmailNext().click();
         Thread.sleep(5000);//I need this even with the wait for not staleness for some reason
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("pwd"));
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.stalenessOf(loginModal.googlePasswordInput())));
-        helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(loginModal.googlePasswordInput()));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("pwd"));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.stalenessOf(loginModal.googlePasswordInput())));
+        Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(loginModal.googlePasswordInput()));
         loginModal.googlePasswordInput().sendKeys(config.password);
         loginModal.googlePasswordNext().click();
-        Assert.assertTrue(header.userMenu().isDisplayed(), "GoogleLoginValid - User is not logged in");
+
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.userMenu())).isDisplayed(), "GoogleLoginValid - User is not logged in");
 
     }
     //************************** Teardown ********************************************

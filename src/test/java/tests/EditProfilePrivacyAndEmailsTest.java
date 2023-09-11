@@ -1,6 +1,7 @@
 package tests;
 
 
+import helpers.Waiter;
 import resources.Config;
 import helpers.Logins;
 import helpers.PageActions;
@@ -12,7 +13,7 @@ import org.testng.annotations.*;
 import pages.EditProfilePage;
 import resources.TestConfig;
 
-import static helpers.getDriverType.getDriver;
+import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
 public class EditProfilePrivacyAndEmailsTest {
@@ -50,7 +51,40 @@ public class EditProfilePrivacyAndEmailsTest {
     }
 
     //************************** Begin Tests ********************************************
-
+    @Test
+    public void EmailCharities() {
+        action.scrollByAmount(0, 300);
+        profile.emailTab().click();
+        Boolean onOff = profile.emailCharities().isSelected();
+        PageActions.scrollDown(driver, 1);
+        profile.emailCharities().click();
+        profile.saveEmailPrefBtn().click();
+        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        profile.emailTab().click();
+        try {
+            Assert.assertNotEquals(onOff, profile.emailCharities().isSelected());
+        } catch (AssertionError e) {
+            System.out.println("EmailCharities - change didn't save");
+            Assert.fail();
+        }
+    }
+    @Test
+    public void EmailChiveNation() {
+        action.scrollByAmount(0, 300);
+        profile.emailTab().click();
+        Boolean onOff = profile.emailChiveNation().isSelected();
+        PageActions.scrollDown(driver, 1);
+        profile.emailChiveNation().click();
+        profile.saveEmailPrefBtn().click();
+        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        profile.emailTab().click();
+        try {
+            Assert.assertNotEquals(onOff, profile.emailChiveNation().isSelected());
+        } catch (AssertionError e) {
+            System.out.println("EmailChiveNation - change didn't save");
+            Assert.fail();
+        }
+    }
     @Test
     public void EmailHotnessDaily() {
         action.scrollByAmount(0, 300);
@@ -213,124 +247,78 @@ public class EditProfilePrivacyAndEmailsTest {
     }
 
     @Test
+    public void EmailWilliamMurray() {
+        action.scrollByAmount(0, 300);
+        profile.emailTab().click();
+        Boolean onOff = profile.emailWilliamMurray().isSelected();
+        PageActions.scrollDown(driver, 1);
+        profile.emailWilliamMurray().click();
+        profile.saveEmailPrefBtn().click();
+        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        profile.emailTab().click();
+        Assert.assertNotEquals(onOff, profile.emailWilliamMurray().isSelected(), "EmailWilliamMurray - change didn't save");
+    }
+
+    @Test
     public void HotnessToggle() throws InterruptedException {
         profile.accountTab().click();
         //  System.out.println(profile.hotnessToggle().getAttribute("value") + " first");
         if (profile.hotnessToggle().getAttribute("value").equals("false")) {
             profile.hotnessToggle().click();
             Thread.sleep(1000);
-            //  System.out.println(profile.hotnessToggle().getAttribute("value") + " did you get here");
-            try {
-                Assert.assertEquals("true", profile.hotnessToggle().getAttribute("value"));
-                // System.out.println(profile.hotnessToggle().getAttribute("value"));
-            } catch (AssertionError e) {
-                System.out.println("Hotness toggle did not switch to on");
-                Assert.fail();
-            }
+            Assert.assertEquals("true", profile.hotnessToggle().getAttribute("value"), "\"Hotness toggle did not switch to on");
         } else if (profile.hotnessToggle().getAttribute("value").equals("true")) {
-            // System.out.println(profile.hotnessToggle().getAttribute("value")+ " else if before");
             profile.hotnessToggle().click();
-
-            try {
-                //	  System.out.println(profile.hotnessToggle().getAttribute("value")+ " else if");
-                Assert.assertEquals("false", profile.hotnessToggle().getAttribute("value"));
-            } catch (AssertionError e) {
-                System.out.println(profile.hotnessToggle().getAttribute("value"));
-                System.out.println("Hotness toggle did not switch to off");
-                Assert.fail();
-            }
+            Assert.assertEquals("false", profile.hotnessToggle().getAttribute("value"), "Hotness toggle did not switch to off");
         } else if (!profile.hotnessToggle().getAttribute("value").equals("false") && !profile.hotnessToggle().getAttribute("value").equals("true")) {
             System.out.println("The Hotness toggle may be busted ");
             Assert.fail();
         }
         profile.saveProfileBtn().click();
-        try {
-            Assert.assertTrue(profile.updateSuccess().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println("Success message not displayed after saving hotness toggle");
-            Assert.fail();
-        }
-
+        Assert.assertTrue(profile.updateSuccess().isDisplayed(), "Success message not displayed after saving hotness toggle");
     }
 
     @Test
     public void MakePrivateToggle() throws InterruptedException {
-        //Can't get it to save the choice without those sleeps in there, tried everything
         profile.accountTab().click();
-        //if it's set private when you load the page
         if (profile.makePrivateToggle().getAttribute("value").equals("false")) {
             profile.makePrivateToggle().click();
-            Thread.sleep(1000);
-            try {
-                Assert.assertTrue(profile.makePrivateTitle().isDisplayed());
-            } catch (AssertionError e) {
-                Assert.fail("Warning popup did not display after toggling make private on");
-            }
-
+            Thread.sleep(1000);//yes
+            Assert.assertTrue(profile.makePrivateTitle().isDisplayed(), "Warning popup did not display after toggling make private on");
             profile.makePrivateNvmBtn().click();
-            Thread.sleep(2000);
-
-            try {
-                Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"));
-            } catch (AssertionError e) {
-                Assert.fail("Make private toggle should not have switched on");
-            }
+            Thread.sleep(2000);//mhm
+            Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"),  "Make private toggle should not have switched on");
 
             profile.makePrivateToggle().click();
             profile.makePrivateAcceptBtn().click();
-            Thread.sleep(3000);
+            Thread.sleep(3000);//I know
 
             profile.saveProfileBtn().click();
-            helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
             driver.navigate().refresh();
             profile.accountTab().click();
             Thread.sleep(5000);
-            helpers.Waiter.wait(driver).until(ExpectedConditions.attributeContains(profile.makePrivateToggle(), "value", "true"));
-            try {
-                Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.attributeToBe(profile.makePrivateToggle(), "value", "true")));
-                //  Assert.assertEquals("true", profile.makePrivateToggle().getAttribute("value"));
-            } catch (AssertionError e) {
-                Assert.fail("Make private toggle did not switch to on");
-            }
+            Waiter.wait(driver).until(ExpectedConditions.attributeContains(profile.makePrivateToggle(), "value", "true"));
+                Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.attributeToBe(profile.makePrivateToggle(), "value", "true")), "Make private toggle did not switch to on");
             //if it's not set private when you load the page
         } else if (profile.makePrivateToggle().getAttribute("value").equals("true")) {
             profile.makePrivateToggle().click();
             profile.saveProfileBtn().click();
-            helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
             driver.navigate().refresh();
             profile.accountTab().click();
             Thread.sleep(1000);
-            try {
-                Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"));
-            } catch (AssertionError e) {
-                Assert.fail("Make private toggle did not switch to off");
-            }
+            Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"), "Make private toggle did not switch to off");
             profile.makePrivateToggle().click();
             Thread.sleep(1000);
-            try {
-                Assert.assertTrue(profile.makePrivateTitle().isDisplayed());
-            } catch (AssertionError e) {
-                Assert.fail("Warning popup did not display after toggling make private on");
-            }
-
+            Assert.assertTrue(profile.makePrivateTitle().isDisplayed(), "Warning popup did not display after toggling make private on");
             profile.makePrivateNvmBtn().click();
             Thread.sleep(2000);
-
-            try {
-                Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"));
-            } catch (AssertionError e) {
-                Assert.fail("Make private toggle should not have switched on");
-            }
-
+            Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"), "Make private toggle should not have switched on");
             profile.makePrivateToggle().click();
             profile.makePrivateAcceptBtn().click();
-
             Thread.sleep(2000);
-            try {
-                Assert.assertEquals("true", profile.makePrivateToggle().getAttribute("value"));
-            } catch (AssertionError e) {
-                Assert.fail("Make private toggle did not switch to on");
-            }
+            Assert.assertEquals("true", profile.makePrivateToggle().getAttribute("value"), "Make private toggle did not switch to on");
 
         } else if (!profile.makePrivateToggle().getAttribute("value").equals("false") && !profile.makePrivateToggle().getAttribute("value").equals("true")) {
             Assert.fail("Make private toggle may be busted");
@@ -343,26 +331,19 @@ public class EditProfilePrivacyAndEmailsTest {
             profile.makePrivateToggle().click();
             profile.saveProfileBtn().click();
             Thread.sleep(4000);
-            helpers.Waiter.wait(driver).until(ExpectedConditions.attributeToBe(profile.makePrivateToggle(), "value", "false"));
+            Waiter.wait(driver).until(ExpectedConditions.attributeToBe(profile.makePrivateToggle(), "value", "false"));
         }
     }
 
     @Test
     public void privacyDefIcon() {
         profile.accountTab().click();
-        System.out.println(profile.privacyInfoIcon().getText());
-        try {
-            Assert.assertTrue(profile.privacyInfoIcon().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println();
-            Assert.fail("privacyDefIcon failed");
-        }
+        Assert.assertTrue(profile.privacyInfoIcon().isDisplayed(), "privacyDefIcon failed");
     }
 
     @Test
     public void PrivacyPageText() {
         profile.accountTab().click();
-
         Assert.assertTrue(
                 profile.privacyDefHeader().isDisplayed()
                         && profile.privacyDefSubHeader().isDisplayed()

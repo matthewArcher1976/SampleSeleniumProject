@@ -12,15 +12,14 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
-@SuppressWarnings({"unused", "UnnecessaryLocalVariable", "MissingSerialAnnotation"})
+@SuppressWarnings({"unused", "MissingSerialAnnotation"})
 public class Drivers {
 
 	public static WebDriver ChromeDriver() {
 		ChromeOptions co = new ChromeOptions();
 		co.addArguments("--remote-allow-origins=*");//workaround a showstopping bug in ChromeDriver 112 
 		co.addArguments("--disable-blink-features=AutomationControlled");//gets around Google's block of logins from WebDriver
-		WebDriver driver = new ChromeDriver(co);
-		return driver;
+		return new ChromeDriver(co);
 	}
 	
 	public static WebDriver ChromeSauce() {
@@ -51,9 +50,8 @@ public class Drivers {
 		ChromeOptions co = new ChromeOptions();
 		co.addArguments("--remote-allow-origins=*");
 		co.addArguments("--disable-web-security"); 
-	    co.addArguments("--allow-running-insecure-content"); 
-		WebDriver driver = new ChromeDriver(co);
-		return driver;
+	    co.addArguments("--allow-running-insecure-content");
+		return new ChromeDriver(co);
 	}
 	
 	public static WebDriver ChromeMobile() {
