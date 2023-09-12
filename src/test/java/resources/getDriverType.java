@@ -14,5 +14,4 @@ public class getDriverType {
             default -> throw new IllegalArgumentException("Driver type not supported: " + driverType);
         };
     }
-
 }

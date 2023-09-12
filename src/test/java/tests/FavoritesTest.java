@@ -64,17 +64,18 @@ public class FavoritesTest {
         header.yourProfileBtn().click();
         String yourName = ("@" + helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()));
         header.menuLatest().click();
-        Thread.sleep(2000);//yes
-        helpers.PageActions.scrollDown(driver, 2);
+        Thread.sleep(5000);//yes
+        helpers.PageActions.scrollDown(driver, 1);
         String submissionID = "";
         List<WebElement> cards = favorites.allCards();
         for (WebElement card : cards) {
             if (!favorites.isHeartFilledCard(card)) {
-                card.findElement(By.cssSelector("[id^='card-image']")).click();
+                card.findElement(By.cssSelector("[id^='submission-image']")).click();
                 helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
                 submissionID = Integer.toString(helpers.GetInteger.getIntFromMixedString(driver.getCurrentUrl()));
                 modal.closeModal().click();
                 Thread.sleep(3000);
+                System.out.println(submissionID + " is our submission id");
                 card.findElement(By.cssSelector("[id='toggle-favorite-" + submissionID + "']")).click();
                 break;
             }

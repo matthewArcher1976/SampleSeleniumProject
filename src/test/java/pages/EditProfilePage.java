@@ -77,7 +77,7 @@ public class EditProfilePage {
     }
 
     public WebElement birthDayValue() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("dob_test_input")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("span[aria-label='Day']")));
     }
 
     public WebElement birthDayInput() {

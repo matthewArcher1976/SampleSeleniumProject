@@ -4,10 +4,7 @@ import org.apache.hc.client5.http.classic.methods.HttpPut;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.HttpStatus;
-import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.testng.ITestResult;
@@ -86,10 +83,15 @@ public class SauceLabsListener extends TestListenerAdapter {
 
 
     private static void handleResponse(CloseableHttpResponse response) throws IOException, ParseException {
+        log("HTTP Status Code: " + response.getCode());
+        Header[] headers = response.getHeaders();
+        for (Header header : headers) {
+            log("Header Name: " + header.getName() + ", Header Value: " + header.getValue());
+        }
         if (response.getCode() == HttpStatus.SC_OK) {
             log("HTTP request successful.");
         } else {
-            log("HTTP request failed. Response: " + EntityUtils.toString(response.getEntity()));
+            log("HTTP request on handleResponse failed. Response: " + EntityUtils.toString(response.getEntity()));
         }
     }
 

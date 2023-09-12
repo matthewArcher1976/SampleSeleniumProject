@@ -96,6 +96,14 @@ public class SubmissionCardsTest {
     }
 
     @Test
+    public void FavoriteLikedCard(){
+        WebElement ourCard = card.cardIsUpvoted();
+        int likes = Integer.parseInt(ourCard.findElement(By.cssSelector("div[id^='vote-counter-']")).getText());
+        ourCard.findElement(By.className("fa-heart")).click();
+        Assert.assertEquals(likes, Integer.parseInt(ourCard.findElement(By.cssSelector("div[id^='vote-counter-']")).getText()), "Favoriting this added an upvote");
+    }
+
+    @Test
     public void FilterPageHotness() {
         pageHeader.filterHotness().click();
         //	Thread.sleep(3000);//remove with bug fix

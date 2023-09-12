@@ -65,6 +65,7 @@ public class CommentsTest {
         PageActions.scrollDown(driver, 2);
 
         PageActions.findElementWithScrollingElement(driver, comments.disqusFrame());
+        comments.switchToDisqusFrame();
         Thread.sleep(3000);
         Assert.assertTrue(comments.commentTextInput().isDisplayed(), "Did not find the comment policy block");
     }

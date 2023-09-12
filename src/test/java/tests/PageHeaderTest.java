@@ -61,12 +61,11 @@ public class PageHeaderTest {
 
     @Test(priority = 99)
     public void AvatarPicGoneOnLogout() throws InterruptedException {
-        WebElement avi = header.headerAvatar();
-        Assert.assertTrue(avi.isDisplayed());
+        WebElement avi = header.avatarPic();
         login.logout();
         Thread.sleep(3000);
-        Assert.assertTrue(header.loginBtn().isDisplayed());
-        //complete this
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(avi)));
+
     }
     @Test(enabled = false)//ad frames changed this, no longer relevant
     public void AvatarPosition(){
@@ -361,7 +360,7 @@ public class PageHeaderTest {
         WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test()
+    @Test
     public void LinksChiveTV() {
         header.linkMenu().click();
         header.dropDownChivery().click();
@@ -373,12 +372,12 @@ public class PageHeaderTest {
         WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test()
+    @Test
     public void MenuLatest() {
         Assert.assertTrue(header.menuLatest().getAttribute("aria-current").contains("page"), "Latest Tab not selected by default");
     }
 
-    @Test()
+    @Test
     public void TrophyIconIsGone() {
         try {
             header.trophyIcon().click();
@@ -388,6 +387,15 @@ public class PageHeaderTest {
             Assert.assertTrue(true);
         }
     }
+    @Test(priority = 1)
+    public void VerifyEmailBanner() throws InterruptedException {
+        //I didn't feel like making a new class for this one test
+        login.logout();
+        login.unpaidLogin(config.unconfirmedEmail, config.password);
+        Assert.assertTrue(header.verifyEmailHeader().isEnabled());
+        login.logout();
+    }
+
     //************************** Teardown ********************************************
 
     @AfterClass

@@ -3,9 +3,7 @@ package resources;
 import java.util.ArrayList;
 
 public class UserNameBlacklist {
-	
-    	
-    	
+
     public static ArrayList<String> getWordList() {
     	ArrayList<String> wordList = new ArrayList<>();
     	wordList.add("activity");

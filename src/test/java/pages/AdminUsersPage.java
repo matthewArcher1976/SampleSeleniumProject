@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class AdminUsersPage {
 
     WebDriver driver;
