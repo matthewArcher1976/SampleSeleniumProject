@@ -56,7 +56,8 @@ public class GetInteger {
     }
     
     public static String getUsernameFromURL(String url) {
-        int lastIndex = url.lastIndexOf('/');
+		url = url.replaceAll("/+$", "");
+		int lastIndex = url.lastIndexOf('/');
         if (lastIndex != -1 && lastIndex < url.length() - 1) {
             return url.substring(lastIndex + 1);
         } else {

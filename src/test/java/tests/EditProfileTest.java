@@ -1,11 +1,8 @@
 package tests;
 
-import helpers.CustomExpectedConditions;
+import helpers.*;
 import pages.ProfilePage;
 import resources.Config;
-import helpers.Logins;
-import helpers.Randoms;
-import helpers.Waiter;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -41,6 +38,7 @@ public class EditProfileTest {
         action = new Actions(driver);
         login = new Logins(driver);
         profile = new EditProfilePage(driver);
+        profilePage = new ProfilePage(driver);
 
     }
 
@@ -104,17 +102,23 @@ public class EditProfileTest {
         Assert.assertTrue(profile.updateSuccess().isDisplayed(), "BannerPicUpdate - Update Success not found");
     }
 
-    @Test(enabled = false)
-    public void BirthdayPicker(){
+    @Test(enabled = false)//this does not work because the date is in the shadow DOM which does not display in the Selenium browser. Can try with a js executor?
+    public void BirthdayPicker() throws InterruptedException {
         profile.userMenu().click();
         profile.settingsBtn().click();
+        Thread.sleep(99999999);
+        String initialBirthday = profile.birthDayValue().getText();
+        System.out.println(initialBirthday);
+
         String year = Randoms.getRandomYear();
         String month = Randoms.getRandomMonth();
-        String day = Randoms.formatDay(Randoms.getRandomDay());
-        String birthday = profile.monthToNumber(month) + "/" + helpers.Randoms.formatDay(day) + "/" + year;
+        String day = Randoms.getRandomDay();
+        String birthday = profile.monthToNumber(month) + helpers.Randoms.formatDay(day) + year;
+        System.out.println(birthday + " is birthday");
         profile.birthDayInput().click();
-        profile.birthDayInput().sendKeys(month + day + year);
-        System.out.println(birthday);
+        profile.birthDayInput().sendKeys(birthday);
+        profile.saveProfileBtn().click();
+        Thread.sleep(10000);
        // Assert.assertEquals(profile.birthDayValue().getAttribute("value"), birthday, "Birthday did not update properly");
     }
     @Test
@@ -350,12 +354,12 @@ public class EditProfileTest {
     }
 
     @Test
-    public void UpdateUserName() {
+    public void UpdateUserName() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        Waiter.wait(driver).until(ExpectedConditions.urlMatches(config.url));
-        String ourName = helpers.GetInteger.getUsernameFromURL(driver.getCurrentUrl());
-        String newName = helpers.Randoms.getRandomString(10);
+        Thread.sleep(4000);
+        String ourName = GetInteger.getUsernameFromURL(driver.getCurrentUrl());
+        String newName = Randoms.getRandomString(10);
         profile.editProfileBtn().click();
         profile.accountTab().click();
         profile.userName().clear();

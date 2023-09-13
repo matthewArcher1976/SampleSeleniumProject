@@ -1,6 +1,6 @@
 {
   "adminEmail": "thechivetest+admin@gmail.com",
-  "adminURL": "https://i.thechive.com/admin/dashboards/main",
+  "adminURL": "https://stage-i.thechive.com/admin/dashboards/main",
   "bannedEmail": "thechivetest+banned@gmail.com",
   "bannedUsername": "BannedUser",
   "chivetteEmail": "thechivetest+chivette@gmail.com",
@@ -12,6 +12,7 @@
   "privateEmail": "thechivetest+private@gmail.com",
   "unpaidEmail": "thechivetest@gmail.com",
   "url": "https://stage-i.thechive.com/",
+  "unconfirmedEmail": "thechivetest+unconfirmed@gmail.com",
   "verifiedEmail": "thechivetest+verified@gmail.com"
 
 }

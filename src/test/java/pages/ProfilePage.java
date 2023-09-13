@@ -30,8 +30,6 @@ public class ProfilePage {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("social-button-wishlist_url")));
     }
 
-    By amazonIcon = By.id("social-button-wishlist_url");
-
     public WebElement blockBtn() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[id*='block-btn']")));
     }
@@ -96,7 +94,9 @@ public class ProfilePage {
         }
         return otherCard;
     }
-
+    public WebElement pointsTab() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("user_profile_points")));
+    }
     public WebElement privacyTermsLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.linkText("Terms & Privacy")));
     }

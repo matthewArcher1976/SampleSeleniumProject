@@ -18,6 +18,10 @@ public class PageHeaderPage {
 
     //*********************** WebElements *******************************
 
+    public WebElement avatarPic() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar"))).findElement(By.cssSelector("img"));
+    }
+
     public WebElement chiveryLink() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-cart-shopping")));
     }
@@ -35,7 +39,7 @@ public class PageHeaderPage {
         WebElement countdownElement = helpers.Waiter.wait(driver)
                 .until(ExpectedConditions.presenceOfElementLocated(By.className("countdown")));
         List<WebElement> timeElements = countdownElement.findElements(By.tagName("span"));
-        return timeElements.get(0).getAttribute("style").replaceAll("[^\\d]", "");
+        return timeElements.get(0).getAttribute("style").replaceAll("\\D", "");
     }
 
     public String dopamineDumpMinute() {
@@ -43,7 +47,7 @@ public class PageHeaderPage {
         WebElement countdownElement = helpers.Waiter.wait(driver)
                 .until(ExpectedConditions.presenceOfElementLocated(By.className("countdown")));
         List<WebElement> timeElements = countdownElement.findElements(By.tagName("span"));
-        return timeElements.get(1).getAttribute("style").replaceAll("[^\\d]", "");
+        return timeElements.get(1).getAttribute("style").replaceAll("\\D", "");
     }
 
     public String dopamineDumpSecond() {
@@ -51,7 +55,7 @@ public class PageHeaderPage {
         WebElement countdownElement = helpers.Waiter.wait(driver)
                 .until(ExpectedConditions.presenceOfElementLocated(By.className("countdown")));
         List<WebElement> timeElements = countdownElement.findElements(By.tagName("span"));
-        return timeElements.get(2).getAttribute("style").replaceAll("[^\\d]", "");
+        return timeElements.get(2).getAttribute("style").replaceAll("\\D", "");
     }
 
     public WebElement dropDown() {
@@ -138,7 +142,6 @@ public class PageHeaderPage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), 'Sign out')]")));
     }
 
-
     public WebElement submitBtn() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-create")));
     }
@@ -149,6 +152,10 @@ public class PageHeaderPage {
 
     public WebElement userMenu() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("btn-circle")));
+    }
+
+    public WebElement verifyEmailHeader() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//strong[contains(text(), 'Verify your email')]")));
     }
 
     public WebElement yourProfileBtn() {

@@ -1,14 +1,15 @@
 package pages;
 
+import helpers.PageActions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class SubmissionCardsPage {
 
     WebDriver driver;
@@ -39,7 +40,29 @@ public class SubmissionCardsPage {
     public List<WebElement> allTags() {
         return driver.findElements(By.cssSelector("div[id^='tag-']"));
     }
+    public WebElement cardIsUpvoted() {
+        WebElement firstNotUpvotedCard = null;
+        for (int i = 0; i < 2; i++) {
+            List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
+            for (WebElement card : allCards) {
+                if (helpers.IsSelected.isIconSelected(card.findElement(By.className("fa-thumbs-up"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
+                    firstNotUpvotedCard = card;
+                    break;
+                }
+            }
+            if (firstNotUpvotedCard != null) {
+                break;
+            } else {
 
+                PageActions.scrollDown(driver, 2);
+            }
+        }
+        if (firstNotUpvotedCard == null) {
+            System.out.println("Can't find an un-upvoted card, giving up");
+            Assert.fail();
+        }
+        return firstNotUpvotedCard;
+    }
     public WebElement cardNotDownvoted() {
         WebElement firstNotUpvotedCard = null;
         for (int i = 0; i < 2; i++) {
@@ -69,7 +92,7 @@ public class SubmissionCardsPage {
             List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
             for (WebElement card : allCards) {
 
-                if (!helpers.IsSelected.isIconSelected(card.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart")))) {
+                if (!helpers.IsSelected.isIconSelected(card.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
                     firstNotUpvotedCard = card;
                     break;
                 }
@@ -231,7 +254,7 @@ public class SubmissionCardsPage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='card-image-overlay']")));
     }
     public WebElement featuredCommentIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-heart")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-comment")));
     }
     public WebElement featuredIcon() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='featured ichive icon']")));
@@ -335,7 +358,7 @@ public class SubmissionCardsPage {
     }
 
     public WebElement voteCounter() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='vote-counter-']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='vote-counter-']")));
     }
 
     public WebElement voteDownOverlay() {

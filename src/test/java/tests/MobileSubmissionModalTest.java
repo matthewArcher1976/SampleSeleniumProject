@@ -66,7 +66,6 @@ public class MobileSubmissionModalTest {
         PageActions.swipeUp(driver, 2);
         Thread.sleep(2000);
         String tagName = (modal.tag().getText());
-        System.out.println(tagName);
         modal.tag().click();
         Thread.sleep(2000);
         Waiter.wait(driver).until(ExpectedConditions.urlContains(tagName));
@@ -190,14 +189,14 @@ public class MobileSubmissionModalTest {
         Assert.assertEquals("rgba(0, 195, 0, 1)", modal.twitterBtn().getCssValue("color"), "Twitter button color on hover is wrong: " + modal.facebookBtn().getCssValue("color"));
     }
 
-    @Test
+    @Test(enabled = false)//this won't work in mobile view, arrow keys and my custom swipe right won't work
     public void ImageChanceBetweenSubsArrowKey() throws InterruptedException {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
         Thread.sleep(4000);//remove once 731 is fixed
         String firstImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
-        action.sendKeys(Keys.ARROW_RIGHT).perform();
-        Thread.sleep(20000);
+        PageActions.swipeLeft(driver, 2);
+        Thread.sleep(4000);
         String secondImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         Assert.assertNotEquals(firstImage, secondImage, "ImageChanceBetweenSubsArrowKey - Found the same image after navigating right");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
@@ -207,25 +206,6 @@ public class MobileSubmissionModalTest {
         action.sendKeys(Keys.ARROW_LEFT).perform();
         Thread.sleep(3000);
         Assert.assertEquals(secondImage, modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", ""), "ImageChanceBetweenSubsArrowKey - Found a different image when navigating back" + secondImage + " , " + modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", ""));
-    }
-
-    @Test(enabled = false)//no more right left nav buttons
-    public void NavBetweenSubs() throws InterruptedException {
-        Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
-        WebElement card = modal.firstCard();
-        action.moveToElement(card).click().perform();
-        String firstCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
-        Thread.sleep(5000);//remove when bug on 731 is fixed
-        modal.navRight().click();
-        String secondCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
-        Assert.assertNotEquals(firstCardID, secondCardID, "Did not navigate forward when clicking right nav");
-        modal.navRight().click();
-        Thread.sleep(2000);
-        String thirdCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
-        Assert.assertNotEquals(thirdCardID, secondCardID, "Did not navigate forward when clicking right nav, second click");
-        modal.navLeft().click();
-        Thread.sleep(2000);
-        Assert.assertEquals(secondCardID, helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
     @Test

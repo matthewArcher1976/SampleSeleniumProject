@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
-
+@SuppressWarnings({"class", "unused"})
 public class SearchAndFiltersPage {
 
     WebDriver driver;

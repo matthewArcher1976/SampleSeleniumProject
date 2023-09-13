@@ -1,5 +1,6 @@
 package tests;
 
+import org.openqa.selenium.interactions.Actions;
 import resources.Config;
 import helpers.Logins;
 import helpers.Waiter;
@@ -23,7 +24,7 @@ import static resources.getDriverType.getDriver;
 public class DopamineDumpTest {
 
     WebDriver driver;
-
+    Actions action;
     SubmissionCardsPage card;
     PageHeaderPage header;
     Logins login;
@@ -35,7 +36,7 @@ public class DopamineDumpTest {
     public  void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
-
+        action = new Actions(driver);
         card = new SubmissionCardsPage(driver);
         header = new PageHeaderPage(driver);
         login = new Logins(driver);
@@ -58,8 +59,10 @@ public class DopamineDumpTest {
     @Test
     public void CommentButtonFeatured() {
         header.menuFeatured().click();
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         card.featuredCommentIcon().click();
-
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("comments"));
+        System.out.println("here?");
         Assert.assertTrue(card.disqusSection().isDisplayed(), "CommentButtonFeatured -Comments did not open");
     }
 
