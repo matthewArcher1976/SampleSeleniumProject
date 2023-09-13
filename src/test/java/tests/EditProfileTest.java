@@ -394,7 +394,7 @@ public class EditProfileTest {
     }
 
     @Test
-    public void UpdateFirstName() throws InterruptedException {
+    public void UpdateFirstName() {
 
         String nameAfter = helpers.Randoms.getRandomString(10);
         profile.userMenu().click();
