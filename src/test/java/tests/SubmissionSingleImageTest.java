@@ -1,5 +1,7 @@
 package tests;
 
+import helpers.PrettyAsserts;
+import helpers.Waiter;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -13,6 +15,7 @@ import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionSingleImagePage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.ArrayList;
@@ -102,7 +105,7 @@ public class SubmissionSingleImageTest {
         Thread.sleep(3000);//Won't work without this
         submission = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-" + submissionID)));
         try {
-            Assert.assertTrue(helpers.IsSelected.isIconSelected(submission.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart"))));
+            Assert.assertTrue(PrettyAsserts.isIconSelected(submission.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart"))));
             submission.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart")).click(); //teardown
         } catch (AssertionError e) {
             submission.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart")).click(); //teardown
@@ -136,19 +139,17 @@ public class SubmissionSingleImageTest {
         Assert.assertTrue(width <= 600 && height <= 1200, "ImageDisplays failed, found " + width + " for the width and " + height + " for the height");
     }
 
-    @Test
+    @Test()
     public void ReportPostIconHover() throws InterruptedException {
         header.headerAvatar().click();
         header.yourProfileBtn().click();
         Thread.sleep(2000);
-        //helpers.Waiter.wait(driver).until(ExpectedConditions.urlMatches(".*/\\\\d+.*"));
         String userName = helpers.GetInteger.getUsernameFromURL(driver.getCurrentUrl());
         header.menuLatest().click();
-        Thread.sleep(1000);//remove
-        // System.out.println(userName);
         action.moveToElement(card.cardNotMine(userName)).click().perform();
         driver.navigate().refresh();
         WebElement flag = single.reportFlag();
+        System.out.println("Here?");
         Assert.assertEquals(flag.getCssValue("color"), "rgba(255, 255, 255, 1)", "Report flag should change color on hover");
         action.moveToElement(flag).perform();
         Assert.assertEquals(flag.getCssValue("color"), "rgba(0, 195, 0, 1)", "Report flag should change color on hover");
@@ -312,20 +313,11 @@ public class SubmissionSingleImageTest {
         action.moveToElement(submission).click().perform();
         driver.navigate().refresh();
         single.downvoteBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.attributeContains(single.downvoteBtn(), "class", "text-white")));
-        // the click on Latest keeps missing for some reason
-       /* int tries = 0;
-        boolean isUrlContainsSubmissionID = driver.getCurrentUrl().contains(submissionID);
-        while (isUrlContainsSubmissionID && tries < 3) {
-            header.menuLatest().click();
-            Thread.sleep(2000);
-            isUrlContainsSubmissionID = driver.getCurrentUrl().contains(submissionID);
-            tries++;
-        }*/
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.attributeContains(single.downvoteBtn(), "class", "text-white")));
         driver.get(config.url);
         submission = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-" + submissionID)));
         try {
-            Assert.assertTrue(helpers.IsSelected.isIconSelected(submission.findElement(By.className("fa-thumbs-down"))));
+            Assert.assertTrue(PrettyAsserts.isIconSelected(submission.findElement(By.className("fa-thumbs-down"))));
             submission.findElement(By.className("fa-thumbs-down")).click(); //teardown
         } catch (AssertionError e) {
             submission.findElement(By.className("fa-thumbs-down")).click(); //teardown
@@ -343,9 +335,9 @@ public class SubmissionSingleImageTest {
         single.upvoteBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.attributeContains(single.upvoteBtn(), "class", "text-white")));
         driver.get(config.url);
-        submission = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-" + submissionID)));
+        submission = Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-" + submissionID)));
         try {
-            Assert.assertTrue(helpers.IsSelected.isIconSelected(submission.findElement(By.className("fa-thumbs-up"))), "Upvote from single page did not persist on Latest list");
+            Assert.assertTrue(PrettyAsserts.isIconSelected(submission.findElement(By.className("fa-thumbs-up"))), "Upvote from single page did not persist on Latest list");
         } catch (AssertionError e) {
             submission.findElement(By.className("fa-thumbs-up")).click();
             Assert.fail("Upvote from single page did not persist on Latest list");

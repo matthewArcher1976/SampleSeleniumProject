@@ -8,11 +8,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
+@Test(retryAnalyzer = RetryAnalyzer.class)
+
 public class LoginModalTest {
 
     WebDriver driver;
@@ -61,7 +64,7 @@ public class LoginModalTest {
         Thread.sleep(2000);
         login.forgotPassword().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
-        login.email().sendKeys("thechivetest+" + helpers.Randoms.getRandomString(10) + "@gmail.com");
+        login.emailInput().sendKeys("thechivetest+" + helpers.Randoms.getRandomString(10) + "@gmail.com");
         login.resetPasswordEmailMe().click();
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We cannot find a user with that email address."), "ForgotPasswordInvalidEmail - error toast not found");
     }
@@ -72,7 +75,7 @@ public class LoginModalTest {
         Thread.sleep(2000);
         login.forgotPassword().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
-        login.email().sendKeys(config.unpaidEmail);
+        login.emailInput().sendKeys(config.unpaidEmail);
         login.resetPasswordEmailMe().click();
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We have emailed your password reset link. If you do not find it in your inbox, please double check your spam folder.")
                 && login.updateSuccess().getText().contains("We have emailed your password reset link."), "ForgotPasswordValidEmail - success toast not found");
@@ -118,8 +121,8 @@ public class LoginModalTest {
     @Test
     public void LoginOpensOnSubmit() throws InterruptedException {
         header.submitBtn().click();
-        login.email().sendKeys(config.unpaidEmail);
-        login.password().sendKeys(config.password);
+        login.emailInput().sendKeys(config.unpaidEmail);
+        login.passwordInput().sendKeys(config.password);
         login.signIn().click();
         Thread.sleep(2000);//yes
         try {

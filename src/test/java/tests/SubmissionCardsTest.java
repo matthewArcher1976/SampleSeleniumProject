@@ -13,6 +13,7 @@ import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.ProfilePage;
 import pages.SubmissionCardsPage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.List;
@@ -30,7 +31,6 @@ public class SubmissionCardsTest {
     PageHeaderPage pageHeader;
     ProfilePage profile;
 
-
     private static TestConfig config;
 
     //************************** Setup ******************************************
@@ -46,6 +46,7 @@ public class SubmissionCardsTest {
         pageHeader = new PageHeaderPage(driver);
         profile = new ProfilePage(driver);
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
@@ -151,7 +152,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(second > first, "Cards do not seem to be loading when you scroll down");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void MouseoversVoteBtns() throws InterruptedException {
         Actions a = new Actions(driver);
         //see if the upvote button is selected then unselect it if it is
@@ -170,7 +171,7 @@ public class SubmissionCardsTest {
         Assert.assertEquals(card.downvoteBtn().getCssValue("color"), "rgba(0, 195, 0, 1)", "Downvote button color did not change on mouseover");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void MouseOverFavoriteBtn() throws InterruptedException {
         Actions a = new Actions(driver);
         if (card.isSelected(card.favoriteBtn())) {
@@ -182,7 +183,7 @@ public class SubmissionCardsTest {
         Assert.assertEquals(card.favoriteBtn().getCssValue("color"), "rgba(0, 195, 0, 1)", "Favorite button color did not change on mouseover");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void MouseOverCommentBtn() throws InterruptedException {
         Actions a = new Actions(driver);
         a.moveToElement(card.commentIcon()).perform();
@@ -190,7 +191,7 @@ public class SubmissionCardsTest {
         Assert.assertEquals(card.commentIcon().getCssValue("color"), "rgba(0, 195, 0, 1)", "Comment button color did not change on mouseover ");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void MouseOverGIF() throws InterruptedException {
         helpers.PageActions.scrollDown(driver, 3);
         WebElement ourGIF = card.firstGIF();
@@ -204,7 +205,7 @@ public class SubmissionCardsTest {
         }
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void MouseOverReportBtn() throws InterruptedException {
         Actions a = new Actions(driver);
         a.moveToElement(card.reportBtn()).perform();

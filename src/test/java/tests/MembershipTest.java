@@ -10,11 +10,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.EditProfilePage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
+@Test(retryAnalyzer = RetryAnalyzer.class)
 public class MembershipTest {
 
     WebDriver driver;
@@ -30,7 +32,7 @@ public class MembershipTest {
     public void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
-
+        action = new Actions(driver);
         login = new Logins(driver);
         profile = new EditProfilePage(driver);
     }
@@ -66,20 +68,19 @@ public class MembershipTest {
     @Test
     public void CreditCardInputs() throws InterruptedException {
         profile.membershipTab().click();
-        Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe")));
-        Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[scrolling='no']")));//yo dawg, we heard you like iframes
+        Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[src='/settings/membership-manage']")));
+        Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[scrolling='no']")));//yo dawg, we heard you like iframes        profile.membershipCreditCardsTab().click();
         profile.membershipCreditCardsTab().click();
         profile.membershipAddCardBtn().click();
         Thread.sleep(4000);//need it
         Assert.assertTrue(profile.membershipCreditCardExp().isDisplayed() && profile.membershipCreditCardExp().isEnabled(), "CC Exp Input Not found");
     }
 
-    @Test
+    @Test()
     public void CreditCCNumber() {
         profile.membershipTab().click();
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[src='/settings/membership-manage']")));
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[scrolling='no']")));//yo dawg, we heard you like iframes
-        Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe")));
         profile.membershipCreditCardsTab().click();
         profile.membershipAddCardBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[sandbox='allow-scripts allow-same-origin']")));
@@ -95,6 +96,7 @@ public class MembershipTest {
         Thread.sleep(2000);//Yes, you get different values if you don't wait
         Assert.assertEquals(profile.addMembershipBtn().getCssValue("background-color"), "rgba(0, 158, 0, 1)", "Color on hover while active should be rgba(0, 158, 0, 1), found: " + profile.profileTab().getCssValue("color"));
     }
+
     //************************** Teardown ********************************************
 
     @AfterClass

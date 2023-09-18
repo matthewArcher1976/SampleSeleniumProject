@@ -10,6 +10,7 @@ import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class PageActions {
@@ -133,9 +134,9 @@ public class PageActions {
 
 		for (int i = 0; i < times; i++) {
 			Sequence scrollDown = new Sequence(finger, 1);
-			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(200), PointerInput.Origin.viewport(), startX, y));
+			scrollDown.addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), startX, y));
 			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
-			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(2000), PointerInput.Origin.viewport(), startX, y));
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(2000), PointerInput.Origin.viewport(), endX, y));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 			((Interactive) driver).perform(Arrays.asList(scrollDown));
 		}
@@ -150,10 +151,9 @@ public class PageActions {
 			Sequence scrollDown = new Sequence(finger, 1);
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), startX, y));
 			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
-			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), startX, y));
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), endX, y));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
-
 }

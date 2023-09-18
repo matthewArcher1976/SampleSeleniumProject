@@ -90,7 +90,6 @@ public class EditProfilePage {
     }
 
     public WebElement birthDayMonth(String month) {
-
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[data-test='" + month + "']")));
     }
 
@@ -101,7 +100,18 @@ public class EditProfilePage {
     public WebElement chapterSelect() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("chiveChapter")));
     }
-
+    public WebElement deleteAccountLink() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("span[class='link']")));
+    }
+    public WebElement deleteCloseModelBtn() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-xmark")));
+    }
+    public WebElement deleteConfirmBtn() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("modal-confirm-button")));
+    }
+    public WebElement deleteNeverMindBtn() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("modal-cancel-button")));
+    }
     public WebElement editProfileBtn() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("edit-profile-button")));
     }
@@ -282,7 +292,7 @@ public class EditProfilePage {
     }
 
     public WebElement membershipCreditCardsTab() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'Credit Cards')]")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("li[data-item='wallet']")));
     }
 
     public WebElement membershipCreditCardZip() {

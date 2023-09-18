@@ -11,11 +11,13 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.EditProfilePage;
 import pages.ProfilePage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
+@Test(retryAnalyzer = RetryAnalyzer.class)
 public class EditProfileSocialLinksTest {
     WebDriver driver;
     private static TestConfig config;

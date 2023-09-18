@@ -84,7 +84,6 @@ public class CommentsTest {
         Assert.assertTrue(comments.enterNameLabel().isDisplayed(), "Did not find the Please enter your name label");
         Assert.assertTrue(comments.enterEmailLabel().isDisplayed(), "Did not find the Please enter your email label");
         Assert.assertTrue(comments.enterPasswordLabel().isDisplayed(), "Did not find the Please enter your password label");
-
     }
     @Test
     public void LeaveGuestComment() throws InterruptedException {

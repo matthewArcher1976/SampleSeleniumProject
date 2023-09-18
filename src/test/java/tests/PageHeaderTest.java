@@ -55,6 +55,10 @@ public class PageHeaderTest {
     //************************** Test Cases ****************************
 
     @Test
+    public void AdFrameDisplays() {
+        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
+    }
+    @Test
     public void AvatarPicDisplays() {
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
     }

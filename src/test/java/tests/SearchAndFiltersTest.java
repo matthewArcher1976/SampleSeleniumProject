@@ -134,18 +134,18 @@ public class SearchAndFiltersTest {
         search.filterHumanity().click();
         search.filterHotness().click();
         search.goButton().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
         Assert.assertTrue(driver.getCurrentUrl().contains("category=Humor&filters=")
                 && !driver.getCurrentUrl().contains("category=Hotness&filters=")
                 && !driver.getCurrentUrl().contains("category=Humanity&filters="), "URL should only contain Humor");
     }
 
-    @Test
+    @Test()
     public void FollowButtonDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();
         action.sendKeys(SEARCH_TERM).sendKeys(Keys.ENTER).build().perform();
-        helpers.Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
+        Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
         Assert.assertTrue(search.followBtn().isDisplayed(), "Did not find follow button");
     }
 
