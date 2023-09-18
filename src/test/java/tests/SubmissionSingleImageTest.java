@@ -15,7 +15,6 @@ import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionSingleImagePage;
-import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.ArrayList;

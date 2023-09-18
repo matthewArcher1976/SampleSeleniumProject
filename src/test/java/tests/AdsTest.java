@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.AdsPage;
-import pages.EditProfilePage;
 import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;

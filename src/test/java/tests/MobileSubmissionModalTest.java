@@ -18,8 +18,6 @@ import pages.SubmissionSingleImagePage;
 import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
-
-import java.text.DecimalFormat;
 import java.util.List;
 
 import static resources.getDriverType.getDriver;

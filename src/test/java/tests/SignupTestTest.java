@@ -103,7 +103,7 @@ public class SignupTestTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void EmailTaken() throws InterruptedException {
+    public void EmailTaken()  {
         header.loginBtn().click();
         loginModal.signUpTab().click();
         loginModal.userName().sendKeys(USER_NAME);
