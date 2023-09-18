@@ -43,11 +43,11 @@ public class CustomExpectedConditions {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
             wait.until(ExpectedConditions.jsReturnsValue("return window.jQuery != undefined"));
 
-            Boolean documentReady = Boolean.valueOf(((JavascriptExecutor) driver)
-                    .executeScript("return document.readyState").equals("complete"));
+            Boolean documentReady = ((JavascriptExecutor) driver)
+                    .executeScript("return document.readyState").equals("complete");
 
-            Boolean noActiveAjax = Boolean.valueOf((Boolean) ((JavascriptExecutor) driver)
-                    .executeScript("return jQuery.active == 0 || document.readyState != 'complete'"));
+            Boolean noActiveAjax = (Boolean) ((JavascriptExecutor) driver)
+                    .executeScript("return jQuery.active == 0 || document.readyState != 'complete'");
 
             return documentReady && noActiveAjax;
         };

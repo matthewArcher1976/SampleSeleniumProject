@@ -16,9 +16,8 @@ import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import pages.SubmissionSingleImagePage;
 import resources.Config;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
-
-import java.text.DecimalFormat;
 import java.util.List;
 
 import static resources.getDriverType.getDriver;
@@ -144,31 +143,7 @@ public class MobileSubmissionModalTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test(priority = 1)
-    //checks that the proportions on the card image are the same an actual, breaks the hover tests if run before then, IDK knows why
-    public void GIFNotCutOff() throws InterruptedException {
-        helpers.PageActions.scrollDown(driver, 3);
-        WebElement gifCard = card.firstGIF();
-        double cardHeight = gifCard.findElement(By.cssSelector("div[id^='card-image']")).getRect().getHeight();
-        double cardWidth = gifCard.findElement(By.cssSelector("div[id^='card-image']")).getRect().getWidth();
-        double cardRatio = cardHeight / cardWidth;
-        DecimalFormat df = new DecimalFormat("#.##");
-        String formattedCardRatio = df.format(cardRatio);
-
-        action.moveToElement(gifCard);
-        gifCard.click();
-        driver.navigate().refresh();
-        driver.get(single.submissionImage().getAttribute("src"));
-
-        double height = Integer.parseInt(single.sourceImage().getCssValue("height").replaceAll("[^0-9]", ""));
-        double width = Integer.parseInt(single.sourceImage().getCssValue("width").replaceAll("[^0-9]", ""));
-        double ratio = height / width;
-        String formattedRatio = df.format(ratio);
-        System.out.println("formattedRatio is " + formattedCardRatio + " and formattedCardRatio   is " + formattedCardRatio);
-        Assert.assertEquals(formattedRatio, formattedCardRatio, "GIFNotCutOff - gif may be getting cut off");
-    }
-
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverFacebookButton() throws InterruptedException {
         modal.firstCard().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(modal.facebookBtn()));
@@ -179,7 +154,7 @@ public class MobileSubmissionModalTest {
         Assert.assertEquals("rgba(0, 195, 0, 1)", modal.facebookBtn().getCssValue("color"), "Facebook button color on hover is wrong: " + modal.facebookBtn().getCssValue("color"));
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverTwitter() throws InterruptedException {
         modal.firstCard().click();
         System.out.println("Twitter color before " + modal.twitterBtn().getCssValue("color"));

@@ -17,9 +17,16 @@ public class PageHeaderPage {
     }
 
     //*********************** WebElements *******************************
+    public WebElement adFrame() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id*=google_ads_iframe]")));
+    }
+
+    public WebElement adImage() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("google_image_div")));
+    }
 
     public WebElement avatarPic() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar"))).findElement(By.cssSelector("img"));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar"))).findElement(By.className("rounded-full")).findElement(By.cssSelector("img"));
     }
 
     public WebElement chiveryLink() {

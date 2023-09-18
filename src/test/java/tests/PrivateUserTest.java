@@ -37,7 +37,7 @@ public class PrivateUserTest {
 
     //************************** Test Cases ****************************
 
-    //TODO - Test all the things related to private accounts
+    //TODO - Test all the things related to private accounts when we fix private users
 
     //************************** Teardown ********************************************
 

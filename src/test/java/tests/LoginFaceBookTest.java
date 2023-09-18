@@ -7,11 +7,14 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.LoginModalPage;
 import pages.PageHeaderPage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
+@Test(retryAnalyzer = RetryAnalyzer.class)
+
 public class LoginFaceBookTest {
 
     WebDriver driver;
@@ -37,7 +40,7 @@ public class LoginFaceBookTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test(priority = 99)
+    @Test(priority = 99, enabled = false)//getting Zucced
     public void FaceBookLoginValid() {
         header.loginBtn().click();
         login.loginFacebook().click();

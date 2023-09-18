@@ -8,10 +8,11 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.EditProfilePage;
 import pages.ProfilePage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
-
+@Test(retryAnalyzer = RetryAnalyzer.class)
 @Listeners(listeners.SauceLabsListener.class)
 public class ChivettesTest {
 
@@ -30,8 +31,8 @@ public class ChivettesTest {
         login = new Logins(driver);
         profilePage = new ProfilePage(driver);
         profile = new EditProfilePage(driver);
-
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
@@ -42,7 +43,6 @@ public class ChivettesTest {
     @BeforeMethod
     public void refresh() {
         driver.get(config.url);
-
     }
 
     //************************** Begin Tests ********************************************

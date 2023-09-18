@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import java.util.List;
 
 public class CustomElementFinder {
-    public static List<WebElement> findElements(WebDriver driver, WebElement parentElement, String className) {
+    public static List<WebElement> findChildElements(WebDriver driver, WebElement parentElement, String className) {
         helpers.Waiter.wait(driver).until((ExpectedCondition<Boolean>) d -> parentElement.isDisplayed());
         // Find child elements using the specified class name
         return parentElement.findElements(By.className(className));

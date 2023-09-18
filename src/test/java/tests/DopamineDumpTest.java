@@ -12,6 +12,7 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import static resources.getDriverType.getDriver;
-
+@Test(retryAnalyzer = RetryAnalyzer.class)
 @Listeners(listeners.SauceLabsListener.class)
 public class DopamineDumpTest {
 

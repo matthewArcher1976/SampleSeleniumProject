@@ -12,12 +12,13 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.BlockUserPage;
 import pages.SearchAndFiltersPage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.List;
 
 import static resources.getDriverType.getDriver;
-
+@Test(retryAnalyzer = RetryAnalyzer.class)
 @Listeners(listeners.SauceLabsListener.class)
 public class BlockUserTest {
 

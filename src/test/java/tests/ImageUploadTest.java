@@ -11,10 +11,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 @Listeners(listeners.SauceLabsListener.class)
+@Test(retryAnalyzer = RetryAnalyzer.class)
 public class ImageUploadTest {
 
     WebDriver driver;

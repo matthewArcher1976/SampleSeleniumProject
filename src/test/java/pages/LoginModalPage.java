@@ -26,6 +26,9 @@ public class LoginModalPage {
     }
 
     //********************** Web Elements ********************************
+    public WebElement birthdayInput() {
+        return getDriver().findElement(By.id("date-dob"));
+    }
 
     public WebElement closeModel() {
         return getDriver().findElement(By.className("fa-xmark"));
@@ -35,12 +38,15 @@ public class LoginModalPage {
         return getDriver().findElement(By.xpath("//button[contains(text(), 'Create Account')]"));
     }
 
-    public WebElement displayName() {
+    public WebElement userName() {
         return getDriver().findElement(By.id("username"));
     }
 
-    public WebElement email() {
+    public WebElement emailInput() {
         return getDriver().findElement(By.id("email"));
+    }
+    public WebElement errorText() {
+        return getDriver().findElement(By.className("text-red-500"));
     }
 
     public WebElement facebookEmail() {
@@ -92,9 +98,7 @@ public class LoginModalPage {
         return getDriver().findElement(By.cssSelector("input[type='password']"));
     }
 
-    public WebElement notificationToast() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("Vue-Toastification__toast-body")));
-    }
+
 
     public WebElement invalidUserNameClose() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("Vue-Toastification__close-button")));
@@ -112,11 +116,14 @@ public class LoginModalPage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-google")));
     }
 
-    public WebElement password() {
+    public WebElement notificationToast() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("Vue-Toastification__toast-body")));
+    }
+    public WebElement passwordInput() {
         return getDriver().findElement(By.id("password"));
     }
 
-    public WebElement passwordConfirm() {
+    public WebElement passwordConfirmInput() {
         return getDriver().findElement(By.id("passwordConfirm"));
     }
 
@@ -155,6 +162,5 @@ public class LoginModalPage {
     public WebElement userMenu() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar")));
     }
-
 
 }

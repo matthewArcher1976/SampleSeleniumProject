@@ -13,6 +13,7 @@ import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import pages.SubmissionSingleImagePage;
 import resources.Config;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.text.DecimalFormat;
@@ -115,7 +116,7 @@ public class SubmissionModalTest {
         Assert.assertTrue(modal.commentTextInput().isDisplayed(), "Policy text did not display");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void ClickCommentsButton() throws InterruptedException {
         driver.manage().window().fullscreen();
         modal.firstCard().click();

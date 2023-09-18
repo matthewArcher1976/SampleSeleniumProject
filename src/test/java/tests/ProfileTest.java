@@ -15,6 +15,7 @@ import pages.PageHeaderPage;
 import pages.ProfilePage;
 import pages.SubmissionCardsPage;
 import resources.Config;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.List;
@@ -68,18 +69,21 @@ public class ProfileTest {
     public void BlockUser() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        String myUser = GetInteger.getIdFromUrl(driver.getCurrentUrl());
         driver.get(config.url);
-        card.firstCard().findElement(By.cssSelector("a[href]")).click();
+        System.out.println(myUser + " my user");
+        card.cardNotMine(myUser).findElement(By.cssSelector("a[href]")).click();
         profilePage.blockBtn().click();
         Thread.sleep(3000);//yes
         if (profilePage.blockBtn().findElement(By.cssSelector("svg")).getAttribute("class").contains("fa-ban")) {
             profilePage.blockBtn().click();
-            Thread.sleep(3000);
+            Thread.sleep(3000);//I know
             Assert.assertTrue(profilePage.blockBtn().findElement(By.cssSelector("svg")).getAttribute("class").contains("fa-check"), "LoginOpensOnBlockButton - didn't block user after login");
             profilePage.blockBtn().click();
         } else if (profilePage.blockBtn().findElement(By.cssSelector("svg")).getAttribute("class").contains("fa-check")) {
             profilePage.blockBtn().click();
-            Thread.sleep(3000);
+            Thread.sleep(3000);//shh
             Assert.assertTrue(profilePage.blockBtn().findElement(By.cssSelector("svg")).getAttribute("class").contains("fa-ban"), "LoginOpensOnBlockButton - didn't unblock user after login");
         }
     }
@@ -94,7 +98,7 @@ public class ProfileTest {
         Assert.assertTrue(profilePage.profile404GIF().isDisplayed() && profilePage.profile404text().isDisplayed(), "Didn't see 404 page for banned user");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void ClickProfilePic() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();

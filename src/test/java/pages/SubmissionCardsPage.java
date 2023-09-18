@@ -1,6 +1,7 @@
 package pages;
 
 import helpers.PageActions;
+import helpers.PrettyAsserts;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -23,6 +24,7 @@ public class SubmissionCardsPage {
 
     public List<WebElement> allCards() {
         return driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
+
     }
 
     public List<WebElement> allFeaturedCards() {
@@ -45,7 +47,7 @@ public class SubmissionCardsPage {
         for (int i = 0; i < 2; i++) {
             List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
             for (WebElement card : allCards) {
-                if (helpers.IsSelected.isIconSelected(card.findElement(By.className("fa-thumbs-up"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
+                if (PrettyAsserts.isIconSelected(card.findElement(By.className("fa-thumbs-up"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
                     firstNotUpvotedCard = card;
                     break;
                 }
@@ -68,7 +70,7 @@ public class SubmissionCardsPage {
         for (int i = 0; i < 2; i++) {
             List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
             for (WebElement card : allCards) {
-                if (!helpers.IsSelected.isIconSelected(card.findElement(By.className("fa-thumbs-down")))) {
+                if (!PrettyAsserts.isIconSelected(card.findElement(By.className("fa-thumbs-down")))) {
                     firstNotUpvotedCard = card;
                     break;
                 }
@@ -76,7 +78,7 @@ public class SubmissionCardsPage {
             if (firstNotUpvotedCard != null) {
                 break;
             } else {
-                helpers.PageActions.scrollDown(driver, 2);
+                PageActions.scrollDown(driver, 2);
             }
         }
         if (firstNotUpvotedCard == null) {
@@ -92,7 +94,7 @@ public class SubmissionCardsPage {
             List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
             for (WebElement card : allCards) {
 
-                if (!helpers.IsSelected.isIconSelected(card.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
+                if (!PrettyAsserts.isIconSelected(card.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
                     firstNotUpvotedCard = card;
                     break;
                 }
@@ -101,7 +103,7 @@ public class SubmissionCardsPage {
                 break;
             } else {
 
-                helpers.PageActions.scrollDown(driver, 2);
+                PageActions.scrollDown(driver, 2);
             }
         }
         if (firstNotUpvotedCard == null) {
@@ -135,9 +137,8 @@ public class SubmissionCardsPage {
         WebElement notMyCard = null;
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
         for (WebElement card : allCards) {
-            action.moveToElement(card).perform();
             // System.out.println(card.findElement(By.cssSelector("span[class='mr-2']")).getText() + " is getText" );
-            if (!card.findElement(By.cssSelector("a[class*='text-primary']")).getText().contains(userName)) {
+            if (!card.findElement(By.className("px-4")).findElement(By.cssSelector("a[class*='text-primary']")).getText().contains(userName)) {
                 notMyCard = card;
                 break;
             }
@@ -150,7 +151,7 @@ public class SubmissionCardsPage {
         for (int i = 0; i < 2; i++) {
             List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
             for (WebElement card : allCards) {
-                if (!helpers.IsSelected.isIconSelected(card.findElement(By.className("fa-thumbs-up"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
+                if (!PrettyAsserts.isIconSelected(card.findElement(By.className("fa-thumbs-up"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
                     firstNotUpvotedCard = card;
                     break;
                 }
@@ -281,6 +282,7 @@ public class SubmissionCardsPage {
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
         WebElement element = null;
         for (WebElement card : allCards) {
+
             try {
                 if (card.findElement(By.className("overflow-hidden")).getText().contains("GIF")) {
                     element = card;

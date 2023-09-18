@@ -36,9 +36,7 @@ public class SauceLabsListener extends TestListenerAdapter {
         String methodName = result.getMethod().getMethodName();
         log("Test Case: " + methodName);
         log("Status: " + status);
-
         String jobId = (String) result.getTestContext().getAttribute("JobId");
-
         updateSauceLabsStatus(jobId, "Passed".equals(status));
     }
 

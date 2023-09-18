@@ -24,32 +24,15 @@ public class Logins extends LoginModalPage {
 	}
 	
 	//*********************************** Logins ********************************
-	
-	public void adminLogin(String adminEmail, String adminPassword) throws InterruptedException {
-		admin.emailInput().sendKeys(adminEmail);
-		admin.passwordInput().sendKeys(adminPassword);
-		admin.submitButton().click();
-		Thread.sleep(3000);
-	}
 
 	public void unpaidLogin(String unpaidEmail, String unpaidPassword) throws InterruptedException {
 		login.loginBtn().click();
-		login.email().sendKeys(unpaidEmail);
-		login.password().sendKeys(unpaidPassword);
+		login.emailInput().sendKeys(unpaidEmail);
+		login.passwordInput().sendKeys(unpaidPassword);
 		login.signIn().click();
 		Thread.sleep(3000);
 	}
-	
-	public void unpaidLoginMobile(String unpaidEmail, String unpaidPassword) throws InterruptedException {
-		login.loginBtn().click();
-		login.email().sendKeys(unpaidEmail);
-		login.password().sendKeys(unpaidPassword);
-		login.signIn().click();
-		Thread.sleep(2000);
-		//driver.findElement(By.cssSelector("img[alt='IChive']")).click();//this should be removed when bug that takes you to profile page is fixed
-		Thread.sleep(5000);
-	}
-	
+
 	public void logout() throws InterruptedException {
 		login.userMenu().click();
 		Thread.sleep(2000);

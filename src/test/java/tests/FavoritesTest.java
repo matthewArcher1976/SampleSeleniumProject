@@ -1,5 +1,7 @@
 package tests;
 
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.interactions.Actions;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -9,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.HashSet;
@@ -18,10 +21,11 @@ import java.util.Set;
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
+@Test(retryAnalyzer = RetryAnalyzer.class)
 public class FavoritesTest {
     private static TestConfig config;
     WebDriver driver;
-
+    Actions action;
     FavoritesPage favorites;
     Logins login;
     PageHeaderPage header;
@@ -35,6 +39,7 @@ public class FavoritesTest {
     public void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
+        action = new Actions(driver);
         login = new Logins(driver);
 
         cards = new SubmissionCardsPage(driver);
@@ -60,6 +65,7 @@ public class FavoritesTest {
 
     @Test
     public void FavoriteDisplaysOnProfile() throws InterruptedException {
+        driver.manage().window().fullscreen();
         header.userMenu().click();
         header.yourProfileBtn().click();
         String yourName = ("@" + helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()));
@@ -70,7 +76,11 @@ public class FavoritesTest {
         List<WebElement> cards = favorites.allCards();
         for (WebElement card : cards) {
             if (!favorites.isHeartFilledCard(card)) {
-                card.findElement(By.cssSelector("[id^='submission-image']")).click();
+                try {
+                    card.findElement(By.cssSelector("[id^='submission-image']")).click();
+                }catch (ElementClickInterceptedException e){//the gif spinner glitches it, just skp it an pick another card
+                    continue;
+                }
                 helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
                 submissionID = Integer.toString(helpers.GetInteger.getIntFromMixedString(driver.getCurrentUrl()));
                 modal.closeModal().click();

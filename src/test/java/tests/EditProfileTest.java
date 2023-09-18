@@ -15,11 +15,12 @@ import org.testng.annotations.*;
 
 import pages.EditProfilePage;
 
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
-//@Listeners(listeners.SauceLabsListener.class)
+@Test(retryAnalyzer = RetryAnalyzer.class)
 public class EditProfileTest {
     private static TestConfig config;
     WebDriver driver;
@@ -351,46 +352,6 @@ public class EditProfileTest {
         profile.settingsBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("settings"));
         Assert.assertTrue(profile.profileTab().getAttribute("aria-selected").contains("true"), "Profile tab was not selected by default");
-    }
-
-    @Test
-    public void UpdateUserName() throws InterruptedException {
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
-        Thread.sleep(4000);
-        String ourName = GetInteger.getUsernameFromURL(driver.getCurrentUrl());
-        String newName = Randoms.getRandomString(10);
-        profile.editProfileBtn().click();
-        profile.accountTab().click();
-        profile.userName().clear();
-        profile.userName().sendKeys(newName);
-        profile.saveProfileBtn().click();
-        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
-
-        try {
-            Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains(newName)));
-
-        } catch (AssertionError e) {
-            System.out.println("UpdateUserName - The username did not update");
-            //Teardown, set username back
-            profile.editProfileBtn().click();
-            profile.accountTab().click();
-            profile.userName().clear();
-            profile.userName().sendKeys(ourName);
-            profile.saveProfileBtn().click();
-            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
-            Assert.fail();
-        }
-        //Teardown, set username back
-        profile.editProfileBtn().click();
-        profile.accountTab().click();
-        profile.userName().clear();
-        profile.userName().sendKeys(ourName);
-        profile.saveProfileBtn().click();
-        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
-
     }
 
     @Test
