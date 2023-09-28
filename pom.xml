@@ -71,6 +71,13 @@
             <artifactId>reflections</artifactId>
             <version>0.9.12</version>
         </dependency>
+
+        <!-- https://github.com/sukgu/shadow-automation-selenium Shadow automation-->
+        <dependency>
+        <groupId>io.github.sukgu</groupId>
+        <artifactId>automation</artifactId>
+        <version>0.0.1</version>
+        </dependency>
         
 
     </dependencies>

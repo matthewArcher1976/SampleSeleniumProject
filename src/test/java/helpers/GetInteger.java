@@ -1,5 +1,8 @@
 package helpers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -64,6 +67,17 @@ public class GetInteger {
             throw new IllegalArgumentException("Invalid URL format");
         }
     }
+	public static String dateToMMddyyyy(String inputDate) {
+		SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat outputFormat = new SimpleDateFormat("MMddyyyy");
 
+		try {
+			Date date = inputFormat.parse(inputDate);
+			return outputFormat.format(date);
+		} catch (ParseException e) {
+			System.out.println("Invalid date format: " + e.getMessage());
+			return null;
+		}
+	}
 
 }

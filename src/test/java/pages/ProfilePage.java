@@ -2,6 +2,7 @@ package pages;
 
 import helpers.PageActions;
 import helpers.Waiter;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,6 +19,7 @@ public class ProfilePage {
     }
 
     //******************************** Begin Elements ****************************************
+
     public List<WebElement> allCards() {
         return driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image'])"));
     }
@@ -40,6 +42,30 @@ public class ProfilePage {
 
     public WebElement cmgLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.partialLinkText("Chive Media Group")));
+    }
+
+    public WebElement earnPointsDopamineDump() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--submission_featured")));
+    }
+
+    public WebElement earnPointsNewFollower() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--new_follower_maximum")));
+    }
+
+    public WebElement earnPointsPhotoFeatured() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--submission_featured_thechive")));
+    }
+
+    public WebElement earnPointsSiteVisited() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--site_visited")));
+    }
+
+    public WebElement earnPointsSubmitPhoto() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--submission_sent")));
+    }
+
+    public WebElement earnPointsUpvotedScore() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--submission_upvote_milestone")));
     }
 
     public WebElement editButton() {
@@ -65,21 +91,47 @@ public class ProfilePage {
     public WebElement instagramLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("social-button-instagram")));
     }
+
+    public WebElement lionCloseModal() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-modal__close-button")));
+    }
+
+    public WebElement lionGotoSite() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-go-to-other-site-action__button")));
+    }
+
+    public WebElement lionModal() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-modal--large")));
+    }
+
+    public WebElement lionModalDescription() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-action-modal__description")));
+    }
+
+    public WebElement morePointsPurchase() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--$purchase")));
+    }
+
     public WebElement nftSubmitButton() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[class='btn float-right btn-primary']")));
     }
+
     public WebElement nftTab() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("user_profile_nft")));
     }
+
     public WebElement nftToast() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("Vue-Toastification__toast")));
     }
+
     public WebElement nftWalletError() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("text-red-500")));
     }
+
     public WebElement nftWalletInput() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.name("wallet")));
     }
+
     public WebElement otherUserName(String yourName) {
         String otherUser;
         WebElement otherCard = null;
@@ -94,6 +146,28 @@ public class ProfilePage {
         }
         return otherCard;
     }
+
+    public WebElement pointsAccount() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-sidebar__menu-item--history")));
+    }
+
+    public WebElement pointsEarnPoints() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-sidebar__menu-item--earn")));
+    }
+
+    public WebElement pointsHelp() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-sidebar__menu-item--help")));
+    }
+    public WebElement pointsHistory() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-sidebar__menu-item--history")));
+    }
+    public WebElement pointsHistoryApproved() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-history-state-bubble--approved")));
+    }
+    public WebElement pointsRedeemPoints() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-sidebar__menu-item--rewards")));
+    }
+
     public WebElement pointsTab() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("user_profile_points")));
     }
@@ -144,7 +218,6 @@ public class ProfilePage {
     public WebElement websiteIcon() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("social-button-website")));
     }
-
 
     //******************************** Begin Actions ****************************************
 

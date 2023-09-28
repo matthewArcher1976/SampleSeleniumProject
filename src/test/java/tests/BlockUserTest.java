@@ -1,6 +1,7 @@
 package tests;
 
 import helpers.PageActions;
+import helpers.Waiter;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -38,7 +39,6 @@ public class BlockUserTest {
         search = new SearchAndFiltersPage(driver);
         login = new Logins(driver);
         blocked = new BlockUserPage(driver);
-
     }
 
     @BeforeClass
@@ -51,7 +51,6 @@ public class BlockUserTest {
     @BeforeMethod
     public void setDriver() {
         driver.get(config.url);
-
     }
 
     //************************** Begin Tests ********************************************
@@ -69,7 +68,7 @@ public class BlockUserTest {
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         blocked.blockBtn().click();
         try {
-            Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.attributeContains(blocked.blockBtn().findElement(By.cssSelector("svg")), "class", "fa-check")));
+            Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.attributeContains(blocked.blockBtn().findElement(By.cssSelector("svg")), "class", "fa-check")));
             blocked.blockBtn().click(); //unblock the user inside this try/catch, so we don't end up blocking every user running this test
         } catch (Exception e) { //catch any exception here to undo the block
             blocked.blockBtn().click();
@@ -88,14 +87,14 @@ public class BlockUserTest {
         String userName = search.firstUser().getText().replace("@", "");
         PageActions.scrollDown(driver, 2);
         search.firstUser().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         //Setup
         String userURL = driver.getCurrentUrl();
         String blockedUser = helpers.GetInteger.getIdFromUrl(userURL);
         blocked.blockBtn().click();
 
         try {
-            helpers.Waiter.wait(driver).until(ExpectedConditions.attributeContains(blocked.blockBtn().findElement(By.cssSelector("svg")), "class", "fa-check"));
+            Waiter.wait(driver).until(ExpectedConditions.attributeContains(blocked.blockBtn().findElement(By.cssSelector("svg")), "class", "fa-check"));
         } catch (Exception e) {
             if (blocked.blockBtn().findElement(By.cssSelector("svg")).getAttribute(blockedUser).contains("fa-check")) {
                 blocked.blockBtn().click();
@@ -113,7 +112,6 @@ public class BlockUserTest {
             } catch (AssertionError e) {
                 driver.get(userURL);
                 blocked.blockBtn().click();
-
                 Assert.fail("Blocked user " + blockedUser + " found in search results");
             }
         }

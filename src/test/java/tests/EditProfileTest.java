@@ -1,6 +1,7 @@
 package tests;
 
 import helpers.*;
+import io.github.sukgu.Shadow;
 import pages.ProfilePage;
 import resources.Config;
 
@@ -15,12 +16,11 @@ import org.testng.annotations.*;
 
 import pages.EditProfilePage;
 
-import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
-@Test(retryAnalyzer = RetryAnalyzer.class)
+
 public class EditProfileTest {
     private static TestConfig config;
     WebDriver driver;
@@ -29,13 +29,15 @@ public class EditProfileTest {
     EditProfilePage profile;
     Logins login;
     ProfilePage profilePage;
+    Shadow shadow;
+
     //************************** Setup ******************************************
 
     @BeforeTest
     public void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
-
+        shadow = new Shadow(driver);
         action = new Actions(driver);
         login = new Logins(driver);
         profile = new EditProfilePage(driver);
@@ -103,13 +105,13 @@ public class EditProfileTest {
         Assert.assertTrue(profile.updateSuccess().isDisplayed(), "BannerPicUpdate - Update Success not found");
     }
 
-    @Test(enabled = false)//this does not work because the date is in the shadow DOM which does not display in the Selenium browser. Can try with a js executor?
+    @Test()//this does not work because the date is in the shadow DOM which does not display in the Selenium browser. Can try with a js executor?
     public void BirthdayPicker() throws InterruptedException {
         profile.userMenu().click();
         profile.settingsBtn().click();
-        Thread.sleep(99999999);
-        String initialBirthday = profile.birthDayValue().getText();
-        System.out.println(initialBirthday);
+
+        String initialBirthday = profile.birthDayInput().getText();
+        System.out.println(initialBirthday + " is initial birthday");
 
         String year = Randoms.getRandomYear();
         String month = Randoms.getRandomMonth();
@@ -119,9 +121,10 @@ public class EditProfileTest {
         profile.birthDayInput().click();
         profile.birthDayInput().sendKeys(birthday);
         profile.saveProfileBtn().click();
-        Thread.sleep(10000);
-       // Assert.assertEquals(profile.birthDayValue().getAttribute("value"), birthday, "Birthday did not update properly");
+        Thread.sleep(3000);
+        Assert.assertEquals(GetInteger.dateToMMddyyyy(profile.birthDayInput().getAttribute("value")), birthday, "Birthday did not update properly");
     }
+
     @Test
     public void CMGLink() throws InterruptedException {
         profile.userMenu().click();
@@ -135,6 +138,7 @@ public class EditProfileTest {
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
+
     @Test
     public void EmailInputNoEmail() {
         profile.userMenu().click();

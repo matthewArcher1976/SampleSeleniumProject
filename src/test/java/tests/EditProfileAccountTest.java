@@ -13,7 +13,6 @@ import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
-@Listeners(listeners.SauceLabsListener.class)
 @Test(retryAnalyzer = RetryAnalyzer.class)
 public class EditProfileAccountTest {
 

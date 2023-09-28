@@ -63,7 +63,7 @@ public class FavoritesTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void FavoriteDisplaysOnProfile() throws InterruptedException {
         driver.manage().window().fullscreen();
         header.userMenu().click();

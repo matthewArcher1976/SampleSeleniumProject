@@ -70,10 +70,12 @@ public class ProfileTest {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Thread.sleep(3000);//yeah
         String myUser = GetInteger.getIdFromUrl(driver.getCurrentUrl());
         driver.get(config.url);
-        System.out.println(myUser + " my user");
-        card.cardNotMine(myUser).findElement(By.cssSelector("a[href]")).click();
+        WebElement ourCard = card.cardNotMine(myUser);
+        action.moveToElement(ourCard).perform();//fixes that odd click intercepted error
+        ourCard.findElement(By.cssSelector("a[href]")).click();
         profilePage.blockBtn().click();
         Thread.sleep(3000);//yes
         if (profilePage.blockBtn().findElement(By.cssSelector("svg")).getAttribute("class").contains("fa-ban")) {
@@ -99,10 +101,11 @@ public class ProfileTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void ClickProfilePic() {
+    public void ClickProfilePic() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Thread.sleep(3000);//yes
         String profileURL = driver.getCurrentUrl();
         profilePage.tabFollowers().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("followers"));
@@ -124,7 +127,6 @@ public class ProfileTest {
         Waiter.wait(driver).until(ExpectedConditions.urlToBe(profileURL));
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlToBe(profileURL)), "Clicking user name did not return user to profile page, found " + profileURL);
     }
-
 
     @Test
     public void EditButtonNotDisplayed() {
@@ -189,10 +191,11 @@ public class ProfileTest {
         } catch (TimeoutException e) {
             Assert.assertTrue(true);
         }
-        String yourUser = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String yourUser = GetInteger.getIdFromUrl(driver.getCurrentUrl());
         header.menuLatest().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains(yourUser)));
         WebElement otherUser = profilePage.otherUserName(yourUser);
+        action.moveToElement(otherUser).perform();//this fixes that odd click intercepted error
         otherUser.findElement(By.cssSelector("a[href]")).click();
         Thread.sleep(4000);
         Assert.assertTrue(profilePage.followButton().isDisplayed(), "Did not find follow button");

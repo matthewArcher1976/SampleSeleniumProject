@@ -63,7 +63,7 @@ public class PageHeaderTest {
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
     }
 
-    @Test(priority = 99)
+    @Test(priority = 2)
     public void AvatarPicGoneOnLogout() throws InterruptedException {
         WebElement avi = header.avatarPic();
         login.logout();

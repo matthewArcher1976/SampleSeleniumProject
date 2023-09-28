@@ -20,21 +20,22 @@ public class PageActions {
 		action.sendKeys(Keys.ESCAPE).build().perform();
 	}//for in pages classes, may be a better way
 
-	public static void findElementWithScrolling(WebDriver driver, By by) throws InterruptedException {
+	public static WebElement findElementWithScrolling(WebDriver driver, By by) throws InterruptedException {
 	    boolean isElementFound = false;
 	    WebElement element = null;
 	    int tries = 0; 
 	    while(!isElementFound && tries < 4) { 
 	        Thread.sleep(2000);
 	        try {
-	            element = driver.findElement(by);
+	           element = driver.findElement(by);
 	            isElementFound = true;
-	        } catch (NoSuchElementException e) {
+	        } catch (NoSuchElementException | TimeoutException e) {
 	            JavascriptExecutor js = (JavascriptExecutor) driver;
 	            js.executeScript("window.scrollBy(0, 500)");
 	        }
 	        tries++; 
 	    }
+		return element;
 	}
 	
 	public static WebElement findElementWithScrollingElement(WebDriver driver, WebElement elementToFind) throws InterruptedException {
@@ -46,7 +47,7 @@ public class PageActions {
 	        try {
 	            element = elementToFind;
 	            isElementFound = true;
-	        } catch (NoSuchElementException e) {
+	        } catch (NoSuchElementException | TimeoutException e) {
 	            JavascriptExecutor js = (JavascriptExecutor) driver;
 	            js.executeScript("window.scrollBy(0, 500)");
 	        }
@@ -80,18 +81,6 @@ public class PageActions {
 	    }
 	}
 
-	public static void touchScroll(WebDriver driver, int startX, int startY, int endX, int endY, int times) {
-		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-		for (int i = 0; i < times; i++) {
-			Sequence scrollDown = new Sequence(finger, 1);
-			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), startX, startY));
-			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
-			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), endX, endY));
-			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
-		}
-	}
 
 	public static void swipeDown(WebDriver driver, int times) {
 		Dimension d = driver.manage().window().getSize();
@@ -156,4 +145,18 @@ public class PageActions {
 			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
+
+	public static void touchScroll(WebDriver driver, int startX, int startY, int endX, int endY, int times) {
+		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+		for (int i = 0; i < times; i++) {
+			Sequence scrollDown = new Sequence(finger, 1);
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), startX, startY));
+			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), endX, endY));
+			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+			((Interactive) driver).perform(Arrays.asList(scrollDown));
+		}
+	}
+
 }

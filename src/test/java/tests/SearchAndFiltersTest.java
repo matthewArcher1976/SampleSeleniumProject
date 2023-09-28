@@ -1,9 +1,7 @@
 package tests;
 
-import helpers.Waiter;
+import helpers.*;
 import resources.Config;
-import helpers.CustomExpectedConditions;
-import helpers.Logins;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,6 +11,7 @@ import pages.PageHeaderPage;
 import pages.SearchAndFiltersPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.List;
@@ -32,6 +31,7 @@ public class SearchAndFiltersTest {
     SubmissionModalPage modal;
     Actions action;
     final String SEARCH_TERM = "theCHIVERBrady";
+    final String SHORT_TERM = "qw";
 
     //************************** Setup ******************************************
 
@@ -61,17 +61,25 @@ public class SearchAndFiltersTest {
     }
 
     //************************** Begin Tests ********************************************
+    @Test(retryAnalyzer = RetryAnalyzer.class)
+    public void ClickDropdownRow()  {
+        //clicking on the row, not the search term, whole row should be interactable
+        driver.get(config.url + "search");
+        search.searchInput().sendKeys(SHORT_TERM);
+        String suggestion = search.searchSuggestions().getText();
+        search.searchSuggestions().click();
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains(suggestion)), "The click on the search suggestion row may have missed");
+    }
     @Test
     public void FilterHotness() throws InterruptedException {
         header.filterChange().click();
         search.filterHumanity().click();
         search.filterHumor().click();
         search.goButton().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
         Assert.assertTrue(driver.getCurrentUrl().contains("category=Hotness&filters=")
                 && !driver.getCurrentUrl().contains("category=Humor&filters=")
                 && !driver.getCurrentUrl().contains("category=Humanity&filters="), "URL should only contain Hotness");
-
         List<WebElement> cards = card.allCards();
         int size = cards.size();
         card.firstCard().click();
@@ -89,10 +97,8 @@ public class SearchAndFiltersTest {
                 action.sendKeys(Keys.ARROW_RIGHT).perform();
                 Thread.sleep(2000);
             }
-
         }
     }
-
 
     @Test
     public void FilterHumanity() throws InterruptedException {
@@ -100,7 +106,7 @@ public class SearchAndFiltersTest {
         search.filterHotness().click();
         search.filterHumor().click();
         search.goButton().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
         Assert.assertTrue(driver.getCurrentUrl().contains("category=Humanity&filters=")
                 && !driver.getCurrentUrl().contains("category=Hotness&filters=")
                 && !driver.getCurrentUrl().contains("category=Humor&filters="), "URL should only contain Humanity");
@@ -185,7 +191,7 @@ public class SearchAndFiltersTest {
 
         int firstTags = search.allTagCards().size();
         int firstUsers = search.allUserCards().size();
-        helpers.PageActions.scrollDown(driver, 3);
+        PageActions.scrollDown(driver, 3);
         Thread.sleep(3000);
         int secondTags = search.allTagCards().size();
         int secondUsers = search.allUserCards().size();
@@ -214,12 +220,12 @@ public class SearchAndFiltersTest {
     public void VerifiedFilterFeatured() {
         boolean hasCheck = true;
         header.menuFeatured().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         header.filterChange().click();
         search.filterVerified().click();
         search.goButton().click();
 
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
         List<WebElement> cards = card.allFeaturedCards();
         for (WebElement card : cards) {
             try {
@@ -239,11 +245,11 @@ public class SearchAndFiltersTest {
     public void VerifiedFilterFollowing() {
         boolean hasCheck = true;
         header.menuFollowing().click();
-        helpers.Waiter.quickWait(driver).until(ExpectedConditions.urlContains("following"));
+        Waiter.quickWait(driver).until(ExpectedConditions.urlContains("following"));
         header.filterChange().click();
         search.filterVerified().click();
         search.goButton().click();
-        helpers.Waiter.quickWait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
+        Waiter.quickWait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
         System.out.println(driver.getCurrentUrl());
         List<WebElement> cards = card.allCards();
         if (cards.size() == 0) {
@@ -270,7 +276,7 @@ public class SearchAndFiltersTest {
         header.filterChange().click();
         search.filterVerified().click();
         search.goButton().click();
-        helpers.Waiter.quickWait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
+        Waiter.quickWait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
         List<WebElement> cards = card.allCards();
         for (WebElement card : cards) {
             try {
@@ -285,6 +291,7 @@ public class SearchAndFiltersTest {
         }
         Assert.assertTrue(hasCheck, "Found a card from unverified user on latest");
     }
+
     //************************** Teardown ********************************************
 
     @AfterClass

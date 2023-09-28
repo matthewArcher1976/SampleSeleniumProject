@@ -50,8 +50,8 @@ public class SubmissionCardsTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
-        Thread.sleep(1000);
+      login.unpaidLogin(config.unpaidEmail, config.password);
+       Thread.sleep(1000);
     }
 
     @BeforeMethod
@@ -200,7 +200,7 @@ public class SubmissionCardsTest {
         }else {
             String ourGIFid = ourGIF.getAttribute("id");
             action.moveToElement(ourGIF).build().perform();
-            Thread.sleep(7000);
+            Thread.sleep(7000);//yeah i know
             Assert.assertTrue(driver.findElement(By.id(ourGIFid)).findElement(By.className("overflow-hidden")).getAttribute("class").contains("invisible"), "Still see the GIF icon after mouseover on the GIF");
         }
     }
@@ -218,7 +218,6 @@ public class SubmissionCardsTest {
     public void OverlayDownvote() {
         WebElement ourCard = card.cardNotDownvoted();
         ourCard.findElement(By.className("fa-thumbs-down")).click();
-       // Thread.sleep(1000);//yes
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(card.voteDownOverlay())).isDisplayed(),"Downvote overlay not found");
     }
 
@@ -298,6 +297,7 @@ public class SubmissionCardsTest {
         int votes2 = Integer.parseInt(driver.findElement(By.id(ourID)).findElement(By.cssSelector("div[id^='vote-counter']")).getText());
         Assert.assertTrue(votes2 > votes1, "VoteCounter - counter did not increment, votes1 is " + votes1 + " and votes2 is " + votes2);
     }
+
     //************************** Teardown ********************************************
 
     @AfterClass

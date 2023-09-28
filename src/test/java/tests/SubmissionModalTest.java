@@ -48,7 +48,6 @@ public class SubmissionModalTest {
 
     @BeforeClass
     public void login() throws InterruptedException {
-
         driver.get(config.url);
         login.unpaidLogin(config.unpaidEmail, config.password);
         Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
@@ -159,6 +158,7 @@ public class SubmissionModalTest {
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
+
     @Test
     public void EscapeKeyClosedCard() throws InterruptedException {
         modal.firstCard().click();

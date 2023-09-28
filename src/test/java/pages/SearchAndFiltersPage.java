@@ -1,5 +1,6 @@
 package pages;
 
+import helpers.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,27 +31,27 @@ public class SearchAndFiltersPage {
     }
 
     public WebElement filterHotness() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[data-slug='hotness']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[data-slug='hotness']")));
     }
 
     public WebElement filterHumanity() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[data-slug='humanity']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[data-slug='humanity']")));
     }
 
     public WebElement filterHumor() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[data-slug='humor']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[data-slug='humor']")));
     }
 
     public WebElement filterVerified() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[value='verified']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[value='verified']")));
     }
 
     public WebElement followBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[id^='user-card-'][id*='-follow-btn']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[id^='user-card-'][id*='-follow-btn']")));
     }
 
     public WebElement firstUser() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='user-card-']"))).findElement(By.className("flex-col"));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='user-card-']"))).findElement(By.className("flex-col"));
     }
 
     public WebElement goButton() {
@@ -58,45 +59,47 @@ public class SearchAndFiltersPage {
     }
 
     public WebElement searchResultHeader() {
-        return helpers.Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".text-lg.mb-4.mt-4")));
+        return Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".text-lg.mb-4.mt-4")));
     }
 
 
     public WebElement magnifyIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-magnifying-glass")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-magnifying-glass")));
     }
 
     public WebElement recentlyVerifiedUser() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='row-recently-verified-username-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='row-recently-verified-username-']")));
     }
 
     public WebElement recentlyVerifiedText() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'Recently Verified')]")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'Recently Verified')]")));
     }
 
     public WebElement resultsTag() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='tag-card-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='tag-card-']")));
     }
 
     public WebElement resultsText() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Here's what we found for:')]")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Here's what we found for:')]")));
     }
 
     public WebElement searchInput() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("search-form-input")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("search-form-input")));
+    }
+    public WebElement searchSuggestions() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("li[id^='search-instant-result-']")));
     }
 
-
     public WebElement tag() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='tag-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='tag-']")));
     }
 
     public WebElement trendArrowIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-arrow-trend-up")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-arrow-trend-up")));
     }
 
     public WebElement userCard() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='user-card-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='user-card-']")));
     }
 
 
