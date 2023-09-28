@@ -6,7 +6,7 @@
     </listeners>
     <test verbose="2" name="iChiveTests">
         <packages>
-            <package name="src/test/tests"/>
+            <package name="src/test/java/tests"/>
         </packages>
     </test>
 

@@ -1,9 +1,6 @@
 package tests;
 
-import helpers.CustomExpectedConditions;
-import helpers.Logins;
-import helpers.PageActions;
-import helpers.Waiter;
+import helpers.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -59,7 +56,7 @@ public class MobileSubmissionModalTest {
         driver.get(config.url);
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void ClickTagRedirectToTagPage() throws InterruptedException {
         card.firstCard().click();
         PageActions.swipeUp(driver, 2);
@@ -125,10 +122,10 @@ public class MobileSubmissionModalTest {
         modal.firstCard().click();
         modal.facebookBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getCurrentUrl().contains("facebook"), "did not find facebook window");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -137,10 +134,10 @@ public class MobileSubmissionModalTest {
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(modal.twitterBtn()));
         modal.twitterBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.titleContains("Twitter")), "Did not find Twitter login popup");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)

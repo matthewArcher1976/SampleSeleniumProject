@@ -98,8 +98,6 @@ public class LoginModalPage {
         return getDriver().findElement(By.cssSelector("input[type='password']"));
     }
 
-
-
     public WebElement invalidUserNameClose() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("Vue-Toastification__close-button")));
     }
@@ -119,6 +117,7 @@ public class LoginModalPage {
     public WebElement notificationToast() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("Vue-Toastification__toast-body")));
     }
+
     public WebElement passwordInput() {
         return getDriver().findElement(By.id("password"));
     }

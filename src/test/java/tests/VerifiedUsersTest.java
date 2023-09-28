@@ -1,5 +1,7 @@
 package tests;
 
+import helpers.Waiter;
+import helpers.WindowUtil;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.WebDriver;
@@ -69,15 +71,15 @@ public class VerifiedUsersTest {
         profile.websiteInput().clear();
         profile.websiteInput().sendKeys("https://www.google.com");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         Assert.assertTrue(profilePage.websiteIcon().isDisplayed(), "Did not find website icon");
         profilePage.websiteIcon().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getTitle().contains("Google"), "Website tab did not open");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
     //************************** Teardown ********************************************
 

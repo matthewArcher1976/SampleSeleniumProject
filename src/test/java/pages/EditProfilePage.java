@@ -1,5 +1,6 @@
 package pages;
 
+import io.github.sukgu.Shadow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -77,6 +78,7 @@ public class EditProfilePage {
     }
 
     public WebElement birthDayValue() {
+        Shadow shadow = new Shadow(driver);
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("span[aria-label='Day']")));
     }
 
@@ -351,7 +353,6 @@ public class EditProfilePage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("profilePicture")));
     }
 
-
     public WebElement privacyDefHeader() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h3[contains(text(),' Privacy Definitions ')]")));
     }
@@ -494,29 +495,6 @@ public class EditProfilePage {
 
 
     //***************************** Actions *****************************
-
-    public WebElement birthDayPickDay(String dayValue) {
-        By locator = By.xpath("//div[contains(@class, 'dp__cell_inner') and contains(@class, 'dp__pointer') and contains(@class, 'dp__date_hover') and text()='" + dayValue + "']");
-        WebElement birthDayDay = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(locator));
-        birthDayDay.click();
-        return birthDayDay;
-    }
-
-    public void birthdayPickMonth(String randomMonth) {
-
-        List<WebElement> divElements = driver.findElements(By.className("dp__overlay_cell"));
-
-
-        WebElement monthElement;
-        for (WebElement divElement : divElements) {
-            String divText = divElement.getText();
-            if (divText.contains(randomMonth)) {
-                monthElement = divElement;
-                monthElement.click();
-                break;
-            }
-        }
-    }
 
     public void birthdayPickYear(String randomYear) {
 

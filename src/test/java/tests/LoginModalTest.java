@@ -149,6 +149,7 @@ public class LoginModalTest {
         Thread.sleep(2000);
         Assert.assertTrue(login.signIn().isDisplayed(), "Downvote on modal didn't prompt login");
     }
+
     //************************** Teardown ********************************************
 
     @AfterClass

@@ -10,11 +10,9 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.AdsPage;
 import resources.Config;
-import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
-@Test(retryAnalyzer = RetryAnalyzer.class)
 public class AdsTest {
     WebDriver driver;
     AdsPage ads;

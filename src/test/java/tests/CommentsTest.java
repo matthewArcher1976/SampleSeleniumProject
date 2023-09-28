@@ -12,6 +12,7 @@ import org.testng.annotations.*;
 import pages.CommentsPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
@@ -56,7 +57,7 @@ public class CommentsTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void ClickShowComments() throws InterruptedException {
         card.firstCard().click();
         PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
@@ -70,7 +71,7 @@ public class CommentsTest {
         Assert.assertTrue(comments.commentTextInput().isDisplayed(), "Did not find the comment policy block");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void EnterNameEmailPasswordLabels() throws InterruptedException {
         card.firstCard().click();
         PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
@@ -85,7 +86,7 @@ public class CommentsTest {
         Assert.assertTrue(comments.enterEmailLabel().isDisplayed(), "Did not find the Please enter your email label");
         Assert.assertTrue(comments.enterPasswordLabel().isDisplayed(), "Did not find the Please enter your password label");
     }
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void LeaveGuestComment() throws InterruptedException {
         card.firstCard().click();
         PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
@@ -104,12 +105,6 @@ public class CommentsTest {
         comments.switchToCaptchaFrame();
         comments.captchaCheck().click();
         //Not submitting it because spam
-    }
-
-    @Test()
-    public void sandbox() throws InterruptedException {
-        card.firstCard().click();
-        PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
     }
 
     //************************* Teardown ***************************

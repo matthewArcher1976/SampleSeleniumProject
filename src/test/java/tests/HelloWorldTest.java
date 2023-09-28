@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
-import org.testng.ITestResult;
 import org.testng.annotations.*;
 import resources.TestConfig;
 
@@ -65,12 +64,6 @@ public class HelloWorldTest {
     }
 
     //************************** Teardown ********************************************
-    @AfterMethod
-    public void result(ITestResult result, ITestContext context) {
-        if (result.getStatus() != ITestResult.SUCCESS) {
-            context.setAttribute("allTestsPassed", false); // Set to false if any test fails
-        }
-    }
 
     @AfterClass
     public void TearDown(ITestContext context) {

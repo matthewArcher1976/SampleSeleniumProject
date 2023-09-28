@@ -17,7 +17,6 @@ import resources.TestConfig;
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
-@Test(retryAnalyzer = RetryAnalyzer.class)
 public class EditProfileSocialLinksTest {
     WebDriver driver;
     private static TestConfig config;
@@ -318,7 +317,7 @@ public class EditProfileSocialLinksTest {
         Assert.assertTrue(profile.updateSuccess().isDisplayed(), "InstaLinkUserHandle - Should accept Instagram handle with the @");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void TikTokLink() {
         profile.userMenu().click();
         profile.settingsBtn().click();
