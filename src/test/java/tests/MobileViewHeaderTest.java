@@ -11,6 +11,7 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.MobileViewPage;
 import pages.SubmissionCardsPage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
@@ -61,7 +62,7 @@ public class MobileViewHeaderTest {
         int elementWidth = avatar.getSize().getWidth();
         Assert.assertEquals(viewportWidth - elementX - elementWidth, 23, "The avatar is too close or too far to the edge of the screen");
     }
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void CommentButtonFeatured() {
         mobile.hamburgerMenu().click();
         mobile.mobileFeatured().click();

@@ -5,8 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import pages.AdminLoginPage;
 import pages.LoginModalPage;
+import pages.PageHeaderPage;
 
 public class Logins extends LoginModalPage {
 
@@ -15,7 +15,7 @@ public class Logins extends LoginModalPage {
 	}
 	
 	LoginModalPage login = new LoginModalPage(getDriver());
-	AdminLoginPage admin = new AdminLoginPage(getDriver());
+	PageHeaderPage header = new PageHeaderPage(getDriver());
 	
 	//************************************ WebElements **************************
 	
@@ -30,15 +30,13 @@ public class Logins extends LoginModalPage {
 		login.emailInput().sendKeys(unpaidEmail);
 		login.passwordInput().sendKeys(unpaidPassword);
 		login.signIn().click();
-		Thread.sleep(3000);
+		Thread.sleep(3000);//for now
 	}
 
-	public void logout() throws InterruptedException {
+	public void logout(){
 		login.userMenu().click();
-		Thread.sleep(2000);
 		login.signOut().click();
-		Thread.sleep(2000);
-		
+		Waiter.wait(getDriver()).until(ExpectedConditions.visibilityOf(header.loginSuccess()));
 	}
 	
 	

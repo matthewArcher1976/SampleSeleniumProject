@@ -13,7 +13,7 @@ import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
-@Test(retryAnalyzer = RetryAnalyzer.class)
+
 public class EditProfileAccountTest {
 
     WebDriver driver;
@@ -31,6 +31,7 @@ public class EditProfileAccountTest {
         login = new Logins(driver);
         profile = new EditProfilePage(driver);
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
@@ -176,7 +177,7 @@ public class EditProfileAccountTest {
         Assert.assertTrue(PrettyAsserts.isElementDisplayed(profile.privacyToggleText()), "Did not find set profile private text");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void UpdatePassword(){
         profile.userMenu().click();
         profile.settingsBtn().click();

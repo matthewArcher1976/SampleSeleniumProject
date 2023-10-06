@@ -27,13 +27,14 @@ public class AdsTest {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
         login = new Logins(driver);
-
         ads = new AdsPage(driver);
     }
+
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
     }
+
     @BeforeMethod
     public void refresh() {
         driver.get(config.url);

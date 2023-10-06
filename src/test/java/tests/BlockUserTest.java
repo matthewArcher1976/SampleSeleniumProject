@@ -20,7 +20,6 @@ import java.util.List;
 
 import static resources.getDriverType.getDriver;
 @Test(retryAnalyzer = RetryAnalyzer.class)
-@Listeners(listeners.SauceLabsListener.class)
 public class BlockUserTest {
 
     WebDriver driver;

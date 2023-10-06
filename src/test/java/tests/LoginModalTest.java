@@ -1,5 +1,10 @@
 package tests;
 
+
+import helpers.PrettyAsserts;
+import helpers.Waiter;
+import io.github.sukgu.Shadow;
+import org.openqa.selenium.interactions.Actions;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -13,12 +18,12 @@ import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
-@Listeners(listeners.SauceLabsListener.class)
 @Test(retryAnalyzer = RetryAnalyzer.class)
 
 public class LoginModalTest {
 
     WebDriver driver;
+    Actions action;
     ImageUploadPage upload;
     Logins login;
     PageHeaderPage header;
@@ -26,6 +31,7 @@ public class LoginModalTest {
 
     SubmissionCardsPage card;
     SubmissionModalPage modal;
+    Shadow shadow;
     private static TestConfig config;
 
     //*********************** Setup *********************************
@@ -33,7 +39,8 @@ public class LoginModalTest {
     public void setConfig() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
-
+        action = new Actions(driver);
+        shadow =  new Shadow(driver);
         card = new SubmissionCardsPage(driver);
         header = new PageHeaderPage(driver);
         login = new Logins(driver);
@@ -105,33 +112,33 @@ public class LoginModalTest {
 
     @Test
     public void LoginOpensOnFollowButton() throws InterruptedException {
+
         card.firstCard().findElement(By.cssSelector("a[href]")).click();
         profile.followButton().click();
-        Thread.sleep(3000);//yes
+        Thread.sleep(2000);//yes
         Assert.assertTrue(login.signIn().isDisplayed(), "LoginOpensOnFollowButton - didn't open login modal");
     }
 
     @Test
-    public void LoginOpensOnFollowing() throws InterruptedException {
+    public void LoginOnFollowingTab() {
         header.menuFollowing().click();
-        Thread.sleep(2000);
-        Assert.assertTrue(login.signIn().isDisplayed(), "LoginOpensOnFollowing - didn't see login modal");
+        login.emailInput().sendKeys(config.unpaidEmail);
+        login.passwordInput().sendKeys(config.password);
+        login.signIn().click();
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("following")));
+        header.userMenu().click();
+
+
     }
 
     @Test
-    public void LoginOpensOnSubmit() throws InterruptedException {
+    public void LoginOpensOnSubmit() {
         header.submitBtn().click();
         login.emailInput().sendKeys(config.unpaidEmail);
         login.passwordInput().sendKeys(config.password);
         login.signIn().click();
-        Thread.sleep(2000);//yes
-        try {
-            Assert.assertTrue(upload.dragDrop().isDisplayed());
-            login.logout();
-        } catch (AssertionError e) {
-            System.out.println("LoginOpensOnSubmit - didn't see submit page on login");
-            login.logout();
-        }
+        Assert.assertTrue(PrettyAsserts.isElementDisplayed(upload.dragDrop()), "Did not go to submit page on login");
+
     }
 
     @Test
@@ -151,7 +158,10 @@ public class LoginModalTest {
     }
 
     //************************** Teardown ********************************************
-
+    @AfterMethod
+    public void logout(){
+        try {login.logout();}catch (Exception ignore){}
+    }
     @AfterClass
     public void TearDown() {
         driver.quit();

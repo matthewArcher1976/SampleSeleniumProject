@@ -146,7 +146,7 @@ public class SearchAndFiltersTest {
                 && !driver.getCurrentUrl().contains("category=Humanity&filters="), "URL should only contain Humor");
     }
 
-    @Test()
+    @Test(enabled = false)//button was removed
     public void FollowButtonDisplays() {
         search.magnifyIcon().click();
         search.searchInput().click();

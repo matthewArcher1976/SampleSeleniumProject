@@ -14,7 +14,7 @@ import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
-@Listeners(listeners.SauceLabsListener.class)
+
 public class VerifiedUsersTest {
 
     WebDriver driver;

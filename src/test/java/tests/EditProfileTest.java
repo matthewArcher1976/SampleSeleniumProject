@@ -394,6 +394,7 @@ public class EditProfileTest {
         profile.saveProfileBtn().click();
         Assert.assertTrue(profile.updateSuccess().isDisplayed(), "Did not see the Your profile has been successfully updated! message");
     }
+
     //************************** Teardown ********************************************
 
     @AfterClass

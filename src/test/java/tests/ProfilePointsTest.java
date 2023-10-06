@@ -3,6 +3,7 @@ package tests;
 import helpers.Logins;
 import helpers.PrettyAsserts;
 import helpers.Waiter;
+import io.github.sukgu.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -21,6 +22,7 @@ public class ProfilePointsTest {
     Logins login;
     ProfilePage profilePage;
     PageHeaderPage header;
+    Shadow shadow;
 
     //************************************* Setup *********************************************
 
@@ -31,6 +33,7 @@ public class ProfilePointsTest {
         login = new Logins(driver);
         header = new PageHeaderPage(driver);
         profilePage = new ProfilePage(driver);
+        shadow = new Shadow(driver);
     }
 
     @BeforeClass
@@ -59,6 +62,31 @@ public class ProfilePointsTest {
     }
 
     @Test
+    public void EarnPointsFacebook(){
+        header.userMenu().click();
+        header.yourProfileBtn().click();
+        profilePage.pointsTab().click();
+        profilePage.morePointsFacebook().click();
+        Assert.assertEquals(profilePage.lionModalTitle().getText(), "Like us on Facebook", "Missing or incorrect title on Facebook item");
+        profilePage.lionGotoSite().click();
+        //  Assert.assertEquals(driver.getCurrentUrl(), "https://www.instagram.com/thechive/"), "Link to Instagram not working";//TODO - complete these when the links go to the right place
+        driver.navigate().back();
+    }
+
+    @Test
+    public void EarnPointsInstagram(){
+        header.userMenu().click();
+        header.yourProfileBtn().click();
+        profilePage.pointsTab().click();
+        profilePage.morePointsInstagram().click();
+
+        Assert.assertEquals(profilePage.lionModalTitle().getText(), "Follow us on Instagram", "Missing or incorrect title on instagram item");
+        profilePage.lionGotoSite().click();
+      //  Assert.assertEquals(driver.getCurrentUrl(), "https://www.instagram.com/thechive/"), "Link to Instagram not working";//TODO - complete these when the links go to the right place
+        driver.navigate().back();
+    }
+
+    @Test
     public void EarnPointsPurchase(){
         header.userMenu().click();
         header.yourProfileBtn().click();
@@ -66,7 +94,8 @@ public class ProfilePointsTest {
         profilePage.morePointsPurchase().click();
         Assert.assertEquals(profilePage.lionModalDescription().getText(), "Get 5 points for every $1 you spend in our store", "Missing modal text");
         profilePage.lionGotoSite().click();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.thechivery.com/");
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.thechivery.com/", "Did not get linked to The Chivery");
+        driver.navigate().back();
     }
 
     @Test
@@ -76,7 +105,6 @@ public class ProfilePointsTest {
         profilePage.pointsTab().click();
         profilePage.pointsHistory().click();
         profilePage.pointsHistoryApproved().click();
-
     }
 
     @Test

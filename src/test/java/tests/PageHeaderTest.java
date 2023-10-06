@@ -12,6 +12,7 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
@@ -63,14 +64,14 @@ public class PageHeaderTest {
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
     }
 
-    @Test(priority = 2)
+    @Test(priority = 2, retryAnalyzer = RetryAnalyzer.class)
     public void AvatarPicGoneOnLogout() throws InterruptedException {
         WebElement avi = header.avatarPic();
         login.logout();
         Thread.sleep(3000);
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(avi)));
-
     }
+
     @Test(enabled = false)//ad frames changed this, no longer relevant
     public void AvatarPosition(){
         WebElement avatar = header.headerAvatar();
@@ -83,6 +84,7 @@ public class PageHeaderTest {
 
         Assert.assertEquals(viewportWidth - elementX - elementWidth, 8, "The avatar is too close or too far to the edge of the screen");
     }
+
     @Test
     public void ChiveryLink() {
         header.chiveryLink().click();
@@ -128,7 +130,7 @@ public class PageHeaderTest {
         Assert.assertTrue(header.dopamineDump().isDisplayed(), "Did not fine the Dopamine Dump box");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void DopamineCounter() throws InterruptedException {
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.dopamineDump()));
         String time1 = header.dopamineDumpHour() + header.dopamineDumpMinute() + header.dopamineDumpSecond();
@@ -391,6 +393,7 @@ public class PageHeaderTest {
             Assert.assertTrue(true);
         }
     }
+
     @Test(priority = 1)
     public void VerifyEmailBanner() throws InterruptedException {
         //I didn't feel like making a new class for this one test

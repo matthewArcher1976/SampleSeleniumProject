@@ -8,10 +8,14 @@
   "driverTypeMobile": "ChromeMobile",
   "facebookEmail": "matt.archer@chivemediagroup.com",
   "googleEmail": "thechivetest@gmail.com",
+  "natalie": "natalieastak@hotmail.com",
+  "nataliePassword": "123123",
   "password": "Chive1234",
   "privateEmail": "thechivetest+private@gmail.com",
   "unpaidEmail": "thechivetest@gmail.com",
-  "url": "https://stage-i.thechive.com/",
+  "url": "https://i.thechive.com/",
   "unconfirmedEmail": "thechivetest+unconfirmed@gmail.com",
+  "tooManyBlockedEmail": "camarorally@gmail.com",
+  "TooManyFollowedEmail": "chris.harbec@gmail.com",
   "verifiedEmail": "thechivetest+verified@gmail.com"
 }

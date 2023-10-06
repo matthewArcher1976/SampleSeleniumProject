@@ -16,7 +16,8 @@ import resources.TestConfig;
 import static resources.getDriverType.getDriver;
 
 @Test(retryAnalyzer = RetryAnalyzer.class)
-@Listeners(listeners.SauceLabsListener.class)
+
+
 public class BannedUserTest {
     WebDriver driver;
     Logins login;
