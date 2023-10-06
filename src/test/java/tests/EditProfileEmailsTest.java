@@ -15,7 +15,6 @@ import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
-@Listeners(listeners.SauceLabsListener.class)
 public class EditProfileEmailsTest {
 
     WebDriver driver;
@@ -62,13 +61,9 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailCharities().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailCharities - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailCharities().isSelected(), "EmailCharities - change didn't save");
     }
+
     @Test
     public void EmailChiveNation() {
         action.scrollByAmount(0, 300);
@@ -79,12 +74,7 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailChiveNation().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailChiveNation - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailChiveNation().isSelected(), "EmailChiveNation - change didn't save");
     }
     @Test
     public void EmailHotnessDaily() {
@@ -96,12 +86,7 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailHotnessDaily().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailHotnessDaily - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailHotnessDaily().isSelected(), "EmailHotnessDaily - change didn't save");
     }
 
     @Test
@@ -112,12 +97,7 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailHotnessWeekly().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailHotnessWeekly - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailHotnessWeekly().isSelected(), "EmailHotnessWeekly - change didn't save");
     }
 
     @Test
@@ -129,12 +109,7 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailHumanityDaily().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailHumanityDaily - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailHumanityDaily().isSelected(), "EmailHumanityDaily - change didn't save");
     }
 
     @Test
@@ -146,12 +121,7 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailHumanityWeekly().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailHumanityWeekly - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailHumanityWeekly().isSelected(), "EmailHumanityWeekly - change didn't save");
     }
 
     @Test
@@ -162,12 +132,7 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailHumorDaily().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailHumorDaily - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailHumorDaily().isSelected(), "EmailHumorDaily - change didn't save");
     }
 
     @Test
@@ -178,12 +143,7 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailHumorWeekly().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailHumorWeekly - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailHumorWeekly().isSelected(), "EmailHumorWeekly - change didn't save");
     }
 
     @Test
@@ -194,12 +154,7 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailNewsLetterDaily().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailNewsletterDaily - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailNewsLetterDaily().isSelected(), "EmailNewsletterDaily - change didn't save");
     }
 
     @Test
@@ -210,41 +165,23 @@ public class EditProfileEmailsTest {
         profile.saveEmailPrefBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
-        try {
-            Assert.assertNotEquals(onOff, profile.emailNewsLetterWeekly().isSelected());
-        } catch (AssertionError e) {
-            System.out.println("EmailNewsletterWeekly - change didn't save");
-            Assert.fail();
-        }
+        Assert.assertNotEquals(onOff, profile.emailNewsLetterWeekly().isSelected(), "EmailNewsletterWeekly - change didn't save");
     }
 
     @Test
     public void EmailPrefsHeader() {
         profile.emailTab().click();
-        try {
-            Assert.assertTrue(
-                    profile.headerText().isDisplayed()
-                            && profile.headerSubText().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println("EmailPrefsHeader - Headers doesn't display");
-            Assert.fail();
-        }
-
+        Assert.assertTrue(profile.headerText().isDisplayed()
+                && profile.headerSubText().isDisplayed(), "EmailPrefsHeader - Headers doesn't display");
     }
 
     @Test
     public void EmailPageText() {
         profile.emailTab().click();
-        try {
-            Assert.assertTrue(
-                    profile.emailNewsLetterText().isDisplayed()
-                            && profile.emailHumorText().isDisplayed()
-                            && profile.emailHotnessText().isDisplayed()
-                            && profile.emailHumanityText().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println("EmailPageText");
-            Assert.fail();
-        }
+        Assert.assertTrue(profile.emailNewsLetterText().isDisplayed()
+                && profile.emailHumorText().isDisplayed()
+                && profile.emailHotnessText().isDisplayed()
+                && profile.emailHumanityText().isDisplayed(), "Missing email page text");
     }
 
     @Test

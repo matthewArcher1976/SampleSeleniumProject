@@ -17,7 +17,6 @@ import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
-@Listeners(listeners.SauceLabsListener.class)
 public class CommentsTest {
 
     WebDriver driver;
@@ -61,10 +60,8 @@ public class CommentsTest {
     public void ClickShowComments() throws InterruptedException {
         card.firstCard().click();
         PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
-
         action.moveToElement(modal.image()).scrollToElement(comments.disqusFrame()).perform();
         PageActions.scrollDown(driver, 2);
-
         PageActions.findElementWithScrollingElement(driver, comments.disqusFrame());
         comments.switchToDisqusFrame();
         Thread.sleep(3000);

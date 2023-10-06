@@ -120,7 +120,9 @@ public class PageHeaderPage {
     public WebElement loginBtn() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar")));
     }
-
+    public WebElement loginSuccess() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
+    }
     public WebElement menuFeatured() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Featured")));
     }

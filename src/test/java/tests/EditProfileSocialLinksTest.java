@@ -16,7 +16,6 @@ import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
 
-@Listeners(listeners.SauceLabsListener.class)
 public class EditProfileSocialLinksTest {
     WebDriver driver;
     private static TestConfig config;

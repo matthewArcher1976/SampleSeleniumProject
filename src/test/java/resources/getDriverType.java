@@ -11,6 +11,7 @@ public class getDriverType {
             case "ChromeInsecure" -> Drivers.ChromeInsecure();
             case "ChromeMobile" -> Drivers.ChromeMobile();
             case "SafariDriver" -> Drivers.SafariDriver();
+            case "ChromeDriver3g" -> Drivers.ChromeDriver3g();
             default -> throw new IllegalArgumentException("Driver type not supported: " + driverType);
         };
     }

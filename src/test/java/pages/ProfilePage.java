@@ -107,11 +107,20 @@ public class ProfilePage {
     public WebElement lionModalDescription() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-action-modal__description")));
     }
+    public WebElement lionModalTitle() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-modal__title")));
+    }
+    public WebElement morePointsFacebook() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--facebook-like")));
+    }
+
+    public WebElement morePointsInstagram() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--instagram-follow")));
+    }
 
     public WebElement morePointsPurchase() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--$purchase")));
     }
-
     public WebElement nftSubmitButton() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[class='btn float-right btn-primary']")));
     }
