@@ -116,7 +116,7 @@ public class ProfilePointsTest {
     }
 
     @Test
-    public void NonClickableCards() throws InterruptedException {
+    public void NonClickableCards() {
         header.userMenu().click();
         header.yourProfileBtn().click();
         profilePage.pointsTab().click();

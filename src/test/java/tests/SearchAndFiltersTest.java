@@ -255,7 +255,7 @@ public class SearchAndFiltersTest {
     }
 
     @Test
-    public void VerifiedFilterFeatured() throws InterruptedException {
+    public void VerifiedFilterFeatured() {
         boolean hasCheck = true;
         header.menuFeatured().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));

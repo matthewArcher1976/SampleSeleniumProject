@@ -12,7 +12,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import pages.PageHeaderPage;
 import pages.ProfilePage;
 import pages.SubmissionCardsPage;
 import resources.RetryAnalyzer;
