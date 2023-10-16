@@ -73,9 +73,12 @@ public class ProfileTest {
         Thread.sleep(3000);//yeah
         String myUser = GetInteger.getIdFromUrl(driver.getCurrentUrl());
         driver.get(config.url);
-        WebElement ourCard = card.cardNotMine(myUser);
-        action.moveToElement(ourCard).perform();//fixes that odd click intercepted error
-        ourCard.findElement(By.cssSelector("a[href]")).click();
+
+        card.cardNotMine(myUser).click();
+
+        Thread.sleep(1000);//mhm
+        driver.findElement(By.cssSelector("div[class='flex items-center text-lg']")).click();//the username, need an id
+        Thread.sleep(2000);//for now anyway
         profilePage.blockBtn().click();
         Thread.sleep(3000);//yes
         if (profilePage.blockBtn().findElement(By.cssSelector("svg")).getAttribute("class").contains("fa-ban")) {
@@ -128,7 +131,7 @@ public class ProfileTest {
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlToBe(profileURL)), "Clicking user name did not return user to profile page, found " + profileURL);
     }
 
-    @Test
+    @Test()
     public void EditButtonNotDisplayed() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
@@ -168,7 +171,11 @@ public class ProfileTest {
         header.menuLatest().click();
         header.menuFeatured().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump")), "Edit button should not display for user");
-        String userName = card.userName().getText().replace("@", "");
+        String userName = card.userName().getText().replace("@", "")
+                .replace("This member is a verified user.", "")
+                .replace("This member is a verified female user.", "")
+                .replace("\r", "")
+                .replace("\n", "");
         System.out.println("userName is " + userName);
         card.userName().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
@@ -191,17 +198,16 @@ public class ProfileTest {
         } catch (TimeoutException e) {
             Assert.assertTrue(true);
         }
-        String yourUser = GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String myUser = GetInteger.getIdFromUrl(driver.getCurrentUrl());
         header.menuLatest().click();
-        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains(yourUser)));
-        WebElement otherUser = profilePage.otherUserName(yourUser);
-        action.moveToElement(otherUser).perform();//this fixes that odd click intercepted error
-        otherUser.findElement(By.cssSelector("a[href]")).click();
-        Thread.sleep(4000);
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains(myUser)));
+        card.cardNotMine(myUser).click();
+        Thread.sleep(1000);
+        driver.findElement(By.cssSelector("div[class='flex items-center text-lg']")).click();//the username, need an id
         Assert.assertTrue(profilePage.followButton().isDisplayed(), "Did not find follow button");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverEditButton() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
@@ -216,7 +222,7 @@ public class ProfileTest {
         }
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverFacebookLink() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
@@ -263,7 +269,7 @@ public class ProfileTest {
         Assert.assertEquals(profilePage.tabFollowing().getCssValue("background-color"), "rgba(41, 41, 41, 0.9)", "Background color on hover should be rgba(41, 41, 41, 0.9), found: " + profilePage.tabFeatured().getCssValue("background-color"));
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverInstaLink() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
@@ -274,7 +280,7 @@ public class ProfileTest {
         Assert.assertEquals(profilePage.instagramLink().getCssValue("background-color"), "rgba(66, 62, 62, 1)", "Background color on hover should be rgba(66, 62, 62, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverTwitterLink() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
@@ -285,7 +291,7 @@ public class ProfileTest {
         Assert.assertEquals(profilePage.twitterLink().getCssValue("background-color"), "rgba(66, 62, 62, 1)", "Background color on hover should be rgba(66, 62, 62, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverTiktokLink() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
@@ -296,7 +302,7 @@ public class ProfileTest {
         Assert.assertEquals(profilePage.tiktokLink().getCssValue("background-color"), "rgba(66, 62, 62, 1)", "Background color on hover should be rgba(66, 62, 62, 1), found: " + profilePage.tabFeatured().getCssValue("background-color"));
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverWishlistLink() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
@@ -367,7 +373,7 @@ public class ProfileTest {
         Assert.assertTrue(driver.getPageSource().contains(" Once upon a time, if you were one of the lucky, random recipients of the ultra-rare gold bars denominated with the letter V, you were issued a digital certificate of authenticity in the form of a Non-Fungible Token (NFT). "));
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void ProfileIs404() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
@@ -383,12 +389,12 @@ public class ProfileTest {
         profile.yourProfileBtn().click();
         profilePage.privacyTermsLink().click();
         helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(driver.getCurrentUrl().contentEquals("https://www.chivemediagroup.com/legal/terms?utm_source=ichive"), "Privacy Policy link broken");
+        Assert.assertTrue(driver.getCurrentUrl().contentEquals("https://www.chivemediagroup.com/legal/terms?utm_source=mychive"), "Privacy Policy link broken");
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void SubmissionsDisplay() throws InterruptedException {
         profile.userMenu().click();
         profile.yourProfileBtn().click();

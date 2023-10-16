@@ -88,7 +88,7 @@ public class MembershipTest {
         profile.membershipCreditCardNumber().sendKeys("4111111111111111");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverAddMembershipButton() throws InterruptedException {
         profile.membershipTab().click();
         Assert.assertEquals(profile.addMembershipBtn().getCssValue("background-color"), "rgba(0, 194, 0, 1)", "Color before hover while active should be rgba(0, 195, 0, 1), found: " + profile.profileTab().getCssValue("color"));

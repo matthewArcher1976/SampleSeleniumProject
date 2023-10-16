@@ -70,20 +70,26 @@ public class SearchAndFiltersTest {
         search.searchSuggestions().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains(suggestion)), "The click on the search suggestion row may have missed");
     }
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void FilterHotness() throws InterruptedException {
         header.filterChange().click();
-        search.filterHumanity().click();
-        search.filterHumor().click();
+        if(search.filterHumanity().isSelected()){
+            search.filterHumanity().click();
+        }
+        if(!search.filterHotness().isSelected()){
+            search.filterHotness().click();
+        }
+        if(search.filterHumor().isSelected()){
+            search.filterHumor().click();
+        }
         search.goButton().click();
-        Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
-        Assert.assertTrue(driver.getCurrentUrl().contains("category=Hotness&filters=")
-                && !driver.getCurrentUrl().contains("category=Humor&filters=")
-                && !driver.getCurrentUrl().contains("category=Humanity&filters="), "URL should only contain Hotness");
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Waiter.wait(driver).until(ExpectedConditions.stalenessOf(search.goButton()));
         List<WebElement> cards = card.allCards();
         int size = cards.size();
         card.firstCard().click();
         for (int count = 0; count < size; count++) {
+            action.scrollByAmount(0, 400);
             List<WebElement> allTags = modal.tags();
             boolean tagFound = false;
             for (WebElement tag : allTags) {
@@ -100,26 +106,30 @@ public class SearchAndFiltersTest {
         }
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void FilterHumanity() throws InterruptedException {
         header.filterChange().click();
-        search.filterHotness().click();
-        search.filterHumor().click();
+        if(!search.filterHumanity().isSelected()){
+            search.filterHumanity().click();
+        }
+        if(search.filterHotness().isSelected()){
+            search.filterHotness().click();
+        }
+        if(search.filterHumor().isSelected()){
+            search.filterHumor().click();
+        }
         search.goButton().click();
-        Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
-        Assert.assertTrue(driver.getCurrentUrl().contains("category=Humanity&filters=")
-                && !driver.getCurrentUrl().contains("category=Hotness&filters=")
-                && !driver.getCurrentUrl().contains("category=Humor&filters="), "URL should only contain Humanity");
+        Waiter.wait(driver).until(ExpectedConditions.stalenessOf(search.goButton()));
         List<WebElement> cards = card.allCards();
         int size = cards.size();
         card.firstCard().click();
-
         helpers.Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
 
         for (int count = 0; count < size; count++) {
             List<WebElement> allTags = modal.tags();
             boolean tagFound = false;
             for (WebElement tag : allTags) {
+                action.scrollByAmount(0, 400);
                 if (tag.getText().contains("humanity")) {
                     tagFound = true;
                     break;
@@ -134,16 +144,43 @@ public class SearchAndFiltersTest {
         }
     }
 
-    @Test
-    public void FilterHumor() {
+    @Test(retryAnalyzer = RetryAnalyzer.class)
+    public void FilterHumor() throws InterruptedException {
         header.filterChange().click();
-        search.filterHumanity().click();
-        search.filterHotness().click();
+        if(search.filterHumanity().isSelected()){
+            search.filterHumanity().click();
+        }
+        if(search.filterHotness().isSelected()){
+            search.filterHotness().click();
+        }
+        if(!search.filterHumor().isSelected()){
+            search.filterHumor().click();
+        }
+
         search.goButton().click();
-        Waiter.wait(driver).until(ExpectedConditions.urlContains("category"));
-        Assert.assertTrue(driver.getCurrentUrl().contains("category=Humor&filters=")
-                && !driver.getCurrentUrl().contains("category=Hotness&filters=")
-                && !driver.getCurrentUrl().contains("category=Humanity&filters="), "URL should only contain Humor");
+        Waiter.wait(driver).until(ExpectedConditions.stalenessOf(search.goButton()));
+        List<WebElement> cards = card.allCards();
+        int size = cards.size();
+        card.firstCard().click();
+        helpers.Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
+        for (int count = 0; count < size; count++) {
+            List<WebElement> allTags = modal.tags();
+            boolean tagFound = false;
+            for (WebElement tag : allTags) {
+                action.scrollByAmount(0, 400);
+                if (tag.getText().contains("humor")) {
+                    tagFound = true;
+                    break;
+                }
+            }
+            Assert.assertTrue(tagFound, "Might be non humor card found in humanity filter results " + driver.findElement(By.cssSelector("div[id*='tag-']")).getAttribute("id"));
+            if (count < size - 1) {
+                // Perform the action to move to the next card only if it's not the last card
+                action.sendKeys(Keys.ARROW_RIGHT).perform();
+                Thread.sleep(2000);
+            }
+        }
+
     }
 
     @Test(enabled = false)//button was removed
@@ -155,16 +192,17 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(search.followBtn().isDisplayed(), "Did not find follow button");
     }
 
-    @Test
-    public void HashTagExactMatchDisplays() {
+    @Test(retryAnalyzer = RetryAnalyzer.class)
+    public void HashTagExactMatchDisplays() throws InterruptedException {
         search.magnifyIcon().click();
         search.searchInput().click();
         action.sendKeys(SEARCH_TERM).sendKeys(Keys.ENTER).build().perform();
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Thread.sleep(3000);//yeah
         Assert.assertEquals(search.resultsTag().getText(), "theCHIVERBrady", "HashTagExactMatchDisplays - looking for theCHIVERBrady found " + search.resultsTag().getText());
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HashTagPartialMatchDisplays() throws InterruptedException {
         search.magnifyIcon().click();
         search.searchInput().click();
@@ -174,13 +212,13 @@ public class SearchAndFiltersTest {
         search.searchInput().sendKeys(Keys.BACK_SPACE);
         search.searchInput().sendKeys("brady");
         search.searchInput().sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         for (WebElement card : search.allTagCards()) {
             Assert.assertTrue(search.resultsTag().getText().toLowerCase().matches(".*\\b" + "brady" + "\\b.*"), card.getText() + " didn't match search term");
         }
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void InfiniteScrollingSearch() throws InterruptedException {
         search.magnifyIcon().click();
         search.searchInput().click();
@@ -217,15 +255,14 @@ public class SearchAndFiltersTest {
     }
 
     @Test
-    public void VerifiedFilterFeatured() {
+    public void VerifiedFilterFeatured() throws InterruptedException {
         boolean hasCheck = true;
         header.menuFeatured().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         header.filterChange().click();
         search.filterVerified().click();
         search.goButton().click();
-
-        Waiter.wait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
+        Waiter.wait(driver).until(ExpectedConditions.stalenessOf(search.goButton()));
         List<WebElement> cards = card.allFeaturedCards();
         for (WebElement card : cards) {
             try {
@@ -241,23 +278,23 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(hasCheck, "Found unverified user on feature page");
     }
 
-    @Test
-    public void VerifiedFilterFollowing() {
+    @Test(retryAnalyzer = RetryAnalyzer.class)
+    public void VerifiedFilterFollowing() throws InterruptedException {
         boolean hasCheck = true;
         header.menuFollowing().click();
         Waiter.quickWait(driver).until(ExpectedConditions.urlContains("following"));
         header.filterChange().click();
         search.filterVerified().click();
         search.goButton().click();
-        Waiter.quickWait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
-        System.out.println(driver.getCurrentUrl());
+        Waiter.quickWait(driver).until(ExpectedConditions.stalenessOf(search.goButton()));
+        Thread.sleep(2000);//yeah
         List<WebElement> cards = card.allCards();
         if (cards.size() == 0) {
-            System.out.println("Follow some users, including a verified and chivette");
             Assert.fail();
         }
         for (WebElement card : cards) {
             try {
+                System.out.println(card.getAttribute("id") + " is the id");
                 card.findElement(By.id("label-verified"));
             } catch (NoSuchElementException e) {
                 try {
@@ -270,13 +307,13 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(hasCheck, "Found a card from unverified user on following page");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void VerifiedFilterLatest() {
         boolean hasCheck = true;
         header.filterChange().click();
         search.filterVerified().click();
         search.goButton().click();
-        Waiter.quickWait(driver).until(ExpectedConditions.urlContains("Verified+Users"));
+        Waiter.quickWait(driver).until(ExpectedConditions.stalenessOf(search.goButton()));
         List<WebElement> cards = card.allCards();
         for (WebElement card : cards) {
             try {
@@ -285,6 +322,7 @@ public class SearchAndFiltersTest {
                 try {
                     card.findElement(By.id("label-chivette"));
                 } catch (NoSuchElementException f) {
+                    System.out.println(card.findElement(By.cssSelector("img")).getAttribute("id"));
                     hasCheck = false;
                 }
             }

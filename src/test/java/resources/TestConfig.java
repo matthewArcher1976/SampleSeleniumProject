@@ -15,6 +15,7 @@ public class TestConfig {
     public String natalie;
     public String nataliePassword;
     public String password;
+    public String paidEmail;
     public String privateEmail;
     public String unconfirmedEmail;
     public String unpaidEmail;

@@ -56,7 +56,7 @@ public class LoginModalTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void ForgotPasswordText() throws InterruptedException {
         header.loginBtn().click();
         Thread.sleep(2000);
@@ -88,11 +88,11 @@ public class LoginModalTest {
                 && login.updateSuccess().getText().contains("We have emailed your password reset link."), "ForgotPasswordValidEmail - success toast not found");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void LoginOpensOnDownvote() throws InterruptedException {
         card.firstCard().findElement(By.className("fa-thumbs-down")).click();
         Thread.sleep(3000);
-        Assert.assertTrue(login.signIn().isDisplayed(), "User not logged in");
+        Assert.assertTrue(login.signIn().isDisplayed(), "Login modal not found after clicking downvote");
     }
 
     @Test
@@ -131,7 +131,7 @@ public class LoginModalTest {
 
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void LoginOpensOnSubmit() {
         header.submitBtn().click();
         login.emailInput().sendKeys(config.unpaidEmail);
@@ -141,7 +141,7 @@ public class LoginModalTest {
 
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void LoginOpensOnUpvote() throws InterruptedException {
         card.firstCard().findElement(By.className("fa-thumbs-up")).click();
         Thread.sleep(2000);

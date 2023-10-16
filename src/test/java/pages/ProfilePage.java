@@ -2,7 +2,6 @@ package pages;
 
 import helpers.PageActions;
 import helpers.Waiter;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -107,9 +106,11 @@ public class ProfilePage {
     public WebElement lionModalDescription() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-action-modal__description")));
     }
+
     public WebElement lionModalTitle() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-modal__title")));
     }
+
     public WebElement morePointsFacebook() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--facebook-like")));
     }
@@ -121,6 +122,7 @@ public class ProfilePage {
     public WebElement morePointsPurchase() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--$purchase")));
     }
+
     public WebElement nftSubmitButton() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[class='btn float-right btn-primary']")));
     }
@@ -167,12 +169,29 @@ public class ProfilePage {
     public WebElement pointsHelp() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-sidebar__menu-item--help")));
     }
+
     public WebElement pointsHistory() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-sidebar__menu-item--history")));
     }
+
+    public WebElement pointsHistoryAction(WebElement row) {
+        List<WebElement> ourRow = Waiter.wait(driver).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("lion-customer-history-table__row-cell")));
+        return ourRow.get(2);
+    }
+
     public WebElement pointsHistoryApproved() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-history-state-bubble--approved")));
     }
+
+    public WebElement pointsHistoryModalTitle() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-modal__title")));
+    }
+
+    public WebElement pointsHistoryRow(int row) {
+        List<WebElement> ourRow = Waiter.wait(driver).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("lion-customer-history-table__row")));
+        return ourRow.get(row);
+    }
+
     public WebElement pointsRedeemPoints() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-sidebar__menu-item--rewards")));
     }
@@ -180,6 +199,7 @@ public class ProfilePage {
     public WebElement pointsTab() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("user_profile_points")));
     }
+
     public WebElement privacyTermsLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.linkText("Terms & Privacy")));
     }

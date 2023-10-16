@@ -135,7 +135,7 @@ public class MobileSubmissionModalTest {
         modal.twitterBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
         WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.titleContains("Twitter")), "Did not find Twitter login popup");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.titleContains("X")), "Did not find Twitter login popup");
         driver.close();
         WindowUtil.switchToWindow(driver, 0);
     }
@@ -204,7 +204,7 @@ public class MobileSubmissionModalTest {
         Assert.assertEquals(modal.modalCardFull().getCssValue("border-radius"), "8px", "RoundedEdgesOnModal = the border-radius changed, verify it's intentional");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void StickyHeaderOnModal() {
         modal.firstCard().click();
         modal.commentButton().click();

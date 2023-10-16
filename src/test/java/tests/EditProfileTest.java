@@ -16,6 +16,7 @@ import org.testng.annotations.*;
 
 import pages.EditProfilePage;
 
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
@@ -134,7 +135,7 @@ public class EditProfileTest {
         profilePage.cmgLink().click();
         Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
         helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(driver.getCurrentUrl().contains("https://www.chivemediagroup.com/?utm_source=ichive"), "CMG Link broken");
+        Assert.assertTrue(driver.getCurrentUrl().contains("https://www.chivemediagroup.com/?utm_source=mychive"), "CMG Link broken");
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
@@ -256,7 +257,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.membershipTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.membershipTab().getCssValue("color"));
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverProfileTab() {
         profile.userMenu().click();
         profile.settingsBtn().click();

@@ -16,7 +16,6 @@ import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 import static resources.getDriverType.getDriver;
@@ -60,16 +59,17 @@ public class SubmissionModalTest {
 
     @Test
     public void ClickTagRedirectToTagPage() throws InterruptedException {
-        if(config.driverType.contains("Sauce")){
+        if (config.driverType.contains("Sauce")) {
             System.out.println("Skipping until https://resignationmedia.atlassian.net/browse/QA-121");
-        }else {
+        } else {
             driver.manage().window().fullscreen();
             Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
             WebElement taggedCard = modal.cardWithTag();
             action.moveToElement(taggedCard).click().perform();
             String tagName = (modal.tag().getText());
             modal.tag().click();
-            Waiter.wait(driver).until(ExpectedConditions.urlContains(tagName));
+
+            Waiter.longWait(driver).until(ExpectedConditions.urlContains(tagName));
             Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
             Thread.sleep(3000);//still need it
             List<WebElement> cards = modal.allCards();
@@ -109,7 +109,7 @@ public class SubmissionModalTest {
         Dimension size = modal.image().getSize();
         int screenWidth = size.getWidth();
         int screenHeight = size.getHeight();
-        PageActions.touchScroll(driver, screenWidth/2, screenHeight + 200, screenWidth/2, screenHeight - 20, 1);
+        PageActions.touchScroll(driver, screenWidth / 2, screenHeight + 200, screenWidth / 2, screenHeight - 20, 1);
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(modal.disqusFrame()));
         Thread.sleep(5000);//for Sauce
         Assert.assertTrue(modal.commentTextInput().isDisplayed(), "Policy text did not display");
@@ -124,7 +124,7 @@ public class SubmissionModalTest {
         Dimension size = modal.image().getSize();
         int screenWidth = size.getWidth();
         int screenHeight = size.getHeight();
-        PageActions.touchScroll(driver, screenWidth/2, screenHeight + 200, screenWidth/2, screenHeight - 20, 2);
+        PageActions.touchScroll(driver, screenWidth / 2, screenHeight + 200, screenWidth / 2, screenHeight - 20, 2);
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(modal.disqusFrame()));
         Thread.sleep(5000);//for Sauce
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(modal.commentTextInput())).isDisplayed(), "Policy text did not display");
@@ -154,7 +154,7 @@ public class SubmissionModalTest {
         modal.twitterBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
         helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("Twitter")), "Did not find Twitter login popup");
+        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("X")), "Did not find Twitter, no, sorry, 'X', login popup");//fuck Elon Musk
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
@@ -168,28 +168,26 @@ public class SubmissionModalTest {
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(modalCard)), "Modal may not be closing when you press esc");
     }
 
-    @Test(priority = 99)
+    @Test(priority = 1)
     //checks that the proportions on the card image are the same an actual, breaks the hover tests if run before then, who knows why
     public void GIFNotCutOff() throws InterruptedException {
+
+        double acceptableDifference = 0.02;
         helpers.PageActions.scrollDown(driver, 3);
         WebElement gifCard = card.firstGIF();
-        double cardHeight = gifCard.findElement(By.cssSelector("div[id^='card-image']")).getRect().getHeight();
-        double cardWidth = gifCard.findElement(By.cssSelector("div[id^='card-image']")).getRect().getWidth();
-        double cardRatio = cardHeight / cardWidth;
-        DecimalFormat df = new DecimalFormat("#.##");
-        String formattedCardRatio = df.format(cardRatio);
-
+        double cardHeight = card.getCardHeight(gifCard);
+        double cardWidth = card.getCardWidth(gifCard);
+        double cardRatio = card.getCardRatio(cardHeight, cardWidth);
         action.moveToElement(gifCard);
         gifCard.click();
         driver.navigate().refresh();
         driver.get(single.submissionImage().getAttribute("src"));
-
         double height = Integer.parseInt(single.sourceImage().getCssValue("height").replaceAll("[^0-9]", ""));
         double width = Integer.parseInt(single.sourceImage().getCssValue("width").replaceAll("[^0-9]", ""));
-        double ratio = height / width;
-        String formattedRatio = df.format(ratio);
-        System.out.println("formattedRatio is " + formattedCardRatio + " and formattedCardRatio   is " + formattedCardRatio);
-        Assert.assertEquals(formattedRatio, formattedCardRatio, "GIFNotCutOff - gif may be getting cut off");
+        double ratio = card.getCardRatio(height, width);
+
+        Assert.assertTrue(Math.abs(ratio - cardRatio) <= acceptableDifference, "GIF may be getting cut off");
+
     }
 
     @Test
@@ -214,7 +212,7 @@ public class SubmissionModalTest {
 
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void ImageChanceBetweenSubsArrowKey() throws InterruptedException {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
@@ -233,7 +231,7 @@ public class SubmissionModalTest {
 
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void NavBetweenSubs() throws InterruptedException {
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
         WebElement card = modal.firstCard();

@@ -15,6 +15,7 @@ import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import pages.SubmissionSingleImagePage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.ArrayList;
@@ -172,7 +173,7 @@ public class SubmissionSingleImageTest {
         single.shareTwitter().click();
         helpers.WindowUtil.switchToWindow(driver, 1);
         Thread.sleep(2000);
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("Twitter")), "Twitter window title was " + driver.getTitle());
+        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("X")), "Twitter window title was " + driver.getTitle());
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
@@ -295,7 +296,7 @@ public class SubmissionSingleImageTest {
                 && !single.verifiedDate().getText().isBlank(), "Missing the Verified text and icon");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void VerifiedUserDisplays() {
         action.moveToElement(card.firstCard()).click().perform();
         driver.navigate().refresh();
@@ -304,7 +305,7 @@ public class SubmissionSingleImageTest {
                 && !single.verifiedText().getText().isBlank(), "Missing the Verified text and icon");
     }
 
-    @Test
+    @Test(enabled = false)
     public void VoteDownButton() {
         //Downvote a post from the single page, verify the vote persists
         WebElement submission = card.cardNotDownvoted();

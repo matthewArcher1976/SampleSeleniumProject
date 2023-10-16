@@ -110,7 +110,7 @@ public class PageHeaderPage {
     }
 
     public WebElement ichiveLogo() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='IChive']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='myCHIVE']")));
     }
 
     public WebElement linkMenu() {

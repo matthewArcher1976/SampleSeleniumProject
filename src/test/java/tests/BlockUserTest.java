@@ -2,6 +2,7 @@ package tests;
 
 import helpers.PageActions;
 import helpers.Waiter;
+import org.openqa.selenium.interactions.Actions;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -23,6 +24,7 @@ import static resources.getDriverType.getDriver;
 public class BlockUserTest {
 
     WebDriver driver;
+    Actions action;
     SearchAndFiltersPage search;
     Logins login;
     BlockUserPage blocked;
@@ -35,6 +37,8 @@ public class BlockUserTest {
     public void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
+        action= new Actions(driver);
+
         search = new SearchAndFiltersPage(driver);
         login = new Logins(driver);
         blocked = new BlockUserPage(driver);
@@ -63,7 +67,7 @@ public class BlockUserTest {
         search.searchInput().sendKeys(Keys.ENTER);
         String userName = search.firstUser().getText().replace("@", "");
         PageActions.scrollDown(driver, 2);
-        search.firstUser().click();
+        action.moveToElement(search.firstUser()).click().perform();//fixes click intercepted error
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         blocked.blockBtn().click();
         try {
@@ -85,7 +89,7 @@ public class BlockUserTest {
         search.searchInput().sendKeys(Keys.ENTER);
         String userName = search.firstUser().getText().replace("@", "");
         PageActions.scrollDown(driver, 2);
-        search.firstUser().click();
+        action.moveToElement(search.firstUser()).click().perform();//fixes click intercepted error
         Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         //Setup
         String userURL = driver.getCurrentUrl();
