@@ -55,6 +55,7 @@ public class ProfilePointsTest {
         header.userMenu().click();
         header.yourProfileBtn().click();
         profilePage.pointsTab().click();
+        profilePage.pointsEarnPoints().click();
         profilePage.morePointsPurchase().click();
         WebElement lionModal = profilePage.lionModal();
         profilePage.lionCloseModal().click();
@@ -65,12 +66,15 @@ public class ProfilePointsTest {
     public void EarnPointsFacebook(){
         header.userMenu().click();
         header.yourProfileBtn().click();
+
         profilePage.pointsTab().click();
+        profilePage.pointsEarnPoints().click();
         profilePage.morePointsFacebook().click();
         Assert.assertEquals(profilePage.lionModalTitle().getText(), "Like us on Facebook", "Missing or incorrect title on Facebook item");
         profilePage.lionGotoSite().click();
         //  Assert.assertEquals(driver.getCurrentUrl(), "https://www.instagram.com/thechive/"), "Link to Instagram not working";//TODO - complete these when the links go to the right place
         driver.navigate().back();
+
     }
 
     @Test
@@ -78,9 +82,10 @@ public class ProfilePointsTest {
         header.userMenu().click();
         header.yourProfileBtn().click();
         profilePage.pointsTab().click();
+        profilePage.pointsEarnPoints().click();
         profilePage.morePointsInstagram().click();
 
-        Assert.assertEquals(profilePage.lionModalTitle().getText(), "Follow us on Instagram", "Missing or incorrect title on instagram item");
+        Assert.assertEquals(profilePage.lionModalTitle().getText(), "Stalk us on Instagram", "Missing or incorrect title on instagram item");
         profilePage.lionGotoSite().click();
       //  Assert.assertEquals(driver.getCurrentUrl(), "https://www.instagram.com/thechive/"), "Link to Instagram not working";//TODO - complete these when the links go to the right place
         driver.navigate().back();
@@ -91,6 +96,7 @@ public class ProfilePointsTest {
         header.userMenu().click();
         header.yourProfileBtn().click();
         profilePage.pointsTab().click();
+        profilePage.pointsEarnPoints().click();
         profilePage.morePointsPurchase().click();
         Assert.assertEquals(profilePage.lionModalDescription().getText(), "Get 5 points for every $1 you spend in our store", "Missing modal text");
         profilePage.lionGotoSite().click();
@@ -99,12 +105,14 @@ public class ProfilePointsTest {
     }
 
     @Test
-    public void HistoryTab(){
+    public void HistoryTabActivity(){
         header.userMenu().click();
         header.yourProfileBtn().click();
         profilePage.pointsTab().click();
         profilePage.pointsHistory().click();
+        String activity = profilePage.pointsHistoryAction(profilePage.pointsHistoryRow(0)).getText();
         profilePage.pointsHistoryApproved().click();
+        Assert.assertEquals(activity, profilePage.pointsHistoryModalTitle().getText(), "Modal title doesn't match modal row");
     }
 
     @Test
@@ -112,6 +120,8 @@ public class ProfilePointsTest {
         header.userMenu().click();
         header.yourProfileBtn().click();
         profilePage.pointsTab().click();
+
+        profilePage.pointsEarnPoints().click();
         Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsPhotoFeatured()), "Did not see Photo featured on theChive card");
         Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsUpvotedScore()), "Did not see upvote score card");
         Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsDopamineDump()), "Did not see Dopamine Dump card");

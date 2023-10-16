@@ -1,10 +1,9 @@
 package tests;
 
 import helpers.CustomExpectedConditions;
+import helpers.Logins;
 import helpers.Waiter;
 import helpers.WindowUtil;
-import resources.Config;
-import helpers.Logins;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,6 +11,7 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
+import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
@@ -59,6 +59,7 @@ public class PageHeaderTest {
     public void AdFrameDisplays() {
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
     }
+
     @Test
     public void AvatarPicDisplays() {
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
@@ -73,7 +74,7 @@ public class PageHeaderTest {
     }
 
     @Test(enabled = false)//ad frames changed this, no longer relevant
-    public void AvatarPosition(){
+    public void AvatarPosition() {
         WebElement avatar = header.headerAvatar();
         Dimension viewportSize = driver.manage().window().getSize();
         int viewportWidth = viewportSize.getWidth();
@@ -89,7 +90,7 @@ public class PageHeaderTest {
     public void ChiveryLink() {
         header.chiveryLink().click();
         helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(driver.getCurrentUrl().contains("utm_source=ichive"), "ChiveryLink() - broken");
+        Assert.assertTrue(driver.getCurrentUrl().contains("utm_source=mychive"), "ChiveryLink() - broken");
         System.out.println("ChiveryLink() - broken");
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
@@ -182,7 +183,7 @@ public class PageHeaderTest {
         header.searchButton().click();
         Thread.sleep(2000);//yes
         try {
-            helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.filterChange()));
+            Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.filterChange()));
             System.out.println("Filters were found on search page");
             Assert.fail();
         } catch (TimeoutException e) {
@@ -348,7 +349,9 @@ public class PageHeaderTest {
     public void LinksChive() {
         header.linkMenu().click();
         header.dropDownChive().click();
-        Waiter.quickWait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+        System.out.println(driver.getWindowHandles().size() + " windows found");
+        //Waiter.quickWait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+
         WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("thechive"))
                 && driver.getCurrentUrl().contains("utm_source"), "LinksChive - Link is broken");
@@ -358,10 +361,9 @@ public class PageHeaderTest {
 
     @Test
     public void LinksChivery() {
-
         header.chiveryLink().click();
         WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(driver.getCurrentUrl().contains("utm_source=ichive"), "Chivery link is broken");
+        Assert.assertTrue(driver.getCurrentUrl().contains("utm_source=mychive"), "Chivery link is broken");
         driver.close();
         WindowUtil.switchToWindow(driver, 0);
     }

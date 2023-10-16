@@ -41,6 +41,7 @@ public class EditProfileSocialLinksTest {
     public void login() throws InterruptedException {
         driver.get(config.url);
         login.unpaidLogin(config.unpaidEmail, config.password);
+        Thread.sleep(2000);//yes
     }
 
     @BeforeMethod
@@ -418,7 +419,7 @@ public class EditProfileSocialLinksTest {
         profilePage.twitterLink().click();
         Thread.sleep(3000);
         helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(driver.getTitle().contains("Twitter"), "Did not find Twitter window");
+        Assert.assertTrue(driver.getTitle().contains("Log in to X / X"), "Did not find Twitter - wait, sorry, 'X' - window, found " + driver.getTitle());//Fuck you Elon
 
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
@@ -441,7 +442,7 @@ public class EditProfileSocialLinksTest {
         profilePage.twitterLink().click();
         Thread.sleep(3000);
         helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(driver.getTitle().contains("Twitter"), "Did not find Twitter window");
+        Assert.assertTrue(driver.getTitle().contains("Log in to X / X"), "Did not find Twitter - wait, sorry, 'X' - window, found " + driver.getTitle());//Fuck you Elon
 
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);

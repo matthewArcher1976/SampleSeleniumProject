@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.12.1</version>
+            <version>4.13.0</version>
         </dependency>
 
         <!-- TestNG -->
@@ -74,8 +74,8 @@
 
         <!-- https://github.com/sukgu/shadow-automation-selenium Shadow automation-->
         <dependency>
-        <groupId>io.github.sukgu</groupId>
-        <artifactId>automation</artifactId>
+            <groupId>io.github.sukgu</groupId>
+            <artifactId>automation</artifactId>
         <version>0.1.4.1</version>
         </dependency>
 

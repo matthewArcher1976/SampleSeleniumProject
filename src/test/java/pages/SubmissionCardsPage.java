@@ -6,6 +6,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
+
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -93,7 +95,6 @@ public class SubmissionCardsPage {
         for (int i = 0; i < 2; i++) {
             List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
             for (WebElement card : allCards) {
-
                 if (!PrettyAsserts.isIconSelected(card.findElement(By.cssSelector("[id^='toggle-favorite-']")).findElement(By.className("fa-heart"))) && card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
                     firstNotUpvotedCard = card;
                     break;
@@ -102,7 +103,6 @@ public class SubmissionCardsPage {
             if (firstNotUpvotedCard != null) {
                 break;
             } else {
-
                 PageActions.scrollDown(driver, 2);
             }
         }
@@ -121,7 +121,6 @@ public class SubmissionCardsPage {
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
         for (WebElement card : allCards) {
             a.moveToElement(card).perform();
-
             if (card.findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("src").endsWith("jpeg")) {
                 notGIFCard = card;
                 break;
@@ -159,7 +158,6 @@ public class SubmissionCardsPage {
             if (firstNotUpvotedCard != null) {
                 break;
             } else {
-
                 helpers.PageActions.scrollDown(driver, 2);
             }
         }
@@ -201,7 +199,6 @@ public class SubmissionCardsPage {
             helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(card)).click();
             Thread.sleep(2000);
             WebElement cardAfterClick = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id='" + card.getAttribute("id") + "']")));
-
             try {
                 driver.findElement(By.className("badge-outline")); //.cssSelector("div")).getAttribute("class").contains("overflow-hidden"))
                 tags = driver.findElements(By.cssSelector("div[id^='tag-']"));
@@ -258,7 +255,7 @@ public class SubmissionCardsPage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-comment")));
     }
     public WebElement featuredIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='featured ichive icon']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Featured on myCHIVE']")));
     }
 
     public WebElement firstCard() {
@@ -266,7 +263,6 @@ public class SubmissionCardsPage {
     }
 
     public WebElement firstCardEnhanced() {
-
         WebElement first = null;
         try {
             first = helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("[id^='submission-image']")));
@@ -282,7 +278,6 @@ public class SubmissionCardsPage {
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
         WebElement element = null;
         for (WebElement card : allCards) {
-
             try {
                 if (card.findElement(By.className("overflow-hidden")).getText().contains("GIF")) {
                     element = card;
@@ -299,7 +294,6 @@ public class SubmissionCardsPage {
         List<WebElement> cards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image'])"));
         for (WebElement card : cards) {
             String userName = card.findElement(By.cssSelector("a[class='flex gap-x-2 items-center text-primary']")).getText();
-
             if (!userName.isBlank()) {
                 userNames.add(userName);
             }
@@ -385,6 +379,18 @@ public class SubmissionCardsPage {
             Assert.fail();
         }
         return filled;
+    }
+
+    public double getCardHeight(WebElement card) {
+        return card.findElement(By.cssSelector("div[id^='card-image']")).getRect().getHeight();
+    }
+
+    public double getCardRatio(double height, double width){
+        DecimalFormat df = new DecimalFormat("#.##");
+        return Double.parseDouble(df.format(height / width));
+    }
+    public double getCardWidth(WebElement card) {
+        return card.findElement(By.cssSelector("div[id^='card-image']")).getRect().getWidth();
     }
 
 }

@@ -29,7 +29,9 @@ public class SearchAndFiltersPage {
     public List<WebElement> allUserCards() {
         return driver.findElements(By.cssSelector("[id^='user-card-']:not([id*='follow-btn'])"));
     }
-
+    public WebElement filterFollowing() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[value='submission.following']")));
+    }
     public WebElement filterHotness() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[data-slug='hotness']")));
     }

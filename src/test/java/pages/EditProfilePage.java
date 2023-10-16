@@ -410,7 +410,7 @@ public class EditProfilePage {
     }
 
     public WebElement privacyPublicBullet3() {
-        return helpers.Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(text(),'Your activity on iCHIVE will earn CHIVE Points that you can redeem on The Chivery')]")));
+        return helpers.Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//li[contains(text(),'Your activity on myCHIVE will earn CHIVE Points that you can redeem on The Chivery')]")));
     }
 
     public WebElement privacyPublicBullet4() {

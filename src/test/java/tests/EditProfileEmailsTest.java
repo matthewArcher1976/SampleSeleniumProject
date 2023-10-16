@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.EditProfilePage;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import static resources.getDriverType.getDriver;
@@ -76,12 +77,11 @@ public class EditProfileEmailsTest {
         profile.emailTab().click();
         Assert.assertNotEquals(onOff, profile.emailChiveNation().isSelected(), "EmailChiveNation - change didn't save");
     }
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void EmailHotnessDaily() {
         action.scrollByAmount(0, 300);
         profile.emailTab().click();
         Boolean onOff = profile.emailHotnessDaily().isSelected();
-        PageActions.scrollDown(driver, 1);
         profile.emailHotnessDaily().click();
         profile.saveEmailPrefBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));

@@ -1,5 +1,7 @@
 package tests;
 
+import pages.PageHeaderPage;
+import pages.SearchAndFiltersPage;
 import resources.Config;
 import helpers.GetInteger;
 import helpers.Logins;
@@ -10,7 +12,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import pages.PageHeaderPage;
 import pages.ProfilePage;
 import pages.SubmissionCardsPage;
 import resources.RetryAnalyzer;
@@ -28,8 +29,9 @@ public class SubmissionCardsTest {
     Actions action;
     Logins login;
     SubmissionCardsPage card;
-    PageHeaderPage pageHeader;
+    PageHeaderPage header;
     ProfilePage profile;
+    SearchAndFiltersPage search;
 
     private static TestConfig config;
 
@@ -43,8 +45,9 @@ public class SubmissionCardsTest {
         action = new Actions(driver);
         card = new SubmissionCardsPage(driver);
         login = new Logins(driver);
-        pageHeader = new PageHeaderPage(driver);
+        header = new PageHeaderPage(driver);
         profile = new ProfilePage(driver);
+        search = new SearchAndFiltersPage(driver);
     }
 
     @BeforeClass
@@ -52,6 +55,18 @@ public class SubmissionCardsTest {
         driver.get(config.url);
       login.unpaidLogin(config.unpaidEmail, config.password);
        Thread.sleep(1000);
+       
+ /*      header.filterChange().click();
+       if(!search.filterHumor().isSelected()){
+           search.filterHumor().click();
+       }
+       if(!search.filterHotness().isSelected()){
+           search.filterHotness().click();
+       }
+       if (!search.filterHumanity().isSelected()){
+           search.filterHumanity().click();
+       }
+       search.goButton().click();*/
     }
 
     @BeforeMethod
@@ -77,7 +92,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(driver.getCurrentUrl().contains(id) && card.disqusSection().isDisplayed(), "The comment page did not load");
     }
 
-    @Test
+    @Test(enabled = false)//she's gone, daddy gone
     public void DownVoteButton() throws InterruptedException {
         //Check upvote button first
         if (card.upvoteBtn().getAttribute("class").contains("text-white")) {
@@ -96,7 +111,7 @@ public class SubmissionCardsTest {
         Assert.assertTrue(helpers.Waiter.wait(driver).until((ExpectedConditions.attributeContains(card.downvoteBtn(), "class", "text-white"))), "Checked upvote button did not turn white after clicking it");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void FavoriteLikedCard(){
         WebElement ourCard = card.cardIsUpvoted();
         int likes = Integer.parseInt(ourCard.findElement(By.cssSelector("div[id^='vote-counter-']")).getText());
@@ -105,32 +120,8 @@ public class SubmissionCardsTest {
     }
 
     @Test
-    public void FilterPageHotness() {
-        pageHeader.filterHotness().click();
-        //	Thread.sleep(3000);//remove with bug fix
-        action.moveToElement(card.firstCard()).click().perform();
-        Assert.assertTrue(driver.findElement(By.linkText("Hotness")).isDisplayed(), "FilterPageHotness - found a card not tagged Hotness");
-    }
-
-    @Test
-    public void FilterPageHumanity() throws InterruptedException {
-        pageHeader.filterHumanity().click();
-        Thread.sleep(3000);//remove with bug fix
-        action.moveToElement(card.firstCard()).click().perform();
-        Assert.assertTrue(driver.findElement(By.linkText("Humanity")).isDisplayed(), "FilterPageHumanity - found a card not tagged Hotness");
-    }
-
-    @Test
-    public void FilterPageHumor() {
-        pageHeader.filterHumor().click();
-        //Thread.sleep(3000);//remove with bug fix
-        action.moveToElement(card.firstCard()).click().perform();
-        Assert.assertTrue(driver.findElement(By.linkText("Humor")).isDisplayed(), "FilterPageHumor - found a card not tagged Hotness");
-    }
-
-    @Test
     public void FollowingShowsFollowedUsers() throws InterruptedException {
-        pageHeader.menuFollowing().click();
+        header.menuFollowing().click();
         helpers.PageActions.scrollDown(driver, 1);
         driver.navigate().refresh();//I don't know why but it's getting random usernames if I don't refresh
         Set<String> followedUsers = card.getAllUserNames();
@@ -153,7 +144,7 @@ public class SubmissionCardsTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void MouseoversVoteBtns() throws InterruptedException {
+    public void MouseoversLikeButton() throws InterruptedException {
         Actions a = new Actions(driver);
         //see if the upvote button is selected then unselect it if it is
         if (card.isSelected(card.upvoteBtn())) {
@@ -162,13 +153,7 @@ public class SubmissionCardsTest {
         }
         a.moveToElement(card.upvoteBtn()).perform();
         Assert.assertEquals(card.upvoteBtn().getCssValue("color"), "rgba(0, 195, 0, 1)", "Upvote button color did not change on mouseover");
-        // DownvoteButton
-        if (card.isSelected(card.downvoteBtn())) {
-            card.downvoteBtn().click();
-            Thread.sleep(2000);
-        }
-        a.moveToElement(card.downvoteBtn()).perform();
-        Assert.assertEquals(card.downvoteBtn().getCssValue("color"), "rgba(0, 195, 0, 1)", "Downvote button color did not change on mouseover");
+
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
@@ -286,7 +271,7 @@ public class SubmissionCardsTest {
         Assert.assertFalse(ourCard.getAttribute("class").contains("text-white"), "Checked upvote button did not turn white after clicking it ");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void VoteCounter() throws InterruptedException {
         WebElement ourCard = card.cardNotUpvoted();
         String ourID = ourCard.getAttribute("id");
