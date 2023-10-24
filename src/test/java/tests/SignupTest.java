@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import static resources.getDriverType.getDriver;
 
-public class SignupTestTest {
+public class SignupTest {
 
     WebDriver driver;
     private static TestConfig config;

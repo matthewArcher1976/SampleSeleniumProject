@@ -88,17 +88,19 @@ public class PageHeaderPage {
     public WebElement filterChange() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), '(change filter)')]")));
     }
-
+    public WebElement filterGo() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[value='Go!']")));
+    }
     public WebElement filterHotness() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[text()='Hotness']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Hotness']")));
     }
 
     public WebElement filterHumanity() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[text()='Humanity']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Humanity']")));
     }
 
     public WebElement filterHumor() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[text()='Humor']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Humor']")));
     }
 
     public WebElement firstTag() {
@@ -123,6 +125,9 @@ public class PageHeaderPage {
     public WebElement loginSuccess() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
     }
+    public WebElement menuChivettes() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Verified-Chivettes")));
+    }
     public WebElement menuFeatured() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Featured")));
     }
@@ -139,6 +144,12 @@ public class PageHeaderPage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Top-Chivers")));
     }
 
+    public WebElement privateUserIcon() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-user-secret")));
+    }
+    public WebElement privateUserText() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("p[class='mt-6']")));
+    }
     public WebElement searchButton() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("search-form-button")));
     }

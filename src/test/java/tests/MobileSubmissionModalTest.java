@@ -168,15 +168,15 @@ public class MobileSubmissionModalTest {
         Thread.sleep(4000);//remove once 731 is fixed
         String firstImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         PageActions.swipeLeft(driver, 2);
-        Thread.sleep(4000);
+        Thread.sleep(4000);// yes
         String secondImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         Assert.assertNotEquals(firstImage, secondImage, "ImageChanceBetweenSubsArrowKey - Found the same image after navigating right");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
-        Thread.sleep(2000);
+        Thread.sleep(2000);// i know
         String thirdImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         Assert.assertNotEquals(thirdImage, secondImage, "ImageChanceBetweenSubsArrowKey - Found the same image after navigating right second time");
         action.sendKeys(Keys.ARROW_LEFT).perform();
-        Thread.sleep(3000);
+        Thread.sleep(3000);//shut up
         Assert.assertEquals(secondImage, modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", ""), "ImageChanceBetweenSubsArrowKey - Found a different image when navigating back" + secondImage + " , " + modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", ""));
     }
 
@@ -184,17 +184,17 @@ public class MobileSubmissionModalTest {
     public void NavBetweenSubsArrowKeys() throws InterruptedException {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
-        Thread.sleep(4000);//remove once 731 is fixed
+        Thread.sleep(4000);//yeah
         String firstCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
         action.sendKeys(Keys.ARROW_RIGHT).perform();
         String secondCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(firstCardID, secondCardID, "Did not navigate forward when pressing right arrow on keyboard");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
-        Thread.sleep(2000);
+        Thread.sleep(2000);//it's fine
         String thirdCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(thirdCardID, secondCardID, "Did not navigate forward when clicking right nav, second click");
         action.sendKeys(Keys.ARROW_LEFT).perform();
-        Thread.sleep(2000);
+        Thread.sleep(2000);//is what it is
         Assert.assertEquals(secondCardID, helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 

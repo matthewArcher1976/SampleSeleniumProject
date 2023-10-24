@@ -99,9 +99,18 @@ public class ProfilePointsTest {
         profilePage.pointsEarnPoints().click();
         profilePage.morePointsPurchase().click();
         Assert.assertEquals(profilePage.lionModalDescription().getText(), "Get 5 points for every $1 you spend in our store", "Missing modal text");
-        profilePage.lionGotoSite().click();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.thechivery.com/", "Did not get linked to The Chivery");
-        driver.navigate().back();
+        String url = driver.getCurrentUrl();
+
+        if(url.contains("qa")){
+            profilePage.lionGotoSite().click();
+            Assert.assertEquals(driver.getCurrentUrl(), "https://stage-my.thechivery.com/", "Did not get linked to The Chivery");
+            driver.navigate().back();
+        }else{
+            profilePage.lionGotoSite().click();
+            Assert.assertEquals(driver.getCurrentUrl(), "https://www.thechivery.com/", "Did not get linked to The Chivery");
+            driver.navigate().back();
+        }
+
     }
 
     @Test

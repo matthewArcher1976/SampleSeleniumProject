@@ -82,6 +82,7 @@ public class SearchAndFiltersTest {
         if(search.filterHumor().isSelected()){
             search.filterHumor().click();
         }
+        Thread.sleep(4000);
         search.goButton().click();
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         Waiter.wait(driver).until(ExpectedConditions.stalenessOf(search.goButton()));

@@ -1,19 +1,20 @@
 package tests;
 
-import helpers.CustomExpectedConditions;
-import helpers.Logins;
-import helpers.Waiter;
-import helpers.WindowUtil;
+import helpers.*;
+import io.github.sukgu.Shadow;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.PageHeaderPage;
+import pages.SearchAndFiltersPage;
 import pages.SubmissionCardsPage;
 import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
+
+import java.util.List;
 
 import static resources.getDriverType.getDriver;
 
@@ -25,8 +26,10 @@ public class PageHeaderTest {
     private static TestConfig config;
     PageHeaderPage header;
     SubmissionCardsPage card;
+    SearchAndFiltersPage search;
     Logins login;
     Actions action;
+    Shadow shadow;
 
     //************************** Setup ******************************************
 
@@ -36,9 +39,12 @@ public class PageHeaderTest {
         driver = getDriver(config.driverType);
 
         action = new Actions(driver);
+        shadow = new Shadow(driver);
         card = new SubmissionCardsPage(driver);
         header = new PageHeaderPage(driver);
         login = new Logins(driver);
+        search = new SearchAndFiltersPage(driver);
+
     }
 
     @BeforeClass
@@ -46,6 +52,19 @@ public class PageHeaderTest {
         driver.get(config.url);
         login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
+        header.filterChange().click();
+        Thread.sleep(3000);
+        if(!search.filterHumanity().isSelected()){
+            search.filterHumanity().click();
+        }
+        if(!search.filterHotness().isSelected()){
+            search.filterHotness().click();
+        }
+        if(!search.filterHumor().isSelected()){
+            search.filterHumor().click();
+        }
+        search.goButton().click();
+
     }
 
     @BeforeMethod
@@ -95,11 +114,21 @@ public class PageHeaderTest {
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
-
+    @Test(retryAnalyzer = RetryAnalyzer.class)
+    public void ClickChivettesTab(){
+        header.menuChivettes().click();
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("chivettes"));
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        List<WebElement> allCards = card.allCards();
+        for (WebElement card:allCards){
+            System.out.println(card.getAttribute("class") + " is class");
+            Assert.assertTrue(PrettyAsserts.isElementDisplayed(card.findElement(By.id("label-chivette"))));
+        }
+    }
     @Test
-    public void ClickFeaturedTab() throws InterruptedException {
+    public void ClickFeaturedTab() {
         header.menuFeatured().click();
-        Thread.sleep(5000);
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         Assert.assertTrue(header.menuFeatured().getAttribute("aria-current").contains("page"), "Featured Tab not selected after clicking it");
     }
 
@@ -358,6 +387,7 @@ public class PageHeaderTest {
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
+
 
     @Test
     public void LinksChivery() {

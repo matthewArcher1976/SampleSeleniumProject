@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class CustomExpectedConditions {
 
@@ -52,6 +53,16 @@ public class CustomExpectedConditions {
             return documentReady && noActiveAjax;
         };
     }
-
+    public static ExpectedCondition<Boolean> cardsLoaded(){
+       return driver -> {
+           boolean notEmpty = false;
+           assert driver != null;
+           List <WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
+           if(allCards.size() > 10){
+               notEmpty = true;
+           }
+           return notEmpty;
+       };
+    }
 
 }

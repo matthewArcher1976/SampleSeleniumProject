@@ -63,7 +63,7 @@ public class LoginProblemUsersTest {
     @Test
     public void TooManyFollowed() throws InterruptedException {
         Thread.sleep(3000);
-        login.unpaidLogin(config.TooManyFollowedEmail, "redoPassw0rd");
+        login.unpaidLogin(config.TooManyFollowedEmail, config.password);
         Assert.assertTrue(PrettyAsserts.isElementDisplayed(header.loginSuccess()), "User with a lot of followed users may not have logged in successfully");
         header.userMenu().click();
         action.moveToElement(header.signoutBtn()).click().perform();

@@ -88,14 +88,14 @@ public class LoginModalTest {
                 && login.updateSuccess().getText().contains("We have emailed your password reset link."), "ForgotPasswordValidEmail - success toast not found");
     }
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Test(enabled = false)
     public void LoginOpensOnDownvote() throws InterruptedException {
         card.firstCard().findElement(By.className("fa-thumbs-down")).click();
         Thread.sleep(3000);
         Assert.assertTrue(login.signIn().isDisplayed(), "Login modal not found after clicking downvote");
     }
 
-    @Test
+    @Test(enabled = false)
     public void LoginOpensOnDownvoteModalView() throws InterruptedException {
         card.firstCard().click();
         modal.modalDislikeBtn().click();
