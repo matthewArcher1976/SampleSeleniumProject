@@ -1,5 +1,7 @@
 package tests;
 
+import helpers.Waiter;
+import helpers.WindowUtil;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.TimeoutException;
@@ -73,33 +75,33 @@ public class EditProfileSocialLinksTest {
         profile.amazonInput().clear();
         profile.amazonInput().sendKeys("https://amazon.com/registry/wishlist/28NX67QM7I7D3");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         Assert.assertTrue(profile.amazonInputInactive().isDisplayed(), "Did not the wantfor.me link");
 
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
         Assert.assertTrue(profilePage.amazonLink().isDisplayed(), "Did not fine the Amazon icon");
 
         profilePage.amazonLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
 
         try {
-            Assert.assertTrue(helpers.Waiter.quickWait(driver).until(ExpectedConditions.titleContains("Amazon.com")) &&
-                    helpers.Waiter.quickWait(driver).until(ExpectedConditions.urlContains("wishlist")));
+            Assert.assertTrue(Waiter.quickWait(driver).until(ExpectedConditions.titleContains("Amazon.com")) &&
+                    Waiter.quickWait(driver).until(ExpectedConditions.urlContains("wishlist")));
         } catch (AssertionError e) {
             System.out.println("Did not find Amazon window");
             driver.close();
-            helpers.WindowUtil.switchToWindow(driver, 0);
+            WindowUtil.switchToWindow(driver, 0);
             System.out.println("Did not fine the Amazon icon");
             Assert.fail();
         } catch (TimeoutException e) {
             driver.close();
-            helpers.WindowUtil.switchToWindow(driver, 0);
+            WindowUtil.switchToWindow(driver, 0);
             Assert.fail("Did not find Amazon window");
         }
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -138,7 +140,6 @@ public class EditProfileSocialLinksTest {
         profile.amazonInput().sendKeys("https://amazon.com/registry/wishlist/28NX67QM7I7D3");
         profile.saveProfileBtn().click();
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.amazonInputInactive())).isDisplayed(), "Did not find the short link");
-        // Assert.assertTrue(profile.amazonInputInactive().isDisplayed(), "Did not find the short link");// this element finds it by the wantfor.me value
     }
 
     @Test
@@ -152,15 +153,15 @@ public class EditProfileSocialLinksTest {
         helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
         Assert.assertTrue(profilePage.facebookLink().isDisplayed(), "Did not find facebook button");
         profilePage.facebookLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
 
         Assert.assertTrue(profilePage.facebookLogo().isDisplayed(), "Did not find facebook window");
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -182,7 +183,7 @@ public class EditProfileSocialLinksTest {
         profile.facebookInput().clear();
         profile.facebookInput().sendKeys("facebook.com/asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
@@ -190,12 +191,12 @@ public class EditProfileSocialLinksTest {
         Assert.assertTrue(profilePage.facebookLink().isDisplayed(), "Did not find facebook button");
 
         profilePage.facebookLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
 
         Assert.assertTrue(profilePage.facebookLogo().isDisplayed(), "Did not find facebook window");
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -206,19 +207,19 @@ public class EditProfileSocialLinksTest {
         profile.facebookInput().clear();
         profile.facebookInput().sendKeys("http://www.facebook.com/asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
 
         Assert.assertTrue(profilePage.facebookLink().isDisplayed(), "Did not find facebook button");
 
         profilePage.facebookLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
 
         Assert.assertTrue(profilePage.facebookLogo().isDisplayed(), "Did not find facebook window");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -241,18 +242,18 @@ public class EditProfileSocialLinksTest {
         profile.instagramInput().clear();
         profile.instagramInput().sendKeys("asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
         // Thread.sleep(5000);
 
         Assert.assertTrue(profilePage.instagramLink().isDisplayed(), "Did not find insta button");
 
         String instaHandle = profilePage.userGetter(profilePage.instagramLink());
         profilePage.instagramLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(instaHandle));
+        WindowUtil.switchToWindow(driver, 1);
+        Waiter.wait(driver).until(ExpectedConditions.urlContains(instaHandle));
 
         if (!config.driverType.contains("Sauce")) {//getting error 429 when I try this on sauce
             Assert.assertTrue(driver.getTitle().contains("Instagram")
@@ -262,7 +263,7 @@ public class EditProfileSocialLinksTest {
         }
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -284,17 +285,17 @@ public class EditProfileSocialLinksTest {
         profile.instagramInput().clear();
         profile.instagramInput().sendKeys("https://www.instagram.com/asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
 
         Assert.assertTrue(profilePage.instagramLink().isDisplayed(), "Did not find insta button");
 
         String instaHandle = profilePage.userGetter(profilePage.instagramLink());
         profilePage.instagramLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(instaHandle));
+        WindowUtil.switchToWindow(driver, 1);
+        Waiter.wait(driver).until(ExpectedConditions.urlContains(instaHandle));
         if (!config.driverType.contains("Sauce")) {//getting error 429 when I try this on sauce
             Assert.assertTrue(driver.getTitle().contains("Instagram")
                     && driver.getTitle().contains(instaHandle), "Did not find Insta window");
@@ -303,7 +304,7 @@ public class EditProfileSocialLinksTest {
         }
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -325,22 +326,22 @@ public class EditProfileSocialLinksTest {
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
 
         Assert.assertTrue(profilePage.tiktokLink().isDisplayed(), "Did not find tiktok button");
 
         String tiktokHandle = profilePage.userGetter(profilePage.tiktokLink());
         profilePage.tiktokLink().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+        WindowUtil.switchToWindow(driver, 1);
 
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(tiktokHandle)), "Did not find Tiktok window");
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -351,7 +352,6 @@ public class EditProfileSocialLinksTest {
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("https://www.tiktok.com/qwerty/asdf");
         profile.saveProfileBtn().click();
-        // Thread.sleep(10000);
         Assert.assertTrue(helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(profile.tiktokBadURL())).isDisplayed(), "Should have rejected bad Tiktok link");
     }
 
@@ -374,16 +374,16 @@ public class EditProfileSocialLinksTest {
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("https://www.tiktok.com/@asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
 
         Assert.assertTrue(profilePage.tiktokLink().isDisplayed(), "Did not find tiktok button");
 
         String tiktokHandle = profilePage.userGetter(profilePage.tiktokLink());
         profilePage.tiktokLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
 
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(tiktokHandle)), "Did not find Tiktok window");
 
@@ -410,22 +410,22 @@ public class EditProfileSocialLinksTest {
         profile.twitterInput().clear();
         profile.twitterInput().sendKeys("asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
         Assert.assertTrue(profilePage.twitterLink().isDisplayed(), "Did not find Twitter icon");
 
         profilePage.twitterLink().click();
         Thread.sleep(3000);
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getTitle().contains("Log in to X / X"), "Did not find Twitter - wait, sorry, 'X' - window, found " + driver.getTitle());//Fuck you Elon
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void TwitterLinkWholeURL() throws InterruptedException {
         profile.userMenu().click();
         profile.settingsBtn().click();
@@ -433,19 +433,19 @@ public class EditProfileSocialLinksTest {
         profile.twitterInput().clear();
         profile.twitterInput().sendKeys("https://www.twitter.com/asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
         Assert.assertTrue(profilePage.twitterLink().isDisplayed(), "Did not find Twitter icon");
 
         profilePage.twitterLink().click();
         Thread.sleep(3000);
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getTitle().contains("Log in to X / X"), "Did not find Twitter - wait, sorry, 'X' - window, found " + driver.getTitle());//Fuck you Elon
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test

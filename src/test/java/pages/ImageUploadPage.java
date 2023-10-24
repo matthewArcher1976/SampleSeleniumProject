@@ -17,5 +17,8 @@ public class ImageUploadPage {
     public WebElement dragDrop() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-arrow-pointer")));
     }
+    public WebElement dragDropMobile() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-upload")));
+    }
 
 }

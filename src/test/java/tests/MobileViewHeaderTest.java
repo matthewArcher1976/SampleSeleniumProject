@@ -1,5 +1,7 @@
 package tests;
 
+import com.beust.ah.A;
+import pages.PageHeaderPage;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.Dimension;
@@ -22,6 +24,7 @@ public class MobileViewHeaderTest {
     Logins login;
     MobileViewPage mobile;
     SubmissionCardsPage card;
+    PageHeaderPage header;
     private static TestConfig config;
 
     //************************** Setup ******************************************
@@ -34,6 +37,7 @@ public class MobileViewHeaderTest {
         card = new SubmissionCardsPage(driver);
         login = new Logins(driver);
         mobile = new MobileViewPage(driver);
+        header = new PageHeaderPage(driver);
     }
 
     @BeforeClass
@@ -52,16 +56,6 @@ public class MobileViewHeaderTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test(enabled = false)//the ad frames changed this, no longer relevant
-    public void AvatarPosition(){
-        WebElement avatar = mobile.mobileAvatar();
-        Dimension viewportSize = driver.manage().window().getSize();
-        int viewportWidth = viewportSize.getWidth();
-        Point elementLocation = avatar.getLocation();
-        int elementX = elementLocation.getX();
-        int elementWidth = avatar.getSize().getWidth();
-        Assert.assertEquals(viewportWidth - elementX - elementWidth, 23, "The avatar is too close or too far to the edge of the screen");
-    }
     @Test(retryAnalyzer = RetryAnalyzer.class)
     public void CommentButtonFeatured() {
         mobile.hamburgerMenu().click();
@@ -95,6 +89,12 @@ public class MobileViewHeaderTest {
                 && helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(top)), "Menu Items should not display after closing the menu");
     }
 
+    @Test
+    public void LinksTheChive(){
+        header.linkMenu().click();
+        header.dropDownChive().click();
+        Assert.assertEquals(driver.getCurrentUrl(), "https://thechive.com/", "Link to The Chive broken");
+    }
     @Test
     public void MenuFeatured() throws InterruptedException {
         mobile.hamburgerMenu().click();
