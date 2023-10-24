@@ -46,7 +46,7 @@ public class PrivateUserTest {
     //************************** Test Cases ****************************
 
     @Test
-    public void SetPrivate() throws InterruptedException {
+    public void SetPrivate() {
         header.userMenu().click();
         header.settingsBtn().click();
         profile.accountTab().click();

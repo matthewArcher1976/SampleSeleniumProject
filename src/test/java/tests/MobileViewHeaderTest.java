@@ -1,11 +1,11 @@
 package tests;
 
-import com.beust.ah.A;
+
 import pages.PageHeaderPage;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;

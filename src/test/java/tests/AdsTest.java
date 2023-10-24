@@ -110,7 +110,7 @@ public class AdsTest {
     }
 
     @Test
-    public void CloseAd() throws InterruptedException {
+    public void CloseAd() {
         PageActions.scrollDown(driver, 2);
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(ads.adFrame()));
         action.moveToElement(ads.closeAdButton()).click().perform();

@@ -126,7 +126,7 @@ public class PageHeaderTest {
         }
     }
     @Test
-    public void ClickFeaturedTab() throws InterruptedException {
+    public void ClickFeaturedTab() {
         header.menuFeatured().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         Assert.assertTrue(header.menuFeatured().getAttribute("aria-current").contains("page"), "Featured Tab not selected after clicking it");
