@@ -1,6 +1,7 @@
 package tests;
 
 
+import helpers.Waiter;
 import pages.PageHeaderPage;
 import resources.Config;
 import helpers.Logins;
@@ -93,6 +94,7 @@ public class MobileViewHeaderTest {
     public void LinksTheChive(){
         header.linkMenu().click();
         header.dropDownChive().click();
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("thechive "));
         Assert.assertEquals(driver.getCurrentUrl(), "https://thechive.com/", "Link to The Chive broken");
     }
     @Test

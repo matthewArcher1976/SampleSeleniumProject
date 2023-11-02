@@ -13,20 +13,18 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 public class Waiter {
 	public static FluentWait<WebDriver> longWait(WebDriver driver) {
-		FluentWait<WebDriver> wait = new FluentWait<>(driver)
+		return new FluentWait<>(driver)
 				.withTimeout(Duration.ofSeconds(20))
 				.pollingEvery(Duration.ofMillis(500))
 				.ignoring(NoSuchElementException.class)
 				.ignoring(StaleElementReferenceException.class);
-		return wait;
 	}
 	public static FluentWait<WebDriver> quickWait(WebDriver driver) {
-		FluentWait<WebDriver> wait = new FluentWait<>(driver)
+		return new FluentWait<>(driver)
 				.withTimeout(Duration.ofSeconds(5))
 				.pollingEvery(Duration.ofMillis(500))
 				.ignoring(NoSuchElementException.class)
 				.ignoring(StaleElementReferenceException.class);
-		return wait;
 	}
 
 	public static <T> void customWait(WebDriver driver, ExpectedCondition<T> condition) {
@@ -51,12 +49,11 @@ public class Waiter {
 	}
 
 	public static FluentWait<WebDriver> wait(WebDriver driver) {
-		FluentWait<WebDriver> wait = new FluentWait<>(driver)
+		return new FluentWait<>(driver)
 	            .withTimeout(Duration.ofSeconds(10))
 	            .pollingEvery(Duration.ofMillis(500))
 	            .ignoring(NoSuchElementException.class)
 				.ignoring(StaleElementReferenceException.class);
-		return wait;
 	}
 	
 	public static void waitUntilBooleanMethodReturns(WebDriver driver, final BooleanSupplier booleanMethod, final boolean expectedValue) {

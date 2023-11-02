@@ -273,7 +273,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.profileTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.profileTab().getCssValue("color"));
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void HoverSocialTab() throws InterruptedException {
         profile.userMenu().click();
         profile.settingsBtn().click();

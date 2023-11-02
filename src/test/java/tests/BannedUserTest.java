@@ -17,7 +17,6 @@ import static resources.getDriverType.getDriver;
 
 @Test(retryAnalyzer = RetryAnalyzer.class)
 
-
 public class BannedUserTest {
     WebDriver driver;
     Logins login;
@@ -25,7 +24,6 @@ public class BannedUserTest {
     SubmissionCardsPage card;
     PageHeaderPage header;
     TestConfig config;
-
 
     @BeforeTest
     public void configs() throws Exception {
@@ -35,7 +33,6 @@ public class BannedUserTest {
        banned = new BannedUserPage(driver);
        card = new SubmissionCardsPage(driver);
        header = new PageHeaderPage(driver);
-
     }
 
     @BeforeClass
@@ -97,7 +94,6 @@ public class BannedUserTest {
     }
 
     @Test(priority = 99)
-
     public void SignoutBannedTest() {
         driver.get(config.url);
         header.userMenu().click();
@@ -107,7 +103,6 @@ public class BannedUserTest {
     }
 
     @Test
-
     public void SubmitButtonBannedTest() {
         driver.get(config.url);
         card.createBtn().click();
@@ -116,7 +111,6 @@ public class BannedUserTest {
     }
 
     @Test
-
     public void TopChiversannedTest() {
         driver.get(config.url);
         header.menuTopChivers().click();
@@ -125,7 +119,6 @@ public class BannedUserTest {
     }
 
     @Test
-
     public void YourProfileBannedTest() {
         driver.get(config.url);
         header.userMenu().click();

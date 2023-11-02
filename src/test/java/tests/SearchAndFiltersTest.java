@@ -1,6 +1,7 @@
 package tests;
 
 import helpers.*;
+import org.testng.ITestResult;
 import resources.Config;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -13,7 +14,7 @@ import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
-
+import org.openqa.selenium.JavascriptExecutor;
 import java.util.List;
 
 import static resources.getDriverType.getDriver;
@@ -34,6 +35,8 @@ public class SearchAndFiltersTest {
     final String SHORT_TERM = "qw";
 
     //************************** Setup ******************************************
+
+    //Disabled all filter tests since they were removed https://resignationmedia.atlassian.net/browse/MYCHIVE-1061
 
     @BeforeTest
     public void configs() throws Exception {
@@ -70,7 +73,7 @@ public class SearchAndFiltersTest {
         search.searchSuggestions().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains(suggestion)), "The click on the search suggestion row may have missed");
     }
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Test(enabled = false)
     public void FilterHotness() throws InterruptedException {
         header.filterChange().click();
         if(search.filterHumanity().isSelected()){
@@ -107,7 +110,7 @@ public class SearchAndFiltersTest {
         }
     }
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Test(retryAnalyzer = RetryAnalyzer.class, enabled = false)
     public void FilterHumanity() throws InterruptedException {
         header.filterChange().click();
         if(!search.filterHumanity().isSelected()){
@@ -145,7 +148,7 @@ public class SearchAndFiltersTest {
         }
     }
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Test(retryAnalyzer = RetryAnalyzer.class, enabled = false)
     public void FilterHumor() throws InterruptedException {
         header.filterChange().click();
         if(search.filterHumanity().isSelected()){
@@ -255,7 +258,7 @@ public class SearchAndFiltersTest {
         }
     }
 
-    @Test
+    @Test(enabled = false)
     public void VerifiedFilterFeatured() {
         boolean hasCheck = true;
         header.menuFeatured().click();
@@ -279,7 +282,7 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(hasCheck, "Found unverified user on feature page");
     }
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Test(retryAnalyzer = RetryAnalyzer.class, enabled = false)
     public void VerifiedFilterFollowing() throws InterruptedException {
         boolean hasCheck = true;
         header.menuFollowing().click();
@@ -308,7 +311,7 @@ public class SearchAndFiltersTest {
         Assert.assertTrue(hasCheck, "Found a card from unverified user on following page");
     }
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Test(retryAnalyzer = RetryAnalyzer.class, enabled = false)
     public void VerifiedFilterLatest() {
         boolean hasCheck = true;
         header.filterChange().click();
@@ -332,6 +335,13 @@ public class SearchAndFiltersTest {
     }
 
     //************************** Teardown ********************************************
+
+    @AfterMethod
+    public void log(ITestResult result){
+        System.out.println("boooooo");
+        String status = result.isSuccess() ? "passed" : "failed";
+        ((JavascriptExecutor) driver).executeScript("sauce:job-result=" + status);
+    }
 
     @AfterClass
     public void TearDown() {
