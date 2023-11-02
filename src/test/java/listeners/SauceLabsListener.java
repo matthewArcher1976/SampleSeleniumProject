@@ -13,7 +13,6 @@ public class SauceLabsListener extends TestListenerAdapter {
         log("Test is starting: " + result.getMethod().getMethodName());
     }
 
-
     private static void log(String message) {
         System.out.println(message);
     }

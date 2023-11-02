@@ -112,8 +112,9 @@ public class LoginModalTest {
 
     @Test
     public void LoginOpensOnFollowButton() throws InterruptedException {
-
-        card.firstCard().findElement(By.cssSelector("a[href]")).click();
+        shadow.findElement(card.firstCard(), "a[data-username]").click();
+      //  card.firstCard().findElement(By.cssSelector("a[href]")).click();
+        Thread.sleep(2000);
         profile.followButton().click();
         Thread.sleep(2000);//yes
         Assert.assertTrue(login.signIn().isDisplayed(), "LoginOpensOnFollowButton - didn't open login modal");

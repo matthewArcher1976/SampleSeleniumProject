@@ -88,9 +88,11 @@ public class PageHeaderPage {
     public WebElement filterChange() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), '(change filter)')]")));
     }
+
     public WebElement filterGo() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[value='Go!']")));
     }
+
     public WebElement filterHotness() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Hotness']")));
     }
@@ -122,12 +124,15 @@ public class PageHeaderPage {
     public WebElement loginBtn() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar")));
     }
+
     public WebElement loginSuccess() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
     }
+
     public WebElement menuChivettes() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Verified-Chivettes")));
     }
+
     public WebElement menuFeatured() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Featured")));
     }
@@ -147,9 +152,11 @@ public class PageHeaderPage {
     public WebElement privateUserIcon() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-user-secret")));
     }
+
     public WebElement privateUserText() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("p[class='mt-6']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("p[class='m']")));
     }
+
     public WebElement searchButton() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("search-form-button")));
     }

@@ -52,18 +52,6 @@ public class PageHeaderTest {
         driver.get(config.url);
         login.unpaidLogin(config.unpaidEmail, config.password);
         Thread.sleep(1000);
-        header.filterChange().click();
-        Thread.sleep(3000);
-        if(!search.filterHumanity().isSelected()){
-            search.filterHumanity().click();
-        }
-        if(!search.filterHotness().isSelected()){
-            search.filterHotness().click();
-        }
-        if(!search.filterHumor().isSelected()){
-            search.filterHumor().click();
-        }
-        search.goButton().click();
 
     }
 
@@ -178,7 +166,7 @@ public class PageHeaderTest {
                 && header.dropDownChiveTV().isDisplayed(), "Missing links in the dropdown menu");
     }
 
-    @Test
+    @Test(enabled = false)
     public void FilterDisplaysOnFeatured() {
         header.menuFeatured().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
@@ -188,7 +176,7 @@ public class PageHeaderTest {
                 && header.filterHumanity().isDisplayed(), "Filter was missing on Featured page");
     }
 
-    @Test
+    @Test(enabled = false)
     public void FilterDisplaysOnFollowing() {
         header.menuFollowing().click();
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
@@ -198,7 +186,7 @@ public class PageHeaderTest {
                 && header.filterHumanity().isDisplayed(), "Filter was missing on Following page");
     }
 
-    @Test
+    @Test(enabled = false)
     public void FilterDisplaysOnLatest() {
         header.menuLatest().click();
         Assert.assertTrue(header.filterChange().isDisplayed()
@@ -207,7 +195,7 @@ public class PageHeaderTest {
                 && header.filterHumanity().isDisplayed(), "Filter was missing on Latest page");
     }
 
-    @Test
+    @Test(enabled = false)//it's gone everywhere
     public void FilterNotOnSearchPage() throws InterruptedException {
         header.searchButton().click();
         Thread.sleep(2000);//yes
@@ -378,8 +366,6 @@ public class PageHeaderTest {
     public void LinksChive() {
         header.linkMenu().click();
         header.dropDownChive().click();
-        System.out.println(driver.getWindowHandles().size() + " windows found");
-        //Waiter.quickWait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
 
         WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("thechive"))

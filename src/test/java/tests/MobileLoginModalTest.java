@@ -118,8 +118,7 @@ public class MobileLoginModalTest {
 
     @Test
     public void LoginOpensOnFollowButton() throws InterruptedException {
-
-        card.firstCard().findElement(By.cssSelector("a[href]")).click();
+        card.firstCard().findElement(By.cssSelector("a[data-username]")).click();
         profile.followButton().click();
         Thread.sleep(2000);//yes
         Assert.assertTrue(login.signIn().isDisplayed(), "LoginOpensOnFollowButton - didn't open login modal");
@@ -261,6 +260,12 @@ public class MobileLoginModalTest {
         login.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast()));
         Assert.assertTrue(login.notificationToast().getText().contains("The username has already been taken."));
+    }
+
+    @Test
+    public void getDimension(){
+        System.out.println(header.submitBtn().getRect().getWidth());
+        System.out.println(header.submitBtn().getRect().getHeight());
     }
 
     //************************** Teardown ********************************************

@@ -37,7 +37,7 @@ public class AdsTest {
         ads = new AdsPage(driver);
         action = new Actions(driver);
         header = new PageHeaderPage(driver);
-        card =  new SubmissionCardsPage(driver);
+        card = new SubmissionCardsPage(driver);
     }
 
     @BeforeClass
@@ -54,7 +54,7 @@ public class AdsTest {
     //************************** Begin Tests ********************************************
 
     @Test
-    public void AdsOnFeatured(){
+    public void AdsOnFeatured() {
         header.menuFeatured().click();
         Waiter.wait(driver).until(ExpectedConditions.and(
                 ExpectedConditions.urlContains("dopamine-dump"),
@@ -64,7 +64,7 @@ public class AdsTest {
     }
 
     @Test
-    public void AdsOnFollowing(){
+    public void AdsOnFollowing() {
         header.menuFollowing().click();
         PageActions.scrollDown(driver, 2);
         Waiter.wait(driver).until(ExpectedConditions.and(
@@ -75,14 +75,14 @@ public class AdsTest {
     }
 
     @Test
-    public void AdsOnLatest(){
+    public void AdsOnLatest() {
         PageActions.scrollDown(driver, 2);
         Waiter.wait(driver).until(CustomExpectedConditions.cardsLoaded());
         Assert.assertTrue(PrettyAsserts.isElementDisplayed(ads.adFrame()), "Did not find an ad frame on Latest");
     }
 
     @Test
-    public void AdsOnVerifiedChivettes(){
+    public void AdsOnVerifiedChivettes() {
         header.menuChivettes().click();
         PageActions.scrollDown(driver, 2);
         Waiter.wait(driver).until(ExpectedConditions.and(
@@ -118,7 +118,7 @@ public class AdsTest {
     }
 
     @Test
-    public void sandbox(){
+    public void sandbox() {
         List<WebElement> allCards = card.allCards();
         System.out.println(allCards.size() + " is size");
     }
