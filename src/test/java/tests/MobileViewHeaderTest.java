@@ -2,7 +2,7 @@ package tests;
 
 
 import helpers.Waiter;
-import org.openqa.selenium.By;
+
 import pages.PageHeaderPage;
 import resources.Config;
 import helpers.Logins;

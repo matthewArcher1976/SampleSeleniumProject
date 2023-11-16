@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.PageActions;
-import org.openqa.selenium.WebElement;
+
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import resources.Config;
@@ -15,7 +14,6 @@ import pages.ProfilePage;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
-import java.util.List;
 
 import static resources.getDriverType.getDriver;
 @Test(retryAnalyzer = RetryAnalyzer.class)

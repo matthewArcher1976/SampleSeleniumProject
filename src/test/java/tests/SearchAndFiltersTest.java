@@ -1,7 +1,7 @@
 package tests;
 
 import helpers.*;
-import org.testng.ITestResult;
+
 import resources.Config;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -14,7 +14,7 @@ import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
-import org.openqa.selenium.JavascriptExecutor;
+
 import java.util.List;
 
 import static resources.getDriverType.getDriver;

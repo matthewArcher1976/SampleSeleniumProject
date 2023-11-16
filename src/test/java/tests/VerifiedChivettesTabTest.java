@@ -1,7 +1,7 @@
 package tests;
 
 import helpers.*;
-import io.github.sukgu.Shadow;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;

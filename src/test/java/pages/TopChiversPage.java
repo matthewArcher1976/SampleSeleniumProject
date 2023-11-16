@@ -7,8 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.DoubleStream;
+
 
 @SuppressWarnings("unused")
 public class TopChiversPage {

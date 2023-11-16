@@ -1,8 +1,8 @@
 package tests;
 
-import com.beust.ah.A;
+
 import helpers.*;
-import io.github.sukgu.Shadow;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +14,7 @@ import pages.SubmissionCardsPage;
 import resources.Config;
 import resources.TestConfig;
 
-import java.util.regex.Pattern;
+
 
 import static resources.getDriverType.getDriver;
 

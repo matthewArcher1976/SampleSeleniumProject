@@ -5,8 +5,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -82,7 +80,7 @@ public class PageActions {
 			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), x, endY));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
 
@@ -98,7 +96,7 @@ public class PageActions {
 			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), x, endY));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
 	public static void swipeLeft(WebDriver driver, int times) {
@@ -114,7 +112,7 @@ public class PageActions {
 			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(2000), PointerInput.Origin.viewport(), endX, y));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
 	public static void swipeRight(WebDriver driver, int times) {
@@ -142,7 +140,7 @@ public class PageActions {
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), endX, endY));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
 
