@@ -50,7 +50,7 @@ public class PageHeaderTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, config.password);
         Thread.sleep(1000);
 
     }
@@ -102,6 +102,7 @@ public class PageHeaderTest {
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
+
     @Test(retryAnalyzer = RetryAnalyzer.class)
     public void ClickChivettesTab(){
         header.menuChivettes().click();
@@ -113,6 +114,7 @@ public class PageHeaderTest {
             Assert.assertTrue(PrettyAsserts.isElementDisplayed(card.findElement(By.id("label-chivette"))));
         }
     }
+
     @Test
     public void ClickFeaturedTab() {
         header.menuFeatured().click();
@@ -208,7 +210,7 @@ public class PageHeaderTest {
         }
     }
 
-    @Test
+    @Test(enabled = false)//filters gone
     public void FilterNotOnProfilePage() throws InterruptedException {
         header.userMenu().click();
         header.yourProfileBtn().click();
@@ -222,7 +224,7 @@ public class PageHeaderTest {
         }
     }
 
-    @Test
+    @Test(enabled = false)//filters gone
     public void FilterNotOnSettingsPage() {
         header.userMenu().click();
         header.settingsBtn().click();
@@ -236,7 +238,7 @@ public class PageHeaderTest {
         }
     }
 
-    @Test
+    @Test(enabled = false)//filters gone
     public void FilterNotOnSubmissionPage() throws InterruptedException {
         card.cardNotGIF().click();
         driver.navigate().refresh();
@@ -368,7 +370,7 @@ public class PageHeaderTest {
         header.dropDownChive().click();
 
         WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("thechive"))
+        Assert.assertTrue(helpers.Waiter.quickWait(driver).until(ExpectedConditions.urlContains("thechive"))
                 && driver.getCurrentUrl().contains("utm_source"), "LinksChive - Link is broken");
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);

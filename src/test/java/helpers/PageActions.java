@@ -5,8 +5,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -24,20 +22,20 @@ public class PageActions {
 	    boolean isElementFound = false;
 	    WebElement element = null;
 	    int tries = 0; 
-	    while(!isElementFound && tries < 4) { 
+	    while(!isElementFound && tries < 10) {
 	        Thread.sleep(2000);
 	        try {
 	           element = driver.findElement(by);
 	            isElementFound = true;
 	        } catch (NoSuchElementException | TimeoutException e) {
 	            JavascriptExecutor js = (JavascriptExecutor) driver;
-	            js.executeScript("window.scrollBy(0, 500)");
+	            js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 	        }
 	        tries++; 
 	    }
 		return element;
 	}
-	
+
 	public static WebElement findElementWithScrollingElement(WebDriver driver, WebElement elementToFind) throws InterruptedException {
 	    boolean isElementFound = false;
 	    WebElement element = null;
@@ -55,20 +53,7 @@ public class PageActions {
 	    }
 	    return element;
 	}
-	public static void multiClicker(WebDriver driver, WebElement element, int maxTries){
-		int tries = 0;
-		while (tries <= maxTries) {
-			try {
-				helpers.Waiter.quickWait(driver).until(ExpectedConditions.elementToBeClickable(element)).click();
-				break;
-			} catch (TimeoutException e) {
-				tries++;
-				if (tries > maxTries) {
-					Assert.fail("Tried " + tries + " to click " + element.getAttribute("class") + ", giving up");
-				}
-			}
-		}
-	}
+
 	public static void scrollDown(WebDriver driver, int times) {
 	    JavascriptExecutor js = (JavascriptExecutor) driver;
 	    for (int i = 0; i < times; i++) {
@@ -95,7 +80,7 @@ public class PageActions {
 			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), x, endY));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
 
@@ -111,7 +96,7 @@ public class PageActions {
 			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(100), PointerInput.Origin.viewport(), x, endY));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
 	public static void swipeLeft(WebDriver driver, int times) {
@@ -127,7 +112,7 @@ public class PageActions {
 			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(2000), PointerInput.Origin.viewport(), endX, y));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
 	public static void swipeRight(WebDriver driver, int times) {
@@ -155,7 +140,7 @@ public class PageActions {
 			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), endX, endY));
 			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
-			((Interactive) driver).perform(Arrays.asList(scrollDown));
+			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
 

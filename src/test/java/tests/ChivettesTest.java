@@ -1,7 +1,6 @@
 package tests;
 
-import helpers.PageActions;
-import org.openqa.selenium.WebElement;
+
 import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import resources.Config;
@@ -15,7 +14,6 @@ import pages.ProfilePage;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
-import java.util.List;
 
 import static resources.getDriverType.getDriver;
 @Test(retryAnalyzer = RetryAnalyzer.class)
@@ -63,16 +61,6 @@ public class ChivettesTest {
         Assert.assertTrue(profilePage.chivetteIcon().isDisplayed(), "Did not find Chivette icon by username");
     }
 
-    @Test//TODO finish this, look for that modal to display and fail the test if it's found, write the unsubscribed user test case first
-    public void VerifiedTab(){
-        header.menuChivettes().click();
-        int cardCount = 0;
-        List <WebElement> cards = card.allCards();
-        while (cardCount < 40) {
-            PageActions.scrollDown(driver, 1);
-            cardCount++;
-        }
-    }
     @Test
     public void WebSiteInputDisplays() {
         profile.userMenu().click();

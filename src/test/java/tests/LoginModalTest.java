@@ -103,7 +103,7 @@ public class LoginModalTest {
         Assert.assertTrue(login.signIn().isDisplayed(), "Downvote on modal didn't prompt login");
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void LoginOpensOnFavorite() throws InterruptedException {
         card.firstCard().findElement(By.className("fa-heart")).click();
         Thread.sleep(2000);

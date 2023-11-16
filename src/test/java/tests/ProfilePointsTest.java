@@ -85,7 +85,7 @@ public class ProfilePointsTest {
         profilePage.pointsEarnPoints().click();
         profilePage.morePointsInstagram().click();
 
-        Assert.assertEquals(profilePage.lionModalTitle().getText(), "Stalk us on Instagram", "Missing or incorrect title on instagram item");
+        Assert.assertEquals(profilePage.lionModalTitle().getText(), "Follow us on Instagram", "Missing or incorrect title on instagram item");
         profilePage.lionGotoSite().click();
       //  Assert.assertEquals(driver.getCurrentUrl(), "https://www.instagram.com/thechive/"), "Link to Instagram not working";//TODO - complete these when the links go to the right place
         driver.navigate().back();

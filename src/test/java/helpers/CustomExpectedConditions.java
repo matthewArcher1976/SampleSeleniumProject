@@ -46,13 +46,19 @@ public class CustomExpectedConditions {
 
             Boolean documentReady = ((JavascriptExecutor) driver)
                     .executeScript("return document.readyState").equals("complete");
-
             Boolean noActiveAjax = (Boolean) ((JavascriptExecutor) driver)
                     .executeScript("return jQuery.active == 0 || document.readyState != 'complete'");
-
             return documentReady && noActiveAjax;
         };
     }
+    public static ExpectedCondition<Boolean> profileLoaded() {
+        return driver -> {
+            assert driver != null;
+            String currentUrl = driver.getCurrentUrl();
+            return currentUrl.matches(".+mychive\\.com/.+");
+        };
+    }
+
     public static ExpectedCondition<Boolean> cardsLoaded(){
        return driver -> {
            boolean notEmpty = false;
@@ -64,5 +70,4 @@ public class CustomExpectedConditions {
            return notEmpty;
        };
     }
-
 }

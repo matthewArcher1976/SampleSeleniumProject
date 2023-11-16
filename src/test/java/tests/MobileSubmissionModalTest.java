@@ -63,8 +63,8 @@ public class MobileSubmissionModalTest {
         Thread.sleep(2000);
         String tagName = (modal.tag().getText());
         modal.tag().click();
-        Thread.sleep(2000);
-        Waiter.wait(driver).until(ExpectedConditions.urlContains(tagName));
+        Thread.sleep(2000);//yeah
+        Waiter.quickWait(driver).until(ExpectedConditions.urlContains(tagName));
         Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
         Thread.sleep(3000);//still need it
         List<WebElement> cards = modal.allCards();
@@ -165,10 +165,10 @@ public class MobileSubmissionModalTest {
     public void ImageChanceBetweenSubsArrowKey() throws InterruptedException {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
-        Thread.sleep(4000);//remove once 731 is fixed
+        Thread.sleep(4000);//yeah
         String firstImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         PageActions.swipeLeft(driver, 2);
-        Thread.sleep(4000);// yes
+        Thread.sleep(4000);// right
         String secondImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         Assert.assertNotEquals(firstImage, secondImage, "ImageChanceBetweenSubsArrowKey - Found the same image after navigating right");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
@@ -217,8 +217,8 @@ public class MobileSubmissionModalTest {
        modal.firstCard().click();
         Thread.sleep(1000);
         PageActions.swipeLeft(driver, 30);
-
     }
+
     //************************** Teardown ********************************************
 
     @AfterClass

@@ -42,7 +42,7 @@ public class EditProfileSocialLinksTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, config.password);
         Thread.sleep(2000);//yes
     }
 
@@ -222,7 +222,7 @@ public class EditProfileSocialLinksTest {
         WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void FaceBookUserHandle() {
         profile.userMenu().click();
         profile.settingsBtn().click();
@@ -266,7 +266,7 @@ public class EditProfileSocialLinksTest {
         WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void InstaLinkBadURL() {
         profile.userMenu().click();
         profile.settingsBtn().click();

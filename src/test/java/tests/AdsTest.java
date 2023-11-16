@@ -43,7 +43,7 @@ public class AdsTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, config.password);
     }
 
     @BeforeMethod
@@ -106,7 +106,6 @@ public class AdsTest {
             driver.close();
             WindowUtil.switchToWindow(driver, 0);
         }
-
     }
 
     @Test

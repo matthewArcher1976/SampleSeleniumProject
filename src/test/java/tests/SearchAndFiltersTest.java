@@ -1,7 +1,7 @@
 package tests;
 
 import helpers.*;
-import org.testng.ITestResult;
+
 import resources.Config;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -14,7 +14,7 @@ import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
-import org.openqa.selenium.JavascriptExecutor;
+
 import java.util.List;
 
 import static resources.getDriverType.getDriver;
@@ -54,7 +54,7 @@ public class SearchAndFiltersTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, config.password);
         Thread.sleep(1000);
     }
 
@@ -336,12 +336,7 @@ public class SearchAndFiltersTest {
 
     //************************** Teardown ********************************************
 
-    @AfterMethod
-    public void log(ITestResult result){
-        System.out.println("boooooo");
-        String status = result.isSuccess() ? "passed" : "failed";
-        ((JavascriptExecutor) driver).executeScript("sauce:job-result=" + status);
-    }
+
 
     @AfterClass
     public void TearDown() {

@@ -7,6 +7,7 @@ public class TestConfig {
     public String bannedEmail;
     public String bannedUsername;
     public String chivetteEmail;
+    public String defaultEmail;
     public String driver;
     public String driverType;
     public String driverTypeMobile;
