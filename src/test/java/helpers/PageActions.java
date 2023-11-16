@@ -24,20 +24,20 @@ public class PageActions {
 	    boolean isElementFound = false;
 	    WebElement element = null;
 	    int tries = 0; 
-	    while(!isElementFound && tries < 4) { 
+	    while(!isElementFound && tries < 10) {
 	        Thread.sleep(2000);
 	        try {
 	           element = driver.findElement(by);
 	            isElementFound = true;
 	        } catch (NoSuchElementException | TimeoutException e) {
 	            JavascriptExecutor js = (JavascriptExecutor) driver;
-	            js.executeScript("window.scrollBy(0, 500)");
+	            js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 	        }
 	        tries++; 
 	    }
 		return element;
 	}
-	
+
 	public static WebElement findElementWithScrollingElement(WebDriver driver, WebElement elementToFind) throws InterruptedException {
 	    boolean isElementFound = false;
 	    WebElement element = null;
@@ -55,20 +55,7 @@ public class PageActions {
 	    }
 	    return element;
 	}
-	public static void multiClicker(WebDriver driver, WebElement element, int maxTries){
-		int tries = 0;
-		while (tries <= maxTries) {
-			try {
-				helpers.Waiter.quickWait(driver).until(ExpectedConditions.elementToBeClickable(element)).click();
-				break;
-			} catch (TimeoutException e) {
-				tries++;
-				if (tries > maxTries) {
-					Assert.fail("Tried " + tries + " to click " + element.getAttribute("class") + ", giving up");
-				}
-			}
-		}
-	}
+
 	public static void scrollDown(WebDriver driver, int times) {
 	    JavascriptExecutor js = (JavascriptExecutor) driver;
 	    for (int i = 0; i < times; i++) {

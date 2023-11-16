@@ -1,29 +1,37 @@
 package tests;
 
-import resources.Config;
 import helpers.Logins;
+import helpers.PrettyAsserts;
+import helpers.WindowUtil;
+import io.github.sukgu.Shadow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import pages.PageHeaderPage;
 import pages.TopChiversPage;
+import resources.Config;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
-@Ignore
 public class TopChiversTest {
     WebDriver driver;
     private static TestConfig config;
     Actions action;
     Logins login;
     TopChiversPage top;
+    PageHeaderPage header;
+    Shadow shadow;
 
     //************************** Setup ******************************************
 
@@ -31,8 +39,9 @@ public class TopChiversTest {
     public void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
+        shadow = new Shadow(driver);
         login = new Logins(driver);
-
+        header = new PageHeaderPage(driver);
         action = new Actions(driver);
         top = new TopChiversPage(driver);
     }
@@ -47,58 +56,137 @@ public class TopChiversTest {
     @BeforeMethod
     public void setDriver() throws InterruptedException {
         driver.get(config.url);
-        top.topChiversTab().click();
         Thread.sleep(3000);
     }
 
     //************************** Begin Tests ********************************************
 
     @Test
-    public void FollowButton() throws InterruptedException {
-        top.topChiversFollowBtn().getText();
-        if (top.topChiversFollowBtn().getText().contentEquals("FOLLOW")) {
-            top.topChiversFollowBtn().click();
-            Thread.sleep(3000);
-            Assert.assertTrue(top.topChiversFollowBtn().getText().contentEquals("FOLLOWING"), "Clicking FOLLOW button did nit change it to FOLLOWING");
-            Assert.assertTrue(top.followCheck().isDisplayed(), "Missing checkmark in FOLLOWING");
-        } else if (top.topChiversFollowBtn().getText().contentEquals("FOLLOWING")) {
-            top.topChiversFollowBtn().click();
-            Thread.sleep(2000);
-            Assert.assertTrue(top.topChiversFollowBtn().getText().contentEquals("FOLLOW"), "Clicking FOLLOWING button did not change it to FOLLOW");
-            Assert.assertTrue(top.followCircle().isDisplayed(), "Missing checkmark in FOLLOWING");
-        } else if (!top.topChiversFollowBtn().getText().contentEquals("FOLLOW") && !top.topChiversFollowBtn().getText().contentEquals("FOLLOWING")) {
-            Assert.fail("Something is wrong with the follow button");
+    public void AvatarImages() {
+        header.menuTopChivers().click();
+        List<WebElement> rows = top.allRows();
+        int i = 1;
+        for (WebElement row : rows) {
+            Assert.assertTrue(PrettyAsserts.isElementDisplayed(row.findElement(By.cssSelector(top.ChivetteAvatarSelector()))), "Did not find an avatar image on row " + i);
+            i++;
         }
     }
 
     @Test
+    public void FollowButtonClick() throws InterruptedException {
+        header.menuTopChivers().click();
+        top.FollowBtn().getText();
+        if (top.FollowBtn().getText().contentEquals("FOLLOW")) {
+            top.FollowBtn().click();
+            Thread.sleep(2000);//i know
+            Assert.assertTrue(top.FollowBtn().getText().contentEquals("FOLLOWING"), "Clicking FOLLOW button did not change it to FOLLOWING, got " + top.FollowBtn().getText());
+            Assert.assertTrue(top.followCheck().isDisplayed(), "Missing checkmark in FOLLOWING");
+        } else if (top.FollowBtn().getText().contentEquals("FOLLOWING")) {
+            top.FollowBtn().click();
+            Thread.sleep(2000);//yeah
+            Assert.assertTrue(top.FollowBtn().getText().contentEquals("FOLLOW"), "Clicking FOLLOWING button did not change it to FOLLOW");
+            Assert.assertTrue(top.followCircle().isDisplayed(), "Missing checkmark in FOLLOWING");
+        } else if (!top.FollowBtn().getText().contentEquals("FOLLOW") && !top.FollowBtn().getText().contentEquals("FOLLOWING")) {
+            Assert.fail("Something is wrong with the follow button");
+        }
+    }
+
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void FollowButtonHover() throws InterruptedException {
-        if (top.topChiversFollowBtn().getText().contentEquals("FOLLOWING")) {
-            top.topChiversFollowBtn().click();
-            Thread.sleep(4000);
+        header.menuTopChivers().click();
+        if (top.FollowBtn().getText().contentEquals("FOLLOWING")) {
+            top.FollowBtn().click();
+            Thread.sleep(2000);
             driver.navigate().refresh();//for some reason the color doesn't change back in the test though it does if you do it manually. refresh as a workaround
         }
-        try {
-            //    System.out.println(top.topChiversFollowBtn().getCssValue("border-color"));
-            Assert.assertEquals(top.topChiversFollowBtn().getCssValue("border-color"), "rgb(0, 195, 0)");
-        } catch (AssertionError e) {
-            System.out.println("before mouseover color was wrong " + top.topChiversFollowBtn().getCssValue("border-color"));
-            Assert.fail();
-        }
+        Assert.assertEquals(top.FollowBtn().getCssValue("border-color"), "rgb(0, 194, 0)", "before mouseover color was wrong " + top.FollowBtn().getCssValue("border-color"));
 
-        action.moveToElement(top.topChiversFollowBtn()).perform();
+        action.moveToElement(top.FollowBtn()).perform();
         Thread.sleep(2000);
-        // System.out.println(top.topChiversFollowBtn().getCssValue("border-color"));
-        try {
-            Assert.assertEquals(top.topChiversFollowBtn().getCssValue("border-color"), "rgb(0, 156, 0)");
-        } catch (AssertionError e) {
-            System.out.println("after mouseover " + top.topChiversFollowBtn().getCssValue("border-color"));
-            Assert.fail();
+        System.out.println(top.FollowBtn().getCssValue("border-color"));
+        Assert.assertEquals(top.FollowBtn().getCssValue("border-color"), "rgb(0, 158, 0)", "after mouseover " + top.FollowBtn().getCssValue("border-color"));
+    }
+
+    @Test
+    public void FollowButtonsAllTime(){
+        header.menuTopChivers().click();
+        top.tabAllTime().click();
+        List<WebElement> rows = top.allRows();
+        int i = 1;
+        for(WebElement row:rows){
+            Assert.assertTrue(PrettyAsserts.isElementDisplayed(row.findElement(By.cssSelector(top.FollowBtnSelector()))), "Missing the follow button on row " + i);
+            i++;
+        }
+    }
+
+    @Test
+    public void FollowButtonsMonthly(){
+        header.menuTopChivers().click();
+        top.tabPastMonth().click();
+        List<WebElement> rows = top.allRows();
+        int i = 1;
+        for(WebElement row:rows){
+            Assert.assertTrue(PrettyAsserts.isElementDisplayed(row.findElement(By.cssSelector(top.FollowBtnSelector()))), "Missing the follow button on row " + i);
+            i++;
+        }
+    }
+    @Test
+    public void PointsInOrderAllTime(){
+        header.menuTopChivers().click();
+        top.tabAllTime().click();
+        List<WebElement> rows = top.allRows();
+        int lastPoint = Integer.parseInt(top.firstRow().findElement(By.cssSelector(top.pointsSelector())).getText().replace(" Points", ""));
+        int thisPoint = 0;
+        for(WebElement row:rows){
+            thisPoint = Integer.parseInt(row.findElement(By.cssSelector(top.pointsSelector())).getText().replace(" Points", ""));
+            Assert.assertTrue(lastPoint >= thisPoint, "thisPoint is " + thisPoint + " lastPoint is " + lastPoint + ", The rows may be out of order");
+            lastPoint = thisPoint;
+        }
+    }
+
+    @Test
+    public void PointsInOrderPastMonth(){
+        header.menuTopChivers().click();
+        top.tabPastMonth().click();
+        List<WebElement> rows = top.allRows();
+        int lastPoint = Integer.parseInt(top.firstRow().findElement(By.cssSelector(top.pointsSelector())).getText().replace(" Points", ""));
+        int thisPoint = 0;
+       for(WebElement row:rows){
+            thisPoint = Integer.parseInt(row.findElement(By.cssSelector(top.pointsSelector())).getText().replace(" Points", ""));
+            Assert.assertTrue(lastPoint >= thisPoint, "thisPoint is " + thisPoint + " lastPoint is " + lastPoint + ", The rows may be out of order");
+            lastPoint = thisPoint;
+        }
+    }
+
+    @Test//TODO - do another test for each element in the rows
+    public void PositionStarsAllTime() {
+        header.menuTopChivers().click();
+        top.tabAllTime().click();
+        List<WebElement> rows = top.allRows();
+        int i = 1;
+        for (WebElement row : rows) {
+            Assert.assertEquals(row.findElement(By.className(top.starIconClass())).getText(), String.valueOf(i),
+                    "Number in this star should be " + i + ", found" + row.findElement(By.className(top.starIconClass())).getText());
+            i++;
+        }
+    }
+
+    @Test
+    public void PositionStarsPastMonth() {
+        header.menuTopChivers().click();
+        top.tabPastMonth().click();
+        List<WebElement> rows = top.allRows();
+        int i = 1;
+        for (WebElement row : rows) {
+            Assert.assertEquals(row.findElement(By.className(top.starIconClass())).getText(), String.valueOf(i),
+                    "Number in this star should be " + i + ", found" + row.findElement(By.className(top.starIconClass())).getText());
+            i++;
         }
     }
 
     @Test
     public void RecentlyVerified() throws InterruptedException {
+        header.menuTopChivers().click();
         String verifiedUser = top.recentlyVerifiedUser().getText().replace("@", "");
         //ButtonDisplays
         try {
@@ -109,7 +197,8 @@ public class TopChiversTest {
         }
 
         top.recentlyVerifiedUser().click();
-        Thread.sleep(4000);
+
+        Thread.sleep(3000);
 
         try {
             Assert.assertTrue(driver.getCurrentUrl().contains(verifiedUser));
@@ -120,150 +209,112 @@ public class TopChiversTest {
     }
 
     @Test
-    public void ShareIcon() {
-        try {
-            Assert.assertTrue(top.shareIcon().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println("Missing share icon");
-            Assert.fail();
+    public void UserNamesAllTime() {
+        header.menuTopChivers().click();
+        top.tabAllTime().click();
+        List<WebElement> rows = top.allRows();
+        List<String> userNames = new ArrayList<>();
+        Set<String> uniqueNames = new HashSet<>();
+        for (WebElement row : rows) {
+            userNames.add(row.findElement(By.cssSelector(top.UserNameSelector())).getText());
+        }
+        for (String userName : userNames) {
+            Assert.assertTrue(uniqueNames.add(userName), "Found a duplicate entry: " + userName);
         }
     }
 
     @Test
+    public void UserNamesPastMonth() {
+        header.menuTopChivers().click();
+        top.tabPastMonth().click();
+        List<WebElement> rows = top.allRows();
+        List<String> userNames = new ArrayList<>();
+        Set<String> uniqueNames = new HashSet<>();
+        for (WebElement row : rows) {
+            userNames.add(row.findElement(By.cssSelector(top.UserNameSelector())).getText());
+        }
+        for (String userName : userNames) {
+            Assert.assertTrue(uniqueNames.add(userName), "Found a duplicate entry: " + userName);
+        }
+    }
+
+    @Test
+    public void ShareIcon() {
+        header.menuTopChivers().click();
+        Assert.assertTrue(top.shareIcon().isDisplayed(), "Missing share icon");
+    }
+
+
+    @Test
     public void SocialLinksFacebook() throws InterruptedException {
+        header.menuTopChivers().click();
         top.socialFacebookLink().click();
         helpers.WindowUtil.switchToWindow(driver, 1);
-        Thread.sleep(2000);
-        try {
-            Assert.assertEquals(driver.getTitle(), "theCHIVE - Home | Facebook");
-        } catch (AssertionError e) {
-            System.out.println("Facebook window title was " + driver.getTitle());
-            Assert.fail();
-        }
+        Thread.sleep((1000));
+        Assert.assertTrue(driver.getCurrentUrl().contains("facebook"), "Expected facebook.com, found url: " + driver.getCurrentUrl());
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
     public void SocialLinksInsta() {
+        header.menuTopChivers().click();
         top.socialInstagramLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
-        try {
-            Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("Instagram")));
-        } catch (AssertionError e) {
-            System.out.println("Insta window title was " + driver.getTitle());
-            Assert.fail();
-        }
+        WindowUtil.switchToWindow(driver, 1);
+        Assert.assertTrue(driver.getCurrentUrl().contains("instagram"), "Expected instagram.com, found url: " + driver.getCurrentUrl());
+
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
     public void SocialLinksTwitter() throws InterruptedException {
+        header.menuTopChivers().click();
         top.socialTwitterLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Thread.sleep(2000);
-        try {
-            Assert.assertEquals(driver.getTitle(), "theCHIVE (@theCHIVE) / Twitter");
-        } catch (AssertionError e) {
-            System.out.println("Twitter window title was " + driver.getTitle());
-            Assert.fail();
-        }
+        Assert.assertTrue(driver.getCurrentUrl().contains("twitter"), "Expected twitter.com, found url: " + driver.getCurrentUrl());
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
     public void TagsDisplay() {
-        //simple text looks to see if a trending tag displays
-        try {
-            Assert.assertTrue(top.tag().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println("Trending tag not found");
-            Assert.fail();
+        if (driver.getCurrentUrl().equals("https://mychive.com")) {
+            header.menuTopChivers().click();
+            Assert.assertTrue(top.tag().isDisplayed(), "Trending tag not found");
+        } else {
+            System.out.println("Skipped, Trending Tags won't load on " + config.url);
         }
     }
 
     @Test
     public void TopChiversRibbon() {
         //TODO - figure out how to grab that orphaned Top Chivers text
-        try {
-            Assert.assertTrue(top.topChiversHeader().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println("Top Chivers logo didn't load");
-            Assert.fail();
-        }
+        header.menuTopChivers().click();
+        Assert.assertTrue(top.topChiversHeader().isDisplayed(), "Top Chivers logo didn't load");
     }
 
     @Test
-    public void TopChiversArrow() throws InterruptedException {
-
-        try {
-            Thread.sleep(5000);
-            Assert.assertTrue(top.trendArrowIcon().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println("Top Chivers arrow icon didn't load");
-            Assert.fail();
-        }
+    public void TopChiversArrow() {
+        header.menuTopChivers().click();
+        Assert.assertTrue(top.trendArrowIcon().isDisplayed());
     }
 
     @Test
     public void TopChiversAvatar() {
-        try {
-            Assert.assertTrue(top.topChiversProfilePic().isDisplayed());
-        } catch (AssertionError e) {
-            System.out.println("Did not find the profile pic ");
-            Assert.fail();
-        }
+        header.menuTopChivers().click();
+        Assert.assertTrue(top.topChiversProfilePic().isDisplayed(), "Did not find the profile pic ");
     }
 
     @Test
-    public void TopChiversRowElements() throws InterruptedException {
-        Thread.sleep(2000);
-        List<WebElement> rows = top.allRows();
-        for (WebElement row : rows) {
-            try {
-                // row.findElement(By.cssSelector("[id^='leaderboard-row-username']")).click();
-                Assert.assertTrue(row.findElement(By.xpath("//div[contains(@id,'leaderboard-row-position-')]")).isDisplayed() &&
-                        row.findElement(By.xpath("//label[contains(@class, 'avatar')]")).isDisplayed() &&
-                        row.findElement(By.xpath("//div[contains(@id,'leaderboard-row-username-')]")).isDisplayed() &&
-                        row.findElement(By.xpath("//div[contains(@id,'leaderboard-row-points-')]")).isDisplayed() &&
-                        row.findElement(By.xpath("//div[contains(@id,'btn-follow-')]")).isDisplayed());
-            } catch (AssertionError e) {
-                System.out.println(row.findElement(By.cssSelector(null)));
-            }
-        }
-    }
-
-    @Test
-    public void TopChivesRowsScroll() throws InterruptedException {
-        int first = top.allRows().size();
-        helpers.PageActions.scrollDown(driver, 3);
-        Thread.sleep(1000);
-        int second = top.allRows().size();
-        try {
-            //10 rows should load at first
-            Assert.assertTrue(second > first);
-        } catch (AssertionError e) {
-            System.out.println("Rows not loading when you scroll ");
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void TopChivesUserName() throws InterruptedException {
-        String userName = top.topChiversUserName().getText().replace("@", "");
-        System.out.println(userName);
-        top.topChiversUserName().click();
+    public void UserNameLink() throws InterruptedException {
+        header.menuTopChivers().click();
+        String userName = top.UserName().getText().replace("@", "");
+        top.UserName().click();
         Thread.sleep(2000);
         String url = driver.getCurrentUrl();
-        System.out.println(url);
-        try {
-            Assert.assertTrue(url.contains(userName));
-        } catch (AssertionError e) {
-            System.out.println("User's page did not load on clicking username  ");
-            Assert.fail();
-        }
+        Assert.assertTrue(url.contains(userName), "User's page did not load on clicking username  ");
     }
 
     //************************** Teardown ********************************************

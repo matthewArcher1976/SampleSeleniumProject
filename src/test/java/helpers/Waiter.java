@@ -19,6 +19,7 @@ public class Waiter {
 				.ignoring(NoSuchElementException.class)
 				.ignoring(StaleElementReferenceException.class);
 	}
+
 	public static FluentWait<WebDriver> quickWait(WebDriver driver) {
 		return new FluentWait<>(driver)
 				.withTimeout(Duration.ofSeconds(5))

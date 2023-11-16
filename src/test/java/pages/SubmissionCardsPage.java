@@ -67,6 +67,27 @@ public class SubmissionCardsPage {
         }
         return firstNotUpvotedCard;
     }
+    public WebElement cardFromUser(String userName) throws InterruptedException {
+        Actions action = new Actions(driver);
+        PageActions.scrollDown(driver, 1);
+        Thread.sleep(2000);
+        WebElement usersCard = null;
+        List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
+        for (WebElement card : allCards) {
+            System.out.println("Looking for " + userName);
+            System.out.println(card.findElement(By.className("px-4")).findElement(By.cssSelector("a[class*='text-primary']")).getText());
+
+            if (card.findElement(By.className("px-4")).findElement(By.cssSelector("a[class*='text-primary']")).getText().contains(userName)) {
+                usersCard = card;
+                break;
+            }
+        }
+        if(usersCard == null){
+            Assert.fail("User need to submit an image for test to continue ");
+        }
+        return usersCard;
+    }
+
     public WebElement cardNotDownvoted() {
         WebElement firstNotUpvotedCard = null;
         for (int i = 0; i < 2; i++) {
@@ -136,7 +157,6 @@ public class SubmissionCardsPage {
         WebElement notMyCard = null;
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
         for (WebElement card : allCards) {
-            // System.out.println(card.findElement(By.cssSelector("span[class='mr-2']")).getText() + " is getText" );
             if (!card.findElement(By.className("px-4")).findElement(By.cssSelector("a[class*='text-primary']")).getText().contains(userName)) {
                 notMyCard = card;
                 break;
@@ -344,7 +364,9 @@ public class SubmissionCardsPage {
     public WebElement upvoteBtn() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-thumbs-up")));
     }
-
+    public String upvoteBtnClass() {
+        return "fa-thumbs-up";
+    }
     public WebElement userName() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[class='flex gap-x-2 items-center text-primary']")));
     }

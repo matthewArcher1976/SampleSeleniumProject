@@ -262,12 +262,6 @@ public class MobileLoginModalTest {
         Assert.assertTrue(login.notificationToast().getText().contains("The username has already been taken."));
     }
 
-    @Test
-    public void getDimension(){
-        System.out.println(header.submitBtn().getRect().getWidth());
-        System.out.println(header.submitBtn().getRect().getHeight());
-    }
-
     //************************** Teardown ********************************************
 
     @AfterMethod

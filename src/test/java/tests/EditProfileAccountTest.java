@@ -35,7 +35,7 @@ public class EditProfileAccountTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, config.password);
         Thread.sleep(1000);
     }
     @BeforeMethod

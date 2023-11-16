@@ -54,7 +54,7 @@ public class SearchAndFiltersTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, config.password);
         Thread.sleep(1000);
     }
 
@@ -336,12 +336,7 @@ public class SearchAndFiltersTest {
 
     //************************** Teardown ********************************************
 
-    @AfterMethod
-    public void log(ITestResult result){
-        System.out.println("boooooo");
-        String status = result.isSuccess() ? "passed" : "failed";
-        ((JavascriptExecutor) driver).executeScript("sauce:job-result=" + status);
-    }
+
 
     @AfterClass
     public void TearDown() {

@@ -113,7 +113,7 @@ public class SubmissionSingleImageTest {
         }
     }
 
-    @Test
+    @Test(enabled = false)//filters have been removed entirely
     public void FiltersDoNotDisplay() {
         helpers.Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), '(change filter)')]")));
         action.moveToElement(card.firstCard()).click().perform();
@@ -249,11 +249,13 @@ public class SubmissionSingleImageTest {
         Assert.assertTrue(single.trendArrowIcon().isDisplayed() && single.trendingText().isDisplayed(), "Missing the Trending text and icon");
     }
 
-    @Test
+    @Test()//these tags don't show on qa and stage because of the way it is
     public void TrendingTagsDisplay() {
-        action.moveToElement(card.firstCard()).click().perform();
-        driver.navigate().refresh();
-        Assert.assertFalse(single.trendingTags().isEmpty(), "Missing the Trending tags");
+        if(!driver.getCurrentUrl().contains("qa") && !driver.getCurrentUrl().contains("stage")) {
+            action.moveToElement(card.firstCard()).click().perform();
+            driver.navigate().refresh();
+            Assert.assertFalse(single.trendingTags().isEmpty(), "Missing the Trending tags");
+        }
     }
 
     @Test

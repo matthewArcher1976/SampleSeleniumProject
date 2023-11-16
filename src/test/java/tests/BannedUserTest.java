@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Waiter;
 import resources.Config;
 import helpers.Logins;
 import org.openqa.selenium.By;
@@ -107,7 +108,7 @@ public class BannedUserTest {
         driver.get(config.url);
         card.createBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
     }
 
     @Test

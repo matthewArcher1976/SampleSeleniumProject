@@ -2,6 +2,7 @@ package tests;
 
 
 import helpers.Waiter;
+import org.openqa.selenium.By;
 import pages.PageHeaderPage;
 import resources.Config;
 import helpers.Logins;
@@ -91,12 +92,19 @@ public class MobileViewHeaderTest {
     }
 
     @Test
+    public void HomeButton(){
+        String homeURL = driver.getCurrentUrl();
+        Assert.assertEquals(homeURL, header.homeButton().getAttribute("href"), "Clicking the myChive logo should return you home" );
+    }
+
+    @Test
     public void LinksTheChive(){
         header.linkMenu().click();
         header.dropDownChive().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("thechive "));
         Assert.assertEquals(driver.getCurrentUrl(), "https://thechive.com/", "Link to The Chive broken");
     }
+
     @Test
     public void MenuFeatured() throws InterruptedException {
         mobile.hamburgerMenu().click();
@@ -158,6 +166,7 @@ public class MobileViewHeaderTest {
         mobile.hamburgerMenu().click();
         Assert.assertEquals(mobile.hamburgerMenu().getAttribute("aria-expanded"), "true", "Hamburger menu should open on tap");
     }
+
     //************************** Teardown ********************************************
 
     @AfterClass

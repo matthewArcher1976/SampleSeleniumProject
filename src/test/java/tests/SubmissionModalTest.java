@@ -274,7 +274,7 @@ public class SubmissionModalTest {
         Assert.assertEquals(modal.modalCardFull().getCssValue("border-radius"), "8px", "RoundedEdgesOnModal = the border-radius changed, verify it's intentional");
     }
 
-    @Test
+    @Test(enabled = false)//Only works when you're on a live device, mobile view in Chrome does not
     public void StickyHeaderOnModal() {
         modal.firstCard().click();
         modal.commentButton().click();

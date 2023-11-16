@@ -1,5 +1,6 @@
 package pages;
 
+import helpers.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,19 +19,23 @@ public class PageHeaderPage {
 
     //*********************** WebElements *******************************
     public WebElement adFrame() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id*=google_ads_iframe]")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id*=google_ads_iframe]")));
     }
 
     public WebElement adImage() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("google_image_div")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("google_image_div")));
     }
 
     public WebElement avatarPic() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar"))).findElement(By.className("rounded-full")).findElement(By.cssSelector("img"));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar"))).findElement(By.className("rounded-full")).findElement(By.cssSelector("img"));
+    }
+
+    public WebElement notificationIcon(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-bell")));
     }
 
     public WebElement chiveryLink() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-cart-shopping")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-cart-shopping")));
     }
 
     public WebElement dopamineDumpCounter() {
@@ -66,67 +71,71 @@ public class PageHeaderPage {
     }
 
     public WebElement dropDown() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[id^='headlessui-menu-button-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[id^='headlessui-menu-button-']")));
     }
 
     public WebElement dropDownChivery() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Chivery']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Chivery']")));
     }
 
     public WebElement dropDownCharities() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Chive Charities']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Chive Charities']")));
     }
 
     public WebElement dropDownChive() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='The Chive']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='The Chive']")));
     }
 
     public WebElement dropDownChiveTV() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Chive TV']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Chive TV']")));
     }
 
     public WebElement filterChange() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), '(change filter)')]")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), '(change filter)')]")));
     }
 
     public WebElement filterGo() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[value='Go!']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[value='Go!']")));
     }
 
     public WebElement filterHotness() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Hotness']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Hotness']")));
     }
 
     public WebElement filterHumanity() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Humanity']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Humanity']")));
     }
 
     public WebElement filterHumor() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Humor']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Humor']")));
     }
 
     public WebElement firstTag() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='tag-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='tag-']")));
     }
 
     public WebElement headerAvatar() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[data-id='header-user-menu']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[data-id='header-user-menu']")));
+    }
+
+    public WebElement homeButton(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[href]")));
     }
 
     public WebElement ichiveLogo() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='myCHIVE']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='myCHIVE']")));
     }
 
     public WebElement linkMenu() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[id^='headlessui-menu-button-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[id^='headlessui-menu-button-']")));
     }
 
     public WebElement loginBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar")));
     }
 
     public WebElement loginSuccess() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
     }
 
     public WebElement menuChivettes() {
@@ -144,9 +153,11 @@ public class PageHeaderPage {
     public WebElement menuLatest() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Latest")));
     }
-
+    public String menuLatestId() {
+        return "menu-Latest";
+    }
     public WebElement menuTopChivers() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Top-Chivers")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Top-Chivettes")));
     }
 
     public WebElement privateUserIcon() {
