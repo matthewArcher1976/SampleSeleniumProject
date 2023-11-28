@@ -65,7 +65,7 @@ public class MobileSubmissionModalTest {
         modal.tag().click();
         Thread.sleep(2000);//yeah
         Waiter.quickWait(driver).until(ExpectedConditions.urlContains(tagName));
-        Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         Thread.sleep(3000);//still need it
         List<WebElement> cards = modal.allCards();
         int count = 0;
@@ -185,17 +185,17 @@ public class MobileSubmissionModalTest {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
         Thread.sleep(4000);//yeah
-        String firstCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String firstCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         action.sendKeys(Keys.ARROW_RIGHT).perform();
-        String secondCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String secondCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(firstCardID, secondCardID, "Did not navigate forward when pressing right arrow on keyboard");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
         Thread.sleep(2000);//it's fine
-        String thirdCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String thirdCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(thirdCardID, secondCardID, "Did not navigate forward when clicking right nav, second click");
         action.sendKeys(Keys.ARROW_LEFT).perform();
         Thread.sleep(2000);//is what it is
-        Assert.assertEquals(secondCardID, helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
+        Assert.assertEquals(secondCardID, helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
     @Test

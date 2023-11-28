@@ -7,7 +7,6 @@ import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -37,6 +36,7 @@ public class PageActions {
 	}
 
 	public static WebElement findElementWithScrollingElement(WebDriver driver, WebElement elementToFind) throws InterruptedException {
+	   //won't work if ElementToFind is not on the DOM already
 	    boolean isElementFound = false;
 	    WebElement element = null;
 	    int tries = 0; 
@@ -47,7 +47,7 @@ public class PageActions {
 	            isElementFound = true;
 	        } catch (NoSuchElementException | TimeoutException e) {
 	            JavascriptExecutor js = (JavascriptExecutor) driver;
-	            js.executeScript("window.scrollBy(0, 500)");
+	            js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 	        }
 	        tries++; 
 	    }
@@ -65,7 +65,10 @@ public class PageActions {
 	        }
 	    }
 	}
-
+	public static void scrollToTop(WebDriver driver) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollTo(0, 0)");
+	}
 
 	public static void swipeDown(WebDriver driver, int times) {
 		Dimension d = driver.manage().window().getSize();

@@ -1,9 +1,11 @@
 package tests;
 
+import helpers.CustomExpectedConditions;
+import helpers.Waiter;
 import pages.PageHeaderPage;
 import pages.SearchAndFiltersPage;
 import resources.Config;
-import helpers.GetInteger;
+import helpers.StringHelper;
 import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -55,18 +57,7 @@ public class SubmissionCardsTest {
         driver.get(config.url);
       login.unpaidLogin(config.unpaidEmail, config.password);
        Thread.sleep(1000);
-       
- /*      header.filterChange().click();
-       if(!search.filterHumor().isSelected()){
-           search.filterHumor().click();
-       }
-       if(!search.filterHotness().isSelected()){
-           search.filterHotness().click();
-       }
-       if (!search.filterHumanity().isSelected()){
-           search.filterHumanity().click();
-       }
-       search.goButton().click();*/
+
     }
 
     @BeforeMethod
@@ -78,17 +69,18 @@ public class SubmissionCardsTest {
 
     @Test
     public void ClickUserName() {
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         String userName = card.userName().getText().replace("@", "");
         card.userName().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         Assert.assertTrue(driver.getCurrentUrl().contains(userName), "Did not redirect to user's page");
     }
 
     @Test
     public void CommentButton() {
-        String id = Integer.toString(GetInteger.getIntFromMixedString(card.firstCard().getAttribute("id")));
+        String id = Integer.toString(StringHelper.getIntFromMixedString(card.firstCard().getAttribute("id")));
         card.commentIcon().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
         Assert.assertTrue(driver.getCurrentUrl().contains(id) && card.disqusSection().isDisplayed(), "The comment page did not load");
     }
 
@@ -253,11 +245,11 @@ public class SubmissionCardsTest {
     public void SubmissionURLMatchesCard() throws InterruptedException {
         WebElement ourCard = card.cardNotGIF();
         String subID = ourCard.getAttribute("id");
-        int subInt = GetInteger.getIntFromMixedString(subID);
+        int subInt = StringHelper.getIntFromMixedString(subID);
         ourCard.click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
         String url = driver.getCurrentUrl();
-        int urlInt = GetInteger.getIntFromMixedString(url);
+        int urlInt = StringHelper.getIntFromMixedString(url);
         Assert.assertEquals(subInt, urlInt, "The post id didn't match the url");
     }
 

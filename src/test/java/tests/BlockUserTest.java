@@ -93,7 +93,7 @@ public class BlockUserTest {
         Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         //Setup
         String userURL = driver.getCurrentUrl();
-        String blockedUser = helpers.GetInteger.getIdFromUrl(userURL);
+        String blockedUser = helpers.StringHelper.getIdFromUrl(userURL);
         blocked.blockBtn().click();
 
         try {

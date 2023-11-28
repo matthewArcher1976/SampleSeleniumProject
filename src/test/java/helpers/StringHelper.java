@@ -10,7 +10,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class GetInteger {
+public class StringHelper {
 
 	public static int getIntFromMixedString(String s) {
 	    try (Scanner in = new Scanner(s).useDelimiter("[^0-9]+")) {
@@ -32,7 +32,6 @@ public class GetInteger {
 	        }
 	    }
 	}
-
 
 	public static String getIdFromUrl(String url) {
 	    String[] urlParts = url.split("/");

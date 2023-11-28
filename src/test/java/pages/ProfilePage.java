@@ -235,6 +235,9 @@ public class ProfilePage {
     public WebElement tiktokLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("social-button-tiktok")));
     }
+    public WebElement TipLink(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[href*='venmo.com'], a[href*='cash.app']")));
+    }
 
     public WebElement twitterLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("social-button-twitter")));

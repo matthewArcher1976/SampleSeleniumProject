@@ -68,7 +68,7 @@ public class FavoritesTest {
         driver.manage().window().fullscreen();
         header.userMenu().click();
         header.yourProfileBtn().click();
-        String yourName = ("@" + helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()));
+        String yourName = ("@" + helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()));
         header.menuLatest().click();
         Thread.sleep(5000);//yes
         helpers.PageActions.scrollDown(driver, 1);
@@ -82,7 +82,7 @@ public class FavoritesTest {
                     continue;
                 }
                 helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
-                submissionID = Integer.toString(helpers.GetInteger.getIntFromMixedString(driver.getCurrentUrl()));
+                submissionID = Integer.toString(helpers.StringHelper.getIntFromMixedString(driver.getCurrentUrl()));
                 modal.closeModal().click();
                 Thread.sleep(3000);
                 System.out.println(submissionID + " is our submission id");
@@ -121,7 +121,7 @@ public class FavoritesTest {
     }
 
     @Test(priority = 2)
-    public void FavoriteGoneOnLogout() throws InterruptedException {
+    public void FavoriteGoneOnLogout()   {
 
         boolean filled = favorites.isHeartFilled();
         if (!filled) {

@@ -2,7 +2,6 @@ package tests;
 
 import helpers.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -12,8 +11,6 @@ import pages.PageHeaderPage;
 import pages.SubmissionCardsPage;
 import resources.Config;
 import resources.TestConfig;
-
-import java.util.List;
 
 import static resources.getDriverType.getDriver;
 
@@ -114,12 +111,6 @@ public class AdsTest {
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(ads.adFrame()));
         action.moveToElement(ads.closeAdButton()).click().perform();
         Assert.assertTrue(PrettyAsserts.isElementEnabled(ads.sendFeedbackButton()), "User may not be able to hide the ad");
-    }
-
-    @Test
-    public void sandbox() {
-        List<WebElement> allCards = card.allCards();
-        System.out.println(allCards.size() + " is size");
     }
 
     //************************ Teardown ****************************

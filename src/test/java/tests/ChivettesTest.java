@@ -1,30 +1,30 @@
 package tests;
 
 
-import pages.PageHeaderPage;
-import pages.SubmissionCardsPage;
-import resources.Config;
-import helpers.Logins;
+import helpers.*;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import pages.EditProfilePage;
-import pages.ProfilePage;
+import pages.*;
+import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
-
 import static resources.getDriverType.getDriver;
+
 @Test(retryAnalyzer = RetryAnalyzer.class)
 public class ChivettesTest {
 
     WebDriver driver;
     ProfilePage profilePage;
-    EditProfilePage profile;
-    Logins login;
-    PageHeaderPage header;
-    SubmissionCardsPage card;
+    EditProfilePage editProfilePage;
+    Logins logins;
+    LoginModalPage loginModalPage;
+    PageHeaderPage pageHeaderPage;
+    SubscriptionPage subscriptionPage;
     private static TestConfig config;
 
     //************************** Setup ******************************************
@@ -33,17 +33,19 @@ public class ChivettesTest {
     public void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
-        login = new Logins(driver);
-        card = new SubmissionCardsPage(driver);
-        header = new PageHeaderPage(driver);
+        logins = new Logins(driver);
+        pageHeaderPage = new PageHeaderPage(driver);
+        loginModalPage = new LoginModalPage(driver);
         profilePage = new ProfilePage(driver);
-        profile = new EditProfilePage(driver);
+        editProfilePage = new EditProfilePage(driver);
+        subscriptionPage = new SubscriptionPage(driver);
+
     }
 
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.chivetteEmail, config.password);
+        logins.unpaidLogin(config.chivetteEmail, config.password);
         Thread.sleep(1000);
     }
 
@@ -56,40 +58,70 @@ public class ChivettesTest {
 
     @Test
     public void ChivetteIconTest() {
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
+        editProfilePage.userMenu().click();
+        editProfilePage.yourProfileBtn().click();
         Assert.assertTrue(profilePage.chivetteIcon().isDisplayed(), "Did not find Chivette icon by username");
     }
 
     @Test
+    public void PaywallClosesOnLogin() throws InterruptedException {
+        logins.logout();
+        driver.navigate().refresh();
+        pageHeaderPage.menuChivettes().click();
+        PageActions.scrollDown(driver, 5);
+        WebElement subscriptionFooter = subscriptionPage.subscriptionFooter();
+        subscriptionPage.monthlyJoinBtn().click();
+        loginModalPage.emailInput().sendKeys(config.chivetteEmail);
+        loginModalPage.passwordInput().sendKeys(config.password);
+        loginModalPage.signIn().click();
+        driver.navigate().refresh();
+        Thread.sleep(5000);
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Assert.assertFalse(PrettyAsserts.isElementDisplayed(subscriptionFooter));
+    }
+
+    @Test
+    public void TipJar() {
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.tipURLInput().sendKeys("https://cash.app/$SamiNiceGirl");
+        editProfilePage.saveProfileBtn().click();
+        pageHeaderPage.userMenu().click();
+        pageHeaderPage.yourProfileBtn().click();
+        Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
+        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.TipLink())
+                && profilePage.TipLink().getAttribute("target").equals("_blank"));
+    }
+
+    @Test
     public void WebSiteInputDisplays() {
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.socialLinksTab().click();
-        Assert.assertTrue(profile.websiteInput().isDisplayed(), "Did not find website input");
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.socialLinksTab().click();
+        Assert.assertTrue(editProfilePage.websiteInput().isDisplayed(), "Did not find website input");
     }
 
     @Test
     public void WebSiteLink() {
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.socialLinksTab().click();
-        profile.websiteInput().clear();
-        profile.websiteInput().sendKeys("https://www.google.com");
-        profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.socialLinksTab().click();
+        editProfilePage.websiteInput().clear();
+        editProfilePage.websiteInput().sendKeys("https://www.google.com");
+        editProfilePage.saveProfileBtn().click();
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(editProfilePage.updateSuccess()));
+        editProfilePage.userMenu().click();
+        editProfilePage.yourProfileBtn().click();
 
         Assert.assertTrue(profilePage.websiteIcon().isDisplayed(), "Did not find website icon");
 
         profilePage.websiteIcon().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
 
         Assert.assertTrue(driver.getTitle().contains("Google"), "Website tab did not open");
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     //************************* Teardown ***************************

@@ -1,6 +1,7 @@
 package helpers;
 
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -23,10 +24,11 @@ public class PrettyAsserts {
 	public static boolean isElementDisplayed(WebElement element) {
 		try {
 			return element.isDisplayed();
-		} catch (NoSuchElementException | TimeoutException e) {
+		} catch (NoSuchElementException | TimeoutException | StaleElementReferenceException e) {
 			return false;
 		}
 	}
+
 	public static boolean isElementEnabled(WebElement element) {
 		try {
 			return element.isEnabled();

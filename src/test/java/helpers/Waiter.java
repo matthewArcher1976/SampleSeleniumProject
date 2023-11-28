@@ -22,7 +22,7 @@ public class Waiter {
 
 	public static FluentWait<WebDriver> quickWait(WebDriver driver) {
 		return new FluentWait<>(driver)
-				.withTimeout(Duration.ofSeconds(5))
+				.withTimeout(Duration.ofSeconds(3))
 				.pollingEvery(Duration.ofMillis(500))
 				.ignoring(NoSuchElementException.class)
 				.ignoring(StaleElementReferenceException.class);
@@ -30,7 +30,7 @@ public class Waiter {
 
 	public static <T> void customWait(WebDriver driver, ExpectedCondition<T> condition) {
 		FluentWait<WebDriver> wait = new FluentWait<>(driver)
-				.withTimeout(Duration.ofSeconds(10))
+				.withTimeout(Duration.ofSeconds(20))
 				.pollingEvery(Duration.ofMillis(500))
 				.ignoring(NoSuchElementException.class)
 				.ignoring(StaleElementReferenceException.class)

@@ -5,7 +5,7 @@ import java.util.Random;
 public class Randoms {
 	//return a random string of the given length
 	public static String getRandomString(int i) {
-        String RANDCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        String RANDCHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder randomString = new StringBuilder();
         Random rnd = new Random();
         while (randomString.length() < i) { // length of the random string.

@@ -1,9 +1,7 @@
 package pages;
 
 import helpers.Waiter;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
@@ -189,7 +187,11 @@ public class PageHeaderPage {
     }
 
     public WebElement userMenu() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("btn-circle")));
+        try {
+          return Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("btn-circle")));
+        }catch (TimeoutException e){
+            return Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar")));
+        }
     }
 
     public WebElement verifyEmailHeader() {
