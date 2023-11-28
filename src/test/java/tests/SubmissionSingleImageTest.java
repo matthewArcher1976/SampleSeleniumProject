@@ -84,11 +84,11 @@ public class SubmissionSingleImageTest {
         }
     }
 
-    @Test
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void FavoriteButton() throws InterruptedException {
         //Favorite a post from the single page, verify the vote persists
         WebElement submission = card.cardNotFavorited();
-        String submissionID = helpers.GetInteger.getIntFromMixedStringAsString(submission.getAttribute("id"));
+        String submissionID = helpers.StringHelper.getIntFromMixedStringAsString(submission.getAttribute("id"));
         action.moveToElement(submission).click().perform();
         driver.navigate().refresh();
         single.favoriteBtn().click();
@@ -144,7 +144,7 @@ public class SubmissionSingleImageTest {
         header.headerAvatar().click();
         header.yourProfileBtn().click();
         Thread.sleep(2000);
-        String userName = helpers.GetInteger.getUsernameFromURL(driver.getCurrentUrl());
+        String userName = helpers.StringHelper.getUsernameFromURL(driver.getCurrentUrl());
         header.menuLatest().click();
         action.moveToElement(card.cardNotMine(userName)).click().perform();
         driver.navigate().refresh();
@@ -311,7 +311,7 @@ public class SubmissionSingleImageTest {
     public void VoteDownButton() {
         //Downvote a post from the single page, verify the vote persists
         WebElement submission = card.cardNotDownvoted();
-        String submissionID = helpers.GetInteger.getIntFromMixedStringAsString(submission.getAttribute("id"));
+        String submissionID = helpers.StringHelper.getIntFromMixedStringAsString(submission.getAttribute("id"));
         action.moveToElement(submission).click().perform();
         driver.navigate().refresh();
         single.downvoteBtn().click();
@@ -331,7 +331,7 @@ public class SubmissionSingleImageTest {
     public void VoteUpButton() {
         //Like a post from the single page, verify the vote persists
         WebElement submission = card.cardNotUpvoted();
-        String submissionID = helpers.GetInteger.getIntFromMixedStringAsString(submission.getAttribute("id"));
+        String submissionID = helpers.StringHelper.getIntFromMixedStringAsString(submission.getAttribute("id"));
         action.moveToElement(submission).click().perform();
         driver.navigate().refresh();
         single.upvoteBtn().click();

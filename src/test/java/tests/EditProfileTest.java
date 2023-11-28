@@ -123,7 +123,7 @@ public class EditProfileTest {
         profile.birthDayInput().sendKeys(birthday);
         profile.saveProfileBtn().click();
         Thread.sleep(3000);
-        Assert.assertEquals(GetInteger.dateToMMddyyyy(profile.birthDayInput().getAttribute("value")), birthday, "Birthday did not update properly");
+        Assert.assertEquals(StringHelper.dateToMMddyyyy(profile.birthDayInput().getAttribute("value")), birthday, "Birthday did not update properly");
     }
 
     @Test

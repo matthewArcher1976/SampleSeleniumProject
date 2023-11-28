@@ -236,18 +236,18 @@ public class SubmissionModalTest {
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
-        String firstCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String firstCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Thread.sleep(5000);//remove when bug on 731 is fixed
         modal.navRight().click();
-        String secondCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String secondCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(firstCardID, secondCardID, "Did not navigate forward when clicking right nav");
         modal.navRight().click();
         Thread.sleep(2000);
-        String thirdCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String thirdCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(thirdCardID, secondCardID, "Did not navigate forward when clicking right nav, second click");
         modal.navLeft().click();
         Thread.sleep(2000);
-        Assert.assertEquals(secondCardID, helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
+        Assert.assertEquals(secondCardID, helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
     @Test
@@ -255,17 +255,17 @@ public class SubmissionModalTest {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
         Thread.sleep(4000);//remove once 731 is fixed
-        String firstCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String firstCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         action.sendKeys(Keys.ARROW_RIGHT).perform();
-        String secondCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String secondCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(firstCardID, secondCardID, "Did not navigate forward when pressing right arrow on keyboard");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
         Thread.sleep(2000);
-        String thirdCardID = helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String thirdCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(thirdCardID, secondCardID, "Did not navigate forward when clicking right nav, second click");
         action.sendKeys(Keys.ARROW_LEFT).perform();
         Thread.sleep(2000);
-        Assert.assertEquals(secondCardID, helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
+        Assert.assertEquals(secondCardID, helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
     @Test

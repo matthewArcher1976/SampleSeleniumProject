@@ -85,7 +85,6 @@ public class PageHeaderTest {
         WebElement avatar = header.headerAvatar();
         Dimension viewportSize = driver.manage().window().getSize();
         int viewportWidth = viewportSize.getWidth();
-
         Point elementLocation = avatar.getLocation();
         int elementX = elementLocation.getX();
         int elementWidth = avatar.getSize().getWidth();
@@ -141,8 +140,9 @@ public class PageHeaderTest {
     @Test
     public void ClickTopChiversTab() throws InterruptedException {
         header.menuTopChivers().click();
-        Thread.sleep(3000);
-        Assert.assertTrue(header.menuTopChivers().getAttribute("aria-current").contains("page"), "Top Chivers Tab not selected after clicking it");
+       //TODO - get this custom wait to actually work, it never finds the value of aria-current
+        Waiter.customWait(driver, CustomExpectedConditions.tabLoaded(header.menuTopChivers()));
+        Assert.assertEquals(header.menuTopChivers().getAttribute("aria-current"), "page", "Top Chivettes tab should be current");
     }
 
     @Test

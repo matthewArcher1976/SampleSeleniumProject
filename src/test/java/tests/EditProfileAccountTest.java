@@ -204,7 +204,7 @@ public class EditProfileAccountTest {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         Thread.sleep(4000);
-        String ourName = GetInteger.getUsernameFromURL(driver.getCurrentUrl());
+        String ourName = StringHelper.getUsernameFromURL(driver.getCurrentUrl());
         String newName = Randoms.getRandomString(10);
         profile.editProfileBtn().click();
         profile.accountTab().click();

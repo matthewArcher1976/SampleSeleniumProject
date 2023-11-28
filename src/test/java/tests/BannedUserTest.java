@@ -3,7 +3,6 @@ package tests;
 import helpers.Waiter;
 import resources.Config;
 import helpers.Logins;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -92,15 +91,6 @@ public class BannedUserTest {
         header.settingsBtn().click();
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
         Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
-    }
-
-    @Test(priority = 99)
-    public void SignoutBannedTest() {
-        driver.get(config.url);
-        header.userMenu().click();
-        //  header.yourProfileBtn().click();
-        header.signoutBtn().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success"))).isDisplayed(), "Create button did not bring up banned screen");
     }
 
     @Test

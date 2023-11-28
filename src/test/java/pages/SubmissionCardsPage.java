@@ -368,9 +368,11 @@ public class SubmissionCardsPage {
         return "fa-thumbs-up";
     }
     public WebElement userName() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[class='flex gap-x-2 items-center text-primary']")));
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[data-username]")));
     }
-
+    public String userNameSelector(){
+        return "a[data-username]";
+    }
     public WebElement verifiedIcon() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("label-verified")));
     }

@@ -3,6 +3,8 @@ package tests;
 
 import helpers.Waiter;
 
+import io.github.sukgu.Shadow;
+import org.openqa.selenium.TimeoutException;
 import pages.PageHeaderPage;
 import resources.Config;
 import helpers.Logins;
@@ -27,6 +29,7 @@ public class MobileViewHeaderTest {
     MobileViewPage mobile;
     SubmissionCardsPage card;
     PageHeaderPage header;
+    Shadow shadow;
     private static TestConfig config;
 
     //************************** Setup ******************************************
@@ -40,6 +43,7 @@ public class MobileViewHeaderTest {
         login = new Logins(driver);
         mobile = new MobileViewPage(driver);
         header = new PageHeaderPage(driver);
+        shadow = new Shadow(driver);
     }
 
     @BeforeClass
@@ -96,13 +100,27 @@ public class MobileViewHeaderTest {
         String homeURL = driver.getCurrentUrl();
         Assert.assertEquals(homeURL, header.homeButton().getAttribute("href"), "Clicking the myChive logo should return you home" );
     }
+    @Test
+    public void LinksChiveCharities() {
+        header.linkMenu().click();
+        Assert.assertEquals(shadow.getParentElement(header.dropDownChiveTV()).getAttribute("target"), "_blank", "Missing link to Chive TV");
+    }
+    @Test
+    public void LinksChiveTV() {
+        header.linkMenu().click();
+        Assert.assertEquals(shadow.getParentElement(header.dropDownChiveTV()).getAttribute("target"), "_blank", "Missing link to Chive TV");
+    }
 
     @Test
-    public void LinksTheChive(){
+    public void LinksTheChive() {
         header.linkMenu().click();
-        header.dropDownChive().click();
-        Waiter.wait(driver).until(ExpectedConditions.urlContains("thechive "));
-        Assert.assertEquals(driver.getCurrentUrl(), "https://thechive.com/", "Link to The Chive broken");
+        Assert.assertEquals(shadow.getParentElement(header.dropDownChive()).getAttribute("target"), "_blank", "Missing link to Chive TV");
+    }
+
+    @Test
+    public void LinksTheChivery() {
+        header.linkMenu().click();
+        Assert.assertEquals(shadow.getParentElement(header.dropDownChivery()).getAttribute("target"), "_blank", "Missing link to Chive TV");
     }
 
     @Test
@@ -165,6 +183,17 @@ public class MobileViewHeaderTest {
         Assert.assertEquals(mobile.hamburgerMenu().getAttribute("aria-expanded"), "false", "Hamburger menu should be closed by default");
         mobile.hamburgerMenu().click();
         Assert.assertEquals(mobile.hamburgerMenu().getAttribute("aria-expanded"), "true", "Hamburger menu should open on tap");
+    }
+
+    @Test
+    public void ChivetteButton() throws InterruptedException {
+        mobile.ChivetteButton().click();
+        try {//Did it this way to avoid using Thread.sleep
+            Waiter.wait(driver).until(ExpectedConditions.urlContains("chivettes"));
+            Assert.assertTrue(true);
+        }catch (TimeoutException e){
+            Assert.fail("Chivette tab didn't load");
+        }
     }
 
     //************************** Teardown ********************************************

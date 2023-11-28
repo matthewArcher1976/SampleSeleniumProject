@@ -13,6 +13,9 @@ public class SubscriptionPage {
     }
 
     //******************** Web Elements ***********************
+    public WebElement chargebeeClose(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[data-cb-id='cb_close']")));
+    }
     public WebElement chargebeeFrame(){
         return Waiter.wait(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("iframe[id='cb-frame']")));
     }
@@ -28,9 +31,8 @@ public class SubscriptionPage {
     public String monthlyJoinBtnSelector(){
         return "button[data-price-id='myCHIVE-Subscription-USD-Monthly']";
     }
-
-    public WebElement noThanksBtn(){
-        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[class='mt-8 text-base']")));
+    public WebElement subscriptionFooter(){
+        return Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("section[class*='fixed bottom']")));
     }
 
     public String noThanksBtnSelector(){

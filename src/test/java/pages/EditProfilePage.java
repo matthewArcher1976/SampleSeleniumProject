@@ -1,5 +1,6 @@
 package pages;
 
+import helpers.Waiter;
 import io.github.sukgu.Shadow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -453,6 +454,9 @@ public class EditProfilePage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("tiktok")));
     }
 
+    public WebElement tipURLInput(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("tipUrl")));
+    }
     public WebElement twitterBadURL() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'The twitter format is invalid.')]")));
     }

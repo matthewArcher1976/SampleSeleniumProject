@@ -116,12 +116,6 @@ public class AdsTest {
         Assert.assertTrue(PrettyAsserts.isElementEnabled(ads.sendFeedbackButton()), "User may not be able to hide the ad");
     }
 
-    @Test
-    public void sandbox() {
-        List<WebElement> allCards = card.allCards();
-        System.out.println(allCards.size() + " is size");
-    }
-
     //************************ Teardown ****************************
 
     @AfterClass

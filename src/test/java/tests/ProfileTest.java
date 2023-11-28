@@ -71,7 +71,7 @@ public class ProfileTest {
         profile.yourProfileBtn().click();
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         Thread.sleep(3000);//yeah
-        String myUser = GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String myUser = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         driver.get(config.url);
 
         card.cardNotMine(myUser).click();
@@ -135,7 +135,7 @@ public class ProfileTest {
     public void EditButtonNotDisplayed() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        String userName = ("@" + helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()));
+        String userName = ("@" + helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()));
         header.menuLatest().click();
         helpers.PageActions.scrollDown(driver, 1);
         List<WebElement> allPosts = profilePage.allCards();
@@ -198,7 +198,7 @@ public class ProfileTest {
         } catch (TimeoutException e) {
             Assert.assertTrue(true);
         }
-        String myUser = GetInteger.getIdFromUrl(driver.getCurrentUrl());
+        String myUser = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         header.menuLatest().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains(myUser)));
         card.cardNotMine(myUser).click();
@@ -401,7 +401,7 @@ public class ProfileTest {
         driver.navigate().refresh(); //not sure why this is needed; it was grabbing the cards from favorites even though I was never on there
         Thread.sleep(2000);
         List<WebElement> userPosts = profilePage.allCards();
-        String userName = ("@" + helpers.GetInteger.getIdFromUrl(driver.getCurrentUrl()));
+        String userName = ("@" + helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()));
         for (WebElement post : userPosts) {
             Assert.assertTrue(post.getText().contains(userName), "Found someone else's post in user's profile");
         }

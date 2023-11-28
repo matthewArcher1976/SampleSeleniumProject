@@ -35,7 +35,7 @@ public class NotificationsTest {
     private static TestConfig config;
 
     //************************** Setup ******************************************
-
+    //TODO - notifications test cases
     @BeforeTest
     public void configs() throws Exception {
         config = Config.getConfig();
@@ -60,7 +60,7 @@ public class NotificationsTest {
         header1.headerAvatar().click();
         header1.yourProfileBtn().click();
         Waiter.wait(driver1).until(CustomExpectedConditions.profileLoaded());
-        userName = GetInteger.getIdFromUrl(driver1.getCurrentUrl());
+        userName = StringHelper.getIdFromUrl(driver1.getCurrentUrl());
     }
 
     @BeforeMethod
