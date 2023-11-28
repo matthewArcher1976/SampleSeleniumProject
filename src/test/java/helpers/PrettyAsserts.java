@@ -28,9 +28,7 @@ public class PrettyAsserts {
 			return false;
 		}
 	}
-	public static Boolean testerTest(String locator){
-		return true;
-	}
+
 	public static boolean isElementEnabled(WebElement element) {
 		try {
 			return element.isEnabled();

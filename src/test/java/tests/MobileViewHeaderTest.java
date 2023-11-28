@@ -186,7 +186,7 @@ public class MobileViewHeaderTest {
     }
 
     @Test
-    public void ChivetteButton() throws InterruptedException {
+    public void ChivetteButton() {
         mobile.ChivetteButton().click();
         try {//Did it this way to avoid using Thread.sleep
             Waiter.wait(driver).until(ExpectedConditions.urlContains("chivettes"));

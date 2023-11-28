@@ -138,7 +138,7 @@ public class PageHeaderTest {
     }
 
     @Test
-    public void ClickTopChiversTab() throws InterruptedException {
+    public void ClickTopChiversTab() {
         header.menuTopChivers().click();
        //TODO - get this custom wait to actually work, it never finds the value of aria-current
         Waiter.customWait(driver, CustomExpectedConditions.tabLoaded(header.menuTopChivers()));

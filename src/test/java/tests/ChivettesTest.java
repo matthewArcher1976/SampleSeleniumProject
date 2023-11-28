@@ -58,7 +58,6 @@ public class ChivettesTest {
 
     @Test
     public void ChivetteIconTest() {
-        WebElement bottom = subscriptionPage.subscriptionFooter();
         editProfilePage.userMenu().click();
         editProfilePage.yourProfileBtn().click();
         Assert.assertTrue(profilePage.chivetteIcon().isDisplayed(), "Did not find Chivette icon by username");

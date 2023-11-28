@@ -121,7 +121,7 @@ public class FavoritesTest {
     }
 
     @Test(priority = 2)
-    public void FavoriteGoneOnLogout() throws InterruptedException {
+    public void FavoriteGoneOnLogout()   {
 
         boolean filled = favorites.isHeartFilled();
         if (!filled) {
