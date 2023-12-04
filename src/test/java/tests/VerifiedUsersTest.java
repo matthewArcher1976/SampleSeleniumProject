@@ -38,7 +38,7 @@ public class VerifiedUsersTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.verifiedEmail, config.password);
+        login.unpaidLogin(config.verifiedEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
 

@@ -45,7 +45,7 @@ public class ChivettesTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        logins.unpaidLogin(config.chivetteEmail, config.password);
+        logins.unpaidLogin(config.chivetteEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
 
@@ -72,7 +72,7 @@ public class ChivettesTest {
         WebElement subscriptionFooter = subscriptionPage.subscriptionFooter();
         subscriptionPage.monthlyJoinBtn().click();
         loginModalPage.emailInput().sendKeys(config.chivetteEmail);
-        loginModalPage.passwordInput().sendKeys(config.password);
+        loginModalPage.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         loginModalPage.signIn().click();
         driver.navigate().refresh();
         Thread.sleep(5000);

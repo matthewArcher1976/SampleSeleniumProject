@@ -129,7 +129,7 @@ public class MobileLoginModalTest {
         mobile.hamburgerMenu().click();
         mobile.mobileFollowing().click();
         login.emailInput().sendKeys(config.unpaidEmail);
-        login.passwordInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("following")));
         header.userMenu().click();
@@ -141,7 +141,7 @@ public class MobileLoginModalTest {
     public void LoginOpensOnSubmit() throws InterruptedException {
         header.submitBtn().click();
         login.emailInput().sendKeys(config.unpaidEmail);
-        login.passwordInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Thread.sleep(4000);
         Assert.assertTrue(PrettyAsserts.isElementDisplayed(upload.dragDropMobile()), "Did not go to submit page on login");
@@ -171,8 +171,8 @@ public class MobileLoginModalTest {
         login.emailInput().sendKeys(config.unpaidEmail);
         login.birthdayInput().click();
         login.birthdayInput().sendKeys("12121990");
-        login.passwordInput().sendKeys(config.password);
-        login.passwordConfirmInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        login.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         login.termsCheckbox().click();
         login.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast()));
@@ -187,8 +187,8 @@ public class MobileLoginModalTest {
         login.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
         login.birthdayInput().click();
         login.birthdayInput().sendKeys("12121990");
-        login.passwordInput().sendKeys(config.password);
-        login.passwordConfirmInput().sendKeys(config.password + "567");
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        login.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD") + "567");
         login.termsCheckbox().click();
         login.createAccountBtn().click();
         Assert.assertTrue(login.errorText().getText().contains("The value must be equal to the other value"));
@@ -202,8 +202,8 @@ public class MobileLoginModalTest {
         login.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
         login.birthdayInput().click();
         login.birthdayInput().sendKeys("12121990");
-        login.passwordInput().sendKeys(config.password);
-        login.passwordConfirmInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        login.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         login.termsCheckbox().click();
         login.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("auth")));
@@ -229,8 +229,8 @@ public class MobileLoginModalTest {
         login.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
         login.birthdayInput().click();
         login.birthdayInput().sendKeys("12122020");
-        login.passwordInput().sendKeys(config.password);
-        login.passwordConfirmInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        login.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         login.termsCheckbox().click();
         login.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast()));
@@ -254,8 +254,8 @@ public class MobileLoginModalTest {
         login.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
         login.birthdayInput().click();
         login.birthdayInput().sendKeys("12121990");
-        login.passwordInput().sendKeys(config.password);
-        login.passwordConfirmInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        login.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         login.termsCheckbox().click();
         login.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast()));

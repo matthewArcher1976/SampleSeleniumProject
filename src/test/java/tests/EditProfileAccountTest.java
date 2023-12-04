@@ -35,7 +35,7 @@ public class EditProfileAccountTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.defaultEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
     @BeforeMethod
@@ -182,8 +182,8 @@ public class EditProfileAccountTest {
         profile.userMenu().click();
         profile.settingsBtn().click();
         profile.accountTab().click();
-        profile.password().sendKeys(config.password);
-        profile.passwordVerify().sendKeys(config.password);
+        profile.password().sendKeys(System.getenv("TEST_PWD"));
+        profile.passwordVerify().sendKeys(System.getenv("TEST_PWD"));
         profile.saveProfileBtn().click();
         Assert.assertTrue(PrettyAsserts.isElementEnabled(profile.updateSuccess()), "Did not see success toast after updating password");
     }

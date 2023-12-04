@@ -38,7 +38,7 @@ public class BannedUserTest {
     @BeforeClass
     public void signIn() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.bannedEmail, config.password);
+        login.unpaidLogin(config.bannedEmail, System.getenv("TEST_PWD"));
     }
 
     //************************** Begin Tests ********************************************

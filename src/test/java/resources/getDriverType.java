@@ -2,8 +2,10 @@ package resources;
 
 import org.openqa.selenium.WebDriver;
 
+
 public class getDriverType {
     public static WebDriver getDriver(String driverType) {
+
         return switch (driverType) {
             case "ChromeDriver" -> Drivers.ChromeDriver();
             case "ChromeSauce" -> Drivers.ChromeSauce();
