@@ -40,7 +40,7 @@ public class AdsTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.defaultEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
     }
 
     @BeforeMethod

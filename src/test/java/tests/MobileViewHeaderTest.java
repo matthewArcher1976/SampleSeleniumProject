@@ -49,7 +49,7 @@ public class MobileViewHeaderTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, config.password);
+        login.unpaidLogin(config.unpaidEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
 

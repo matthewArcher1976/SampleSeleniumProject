@@ -18,6 +18,7 @@ import org.openqa.selenium.safari.SafariDriver;
 @SuppressWarnings({"unused", "MissingSerialAnnotation"})
 public class Drivers {
 
+
 	public static WebDriver ChromeDriver() {
 		ChromeOptions co = new ChromeOptions();
 		co.addArguments("--remote-allow-origins=*");//workaround a showstopping bug in ChromeDriver 112 
@@ -48,16 +49,18 @@ public class Drivers {
 
 	public static WebDriver ChromeSauce() {
 	    ChromeOptions browserOptions = new ChromeOptions();
-	    browserOptions.setPlatformName("Windows 11");
+
+		browserOptions.setPlatformName("Windows 11");
 	    browserOptions.setBrowserVersion("latest");
 	    Map<String, Object> sauceOptions = new HashMap<>();
 	    sauceOptions.put("username", "oauth-matt.archer-ff614");
 	    sauceOptions.put("accessKey", "48c2e9ca-6c85-470e-a332-588e7e6fde98");
 	    sauceOptions.put("build", "selenium-build-373YO");
-	    sauceOptions.put("name", "iChive Tests");
+	    sauceOptions.put("name", "ugh");
 		sauceOptions.put("screenResolution", "2560x1600");
 	    browserOptions.setCapability("sauce:options", sauceOptions);
 	    browserOptions.addArguments("--disable-blink-features=AutomationControlled");
+
 	    try {
 	        URL url = new URL("https://ondemand.us-west-1.saucelabs.com/wd/hub");
 	        return new RemoteWebDriver(url, browserOptions);

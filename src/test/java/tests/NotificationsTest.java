@@ -53,8 +53,8 @@ public class NotificationsTest {
     public void login() throws InterruptedException {
         driver1.get(config.url);
         driver2.get(config.url);
-        login1.unpaidLogin(config.defaultEmail, config.password);
-        login2.unpaidLogin(config.chivetteEmail, config.password);
+        login1.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
+        login2.unpaidLogin(config.chivetteEmail, System.getenv("TEST_PWD"));
         Waiter.wait(driver1).until(ExpectedConditions.urlContains("mychive"));
         Waiter.wait(driver2).until(ExpectedConditions.urlContains("mychive"));
         header1.headerAvatar().click();

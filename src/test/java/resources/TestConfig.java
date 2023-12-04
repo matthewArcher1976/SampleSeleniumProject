@@ -14,8 +14,7 @@ public class TestConfig {
     public String facebookEmail;
     public String googleEmail;
     public String natalie;
-    public String nataliePassword;
-    public String password;
+
     public String paidEmail;
     public String privateEmail;
     public String privateUsername;

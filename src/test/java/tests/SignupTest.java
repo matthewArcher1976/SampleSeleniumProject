@@ -110,8 +110,8 @@ public class SignupTest {
         loginModal.emailInput().sendKeys(config.unpaidEmail);
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12121990");
-        loginModal.passwordInput().sendKeys(config.password);
-        loginModal.passwordConfirmInput().sendKeys(config.password);
+        loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        loginModal.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         loginModal.termsCheckbox().click();
         loginModal.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(loginModal.notificationToast()));
@@ -126,8 +126,8 @@ public class SignupTest {
         loginModal.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12121990");
-        loginModal.passwordInput().sendKeys(config.password);
-        loginModal.passwordConfirmInput().sendKeys(config.password + "567");
+        loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        loginModal.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD") + "567");
         loginModal.termsCheckbox().click();
         loginModal.createAccountBtn().click();
         Assert.assertTrue(loginModal.errorText().getText().contains("The value must be equal to the other value"));
@@ -141,8 +141,8 @@ public class SignupTest {
         loginModal.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12121990");
-        loginModal.passwordInput().sendKeys(config.password);
-        loginModal.passwordConfirmInput().sendKeys(config.password);
+        loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        loginModal.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         loginModal.termsCheckbox().click();
         loginModal.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("auth")));
@@ -168,8 +168,8 @@ public class SignupTest {
         loginModal.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12122020");
-        loginModal.passwordInput().sendKeys(config.password);
-        loginModal.passwordConfirmInput().sendKeys(config.password);
+        loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        loginModal.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         loginModal.termsCheckbox().click();
         loginModal.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(loginModal.notificationToast()));
@@ -193,8 +193,8 @@ public class SignupTest {
         loginModal.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12121990");
-        loginModal.passwordInput().sendKeys(config.password);
-        loginModal.passwordConfirmInput().sendKeys(config.password);
+        loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        loginModal.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         loginModal.termsCheckbox().click();
         loginModal.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(loginModal.notificationToast()));

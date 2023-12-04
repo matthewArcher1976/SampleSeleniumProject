@@ -57,7 +57,7 @@ public class VerifiedChivettesTabTest {
         header.menuChivettes().click();
         PageActions.findElementWithScrolling(driver, By.cssSelector(subscription.monthlyJoinBtnSelector())).click();
         login.emailInput().sendKeys(config.defaultEmail);
-        login.passwordInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("auth")));
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());

@@ -42,7 +42,7 @@ public class EditProfileSocialLinksTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.defaultEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
         Thread.sleep(2000);//yes
     }
 

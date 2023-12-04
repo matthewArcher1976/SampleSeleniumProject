@@ -124,7 +124,7 @@ public class LoginModalTest {
     public void LoginOnFollowingTab() {
         header.menuFollowing().click();
         login.emailInput().sendKeys(config.unpaidEmail);
-        login.passwordInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("following")));
         header.userMenu().click();
@@ -136,7 +136,7 @@ public class LoginModalTest {
     public void LoginOpensOnSubmit() {
         header.submitBtn().click();
         login.emailInput().sendKeys(config.unpaidEmail);
-        login.passwordInput().sendKeys(config.password);
+        login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Assert.assertTrue(PrettyAsserts.isElementDisplayed(upload.dragDrop()), "Did not go to submit page on login");
 

@@ -44,25 +44,29 @@ public class DopamineDumpTest {
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.defaultEmail, config.password);
+        login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
 
     @BeforeMethod
     public void refresh() {
+
         driver.get(config.url);
+
     }
 
     //************************** Begin Tests ********************************************
 
     @Test
     public void CommentButtonFeatured() {
+        System.out.println("before?");
         header.menuFeatured().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         card.featuredCommentIcon().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("comments"));
         System.out.println("here?");
         Assert.assertTrue(card.disqusSection().isDisplayed(), "CommentButtonFeatured -Comments did not open");
+
     }
 
     @Test

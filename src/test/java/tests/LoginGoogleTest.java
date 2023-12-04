@@ -62,7 +62,7 @@ public class LoginGoogleTest {
         Waiter.wait(driver).until(ExpectedConditions.urlContains("pwd"));
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.stalenessOf(loginModal.googlePasswordInput())));
         Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(loginModal.googlePasswordInput()));
-        loginModal.googlePasswordInput().sendKeys(config.password);
+        loginModal.googlePasswordInput().sendKeys(System.getenv("TEST_PWD"));
         loginModal.googlePasswordNext().click();
 
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.userMenu())).isDisplayed(), "GoogleLoginValid - User is not logged in");
