@@ -1,5 +1,6 @@
 package pages;
 
+import helpers.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,11 +15,14 @@ public class ImageUploadPage {
 
     //************************** Begin Tests ********************************************
 
-    public WebElement dragDrop() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-arrow-pointer")));
+    public By dragDropBy() {
+        return By.className("fa-arrow-pointer");
     }
-    public WebElement dragDropMobile() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-upload")));
+    public WebElement dragDrop() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(dragDropBy()));
+    }
+    public By dragDropMobileBy() {
+       return By.className("fa-upload");
     }
 
 }

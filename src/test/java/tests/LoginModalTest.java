@@ -61,7 +61,7 @@ public class LoginModalTest {
         header.loginBtn().click();
         Thread.sleep(2000);
         login.forgotPassword().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
         Assert.assertTrue(login.resetPasswordText().getText().contains("Enter your username or email address and we will send you a link to reset your password."), "ForgotPasswordText - text not found");
     }
 
@@ -73,7 +73,7 @@ public class LoginModalTest {
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
         login.emailInput().sendKeys("thechivetest+" + helpers.Randoms.getRandomString(10) + "@gmail.com");
         login.resetPasswordEmailMe().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We cannot find a user with that email address."), "ForgotPasswordInvalidEmail - error toast not found");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We cannot find a user with that email address."), "ForgotPasswordInvalidEmail - error toast not found");
     }
 
     @Test
@@ -84,7 +84,7 @@ public class LoginModalTest {
         helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
         login.emailInput().sendKeys(config.unpaidEmail);
         login.resetPasswordEmailMe().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We have emailed your password reset link. If you do not find it in your inbox, please double check your spam folder.")
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We have emailed your password reset link. If you do not find it in your inbox, please double check your spam folder.")
                 && login.updateSuccess().getText().contains("We have emailed your password reset link."), "ForgotPasswordValidEmail - success toast not found");
     }
 
@@ -123,22 +123,23 @@ public class LoginModalTest {
     @Test
     public void LoginOnFollowingTab() {
         header.menuFollowing().click();
-        login.emailInput().sendKeys(config.unpaidEmail);
+        login.emailInput().sendKeys(config.chivetteEmail);
         login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("following")));
         header.userMenu().click();
 
-
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void LoginOpensOnSubmit() {
+    public void LoginOpensOnSubmit() throws InterruptedException {
         header.submitBtn().click();
         login.emailInput().sendKeys(config.unpaidEmail);
         login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(upload.dragDrop()), "Did not go to submit page on login");
+        Thread.sleep(3000);
+        //TODO - figure out how to add implicit wait to PrettyAsserts to avoid having to use Thread.sleep
+        Assert.assertTrue(PrettyAsserts.isDisplayed(upload.dragDropBy(), driver), "Did not go to submit page on login");
 
     }
 

@@ -63,34 +63,37 @@ public class ChivettesTest {
         Assert.assertTrue(profilePage.chivetteIcon().isDisplayed(), "Did not find Chivette icon by username");
     }
 
-    @Test
+    @Test()
     public void PaywallClosesOnLogin() throws InterruptedException {
         logins.logout();
         driver.navigate().refresh();
         pageHeaderPage.menuChivettes().click();
         PageActions.scrollDown(driver, 5);
         WebElement subscriptionFooter = subscriptionPage.subscriptionFooter();
-        subscriptionPage.monthlyJoinBtn().click();
+        subscriptionPage.payWallSignIn().click();
         loginModalPage.emailInput().sendKeys(config.chivetteEmail);
         loginModalPage.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         loginModalPage.signIn().click();
         driver.navigate().refresh();
         Thread.sleep(5000);
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
-        Assert.assertFalse(PrettyAsserts.isElementDisplayed(subscriptionFooter));
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(subscriptionFooter)), "Should not see footer");//test may break, watch
     }
 
     @Test
-    public void TipJar() {
+    public void TipJar() throws InterruptedException {
         editProfilePage.userMenu().click();
         editProfilePage.settingsBtn().click();
+        editProfilePage.socialLinksTab().click();
         editProfilePage.tipURLInput().sendKeys("https://cash.app/$SamiNiceGirl");
         editProfilePage.saveProfileBtn().click();
         pageHeaderPage.userMenu().click();
         pageHeaderPage.yourProfileBtn().click();
+        Thread.sleep(1000);
         Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.TipLink())
-                && profilePage.TipLink().getAttribute("target").equals("_blank"));
+        Assert.assertTrue(PrettyAsserts.isDisplayed(profilePage.TipLinkBy(), driver), "Did not see tip jar link on profile");
+        Assert.assertEquals(profilePage.TipLink().getAttribute("target"), "_blank");
+
     }
 
     @Test

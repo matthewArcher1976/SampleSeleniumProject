@@ -44,7 +44,7 @@ public class MobileLoginModalTest {
         config = Config.getConfig();
         driver = getDriver(config.driverTypeMobile);
         action = new Actions(driver);
-        shadow =  new Shadow(driver);
+        shadow = new Shadow(driver);
         card = new SubmissionCardsPage(driver);
         header = new PageHeaderPage(driver);
         login = new Logins(driver);
@@ -144,7 +144,7 @@ public class MobileLoginModalTest {
         login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Thread.sleep(4000);
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(upload.dragDropMobile()), "Did not go to submit page on login");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(upload.dragDropMobileBy(), driver), "Did not go to submit page on login");
 
     }
 
@@ -163,8 +163,9 @@ public class MobileLoginModalTest {
         Thread.sleep(2000);
         Assert.assertTrue(login.signIn().isDisplayed(), "Downvote on modal didn't prompt login");
     }
+
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void EmailTaken()  {
+    public void EmailTaken() {
         header.loginBtn().click();
         login.signUpTab().click();
         login.userName().sendKeys(USER_NAME);
@@ -265,9 +266,13 @@ public class MobileLoginModalTest {
     //************************** Teardown ********************************************
 
     @AfterMethod
-    public void logout(){
-        try {login.logout();}catch (Exception ignore){}
+    public void logout() {
+        try {
+            login.logout();
+        } catch (Exception ignore) {
+        }
     }
+
     @AfterClass
     public void TearDown() {
         driver.quit();

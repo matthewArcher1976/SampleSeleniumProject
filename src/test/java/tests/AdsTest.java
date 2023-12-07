@@ -57,7 +57,7 @@ public class AdsTest {
                 ExpectedConditions.urlContains("dopamine-dump"),
                 CustomExpectedConditions.cardsLoaded()));
         PageActions.scrollDown(driver, 2);
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(ads.adFrame()), "Did not find an ad frame on Latest");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(ads.adFrame(), driver), "Did not find an ad frame on Latest");
     }
 
     @Test
@@ -68,14 +68,14 @@ public class AdsTest {
                 ExpectedConditions.urlContains("following"),
                 CustomExpectedConditions.cardsLoaded()));
         PageActions.scrollDown(driver, 2);
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(ads.adFrame()), "Did not find an ad frame on Latest");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(ads.adFrame(), driver), "Did not find an ad frame on Latest");
     }
 
     @Test
     public void AdsOnLatest() {
         PageActions.scrollDown(driver, 2);
         Waiter.wait(driver).until(CustomExpectedConditions.cardsLoaded());
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(ads.adFrame()), "Did not find an ad frame on Latest");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(ads.adFrame(), driver), "Did not find an ad frame on Latest");
     }
 
     @Test
@@ -86,7 +86,7 @@ public class AdsTest {
                 ExpectedConditions.urlContains("chivettes"),
                 CustomExpectedConditions.cardsLoaded()));
         PageActions.scrollDown(driver, 2);
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(ads.adFrame()), "Did not find an ad frame on Verified");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(ads.adFrame(), driver), "Did not find an ad frame on Verified");
     }
 
     @Test

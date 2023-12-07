@@ -14,8 +14,8 @@ public class AdsPage {
 
     //****************************** Elements **********************************
 
-    public WebElement adFrame() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[id*=google_ads_iframe]")));
+    public By adFrame() {
+        return By.cssSelector("iframe[id*=google_ads_iframe]");
     }
     public WebElement adImage() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("google_image_div")));

@@ -57,7 +57,7 @@ public class SubmissionModalTest {
         driver.get(config.url);
     }
 
-    @Test
+    @Test()
     public void ClickTagRedirectToTagPage() throws InterruptedException {
         if (config.driverType.contains("Sauce")) {
             System.out.println("Skipping until https://resignationmedia.atlassian.net/browse/QA-121");

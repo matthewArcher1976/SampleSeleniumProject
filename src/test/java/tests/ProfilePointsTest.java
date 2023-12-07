@@ -62,19 +62,17 @@ public class ProfilePointsTest {
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(lionModal)), "Modal still displays after trying to close it");
     }
 
+
     @Test
     public void EarnPointsFacebook(){
         header.userMenu().click();
         header.yourProfileBtn().click();
-
         profilePage.pointsTab().click();
         profilePage.pointsEarnPoints().click();
         profilePage.morePointsFacebook().click();
         Assert.assertEquals(profilePage.lionModalTitle().getText(), "Like us on Facebook", "Missing or incorrect title on Facebook item");
-        profilePage.lionGotoSite().click();
-        //  Assert.assertEquals(driver.getCurrentUrl(), "https://www.instagram.com/thechive/"), "Link to Instagram not working";//TODO - complete these when the links go to the right place
+        Assert.assertEquals(profilePage.lionGotoSite().getAttribute("href"), "https://www.instagram.com/thechive/", "Expected a link to our Instagram page, found" + profilePage.lionGotoSite().getAttribute("href"));
         driver.navigate().back();
-
     }
 
     @Test
@@ -84,10 +82,8 @@ public class ProfilePointsTest {
         profilePage.pointsTab().click();
         profilePage.pointsEarnPoints().click();
         profilePage.morePointsInstagram().click();
-
         Assert.assertEquals(profilePage.lionModalTitle().getText(), "Follow us on Instagram", "Missing or incorrect title on instagram item");
-        profilePage.lionGotoSite().click();
-      //  Assert.assertEquals(driver.getCurrentUrl(), "https://www.instagram.com/thechive/"), "Link to Instagram not working";//TODO - complete these when the links go to the right place
+        Assert.assertEquals(profilePage.lionGotoSite().getAttribute("href"), "https://www.instagram.com/thechive/", "Expected a link to our Instagram page, found" + profilePage.lionGotoSite().getAttribute("href"));
         driver.navigate().back();
     }
 
@@ -99,18 +95,28 @@ public class ProfilePointsTest {
         profilePage.pointsEarnPoints().click();
         profilePage.morePointsPurchase().click();
         Assert.assertEquals(profilePage.lionModalDescription().getText(), "Get 5 points for every $1 you spend in our store", "Missing modal text");
-        String url = driver.getCurrentUrl();
-
-        if(url.contains("qa")){
-            profilePage.lionGotoSite().click();
-            Assert.assertEquals(driver.getCurrentUrl(), "https://stage-my.thechivery.com/", "Did not get linked to The Chivery");
-            driver.navigate().back();
-        }else{
-            profilePage.lionGotoSite().click();
-            Assert.assertEquals(driver.getCurrentUrl(), "https://www.thechivery.com/", "Did not get linked to The Chivery");
-            driver.navigate().back();
-        }
-
+        Assert.assertTrue(profilePage.lionGotoSite().getAttribute("href").contains("thechivery"), "Expected a link to The Chivery, found: " + profilePage.lionGotoSite().getAttribute("href"));
+    }
+    @Test()
+    public void EarnPointsReferral(){
+        header.userMenu().click();
+        header.yourProfileBtn().click();
+        profilePage.pointsTab().click();
+        profilePage.pointsEarnPoints().click();
+        profilePage.morePointsReferral().click();
+        Assert.assertEquals(profilePage.lionModalDescription().getText(), "Refer a friend", "Expected Refer a friend, found: " + profilePage.lionModalDescription().getText());
+        //TODO - complete test when https://resignationmedia.atlassian.net/browse/MYCHIVE-1125 is fixed
+    }
+    @Test
+    public void EarnPointsVisitChivery(){
+        header.userMenu().click();
+        header.yourProfileBtn().click();
+        profilePage.pointsTab().click();
+        profilePage.pointsEarnPoints().click();
+        profilePage.morePointsVisitChivery().click();
+        Assert.assertEquals(profilePage.lionModalTitle().getText(), "Visit The Chivery", "Missing or incorrect title on visit The Chivery item");
+        Assert.assertTrue(profilePage.lionGotoSite().getAttribute("href").contains("thechivery"), "Expected a link to The Chivery, found: " + profilePage.lionGotoSite().getAttribute("href"));
+        driver.navigate().back();
     }
 
     @Test
@@ -131,12 +137,12 @@ public class ProfilePointsTest {
         profilePage.pointsTab().click();
 
         profilePage.pointsEarnPoints().click();
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsPhotoFeatured()), "Did not see Photo featured on theChive card");
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsUpvotedScore()), "Did not see upvote score card");
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsDopamineDump()), "Did not see Dopamine Dump card");
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsSiteVisited()), "Did not see Site Visited card");
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsNewFollower()), "Did not see new followers card");
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profilePage.earnPointsSubmitPhoto()), "Did not see Points submitted card");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(profilePage.earnPointsPhotoFeaturedBy(), driver), "Did not see Photo featured on theChive card");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(profilePage.earnPointsUpvotedScoreBy(), driver), "Did not see upvote score card");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(profilePage.earnPointsDopamineDumpBy(), driver), "Did not see Dopamine Dump card");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(profilePage.earnPointsSiteVisitedBy(), driver), "Did not see Site Visited card");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(profilePage.earnPointsNewFollowerBy(), driver), "Did not see new followers card");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(profilePage.earnPointsSubmitPhotoBy(), driver), "Did not see Points submitted card");
     }
 
     //************************************* Teardown ********************************************

@@ -110,7 +110,7 @@ public class PageHeaderTest {
         List<WebElement> allCards = card.allCards();
         for (WebElement card:allCards){
             System.out.println(card.getAttribute("class") + " is class");
-            Assert.assertTrue(PrettyAsserts.isElementDisplayed(card.findElement(By.id("label-chivette"))));
+            Assert.assertTrue(card.findElement(By.id("label-chivette")).isDisplayed());
         }
     }
 

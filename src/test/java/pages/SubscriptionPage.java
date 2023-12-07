@@ -23,19 +23,22 @@ public class SubscriptionPage {
     public WebElement chargebeeOrderSummary(){
         return Waiter.wait(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[data-cb-id='cart_summary']")));
     }
+    public By chargebeeOrderSummaryBy(){
+        return By.cssSelector("div[data-cb-id='cart_summary']");
+    }
 
     public WebElement monthlyJoinBtn() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[data-price-id='myCHIVE-Subscription-USD-Monthly']")));
     }
 
-    public String monthlyJoinBtnSelector(){
-        return "button[data-price-id='myCHIVE-Subscription-USD-Monthly']";
+    public By monthlyJoinBtnBy(){
+        return By.cssSelector("button[data-price-id='myCHIVE-Subscription-USD-Monthly']");
+    }
+    public WebElement payWallSignIn(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(text(),'Sign in here!')]")));
     }
     public WebElement subscriptionFooter(){
         return Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("section[class*='fixed bottom']")));
     }
 
-    public String noThanksBtnSelector(){
-        return "button[class='mt-8 text-base']";
-    }
 }
