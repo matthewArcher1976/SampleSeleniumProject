@@ -60,7 +60,7 @@ public class MobileSubmissionModalTest {
     public void ClickTagRedirectToTagPage() throws InterruptedException {
         card.firstCard().click();
         PageActions.swipeUp(driver, 2);
-        Thread.sleep(2000);
+        Thread.sleep(2000);//mhm
         String tagName = (modal.tag().getText());
         modal.tag().click();
         Thread.sleep(2000);//yeah
@@ -147,7 +147,7 @@ public class MobileSubmissionModalTest {
         Assert.assertEquals(modal.facebookBtn().getCssValue("color"), "rgba(255, 255, 255, 1)", "Facebook icon is wrong color to start");
         Thread.sleep(1000);//yes
         action.moveToElement(modal.facebookBtn()).perform();
-        Thread.sleep(1000);
+        Thread.sleep(1000);//i get it
         Assert.assertEquals("rgba(0, 195, 0, 1)", modal.facebookBtn().getCssValue("color"), "Facebook button color on hover is wrong: " + modal.facebookBtn().getCssValue("color"));
     }
 
@@ -161,18 +161,28 @@ public class MobileSubmissionModalTest {
         Assert.assertEquals("rgba(0, 195, 0, 1)", modal.twitterBtn().getCssValue("color"), "Twitter button color on hover is wrong: " + modal.facebookBtn().getCssValue("color"));
     }
 
-    @Test(enabled = false)//this won't work in mobile view, arrow keys and my custom swipe right won't work
+    @Test(enabled = false)//Selenium doesn't like modals very much, can't get the navigation to work, tried several ways
     public void ImageChanceBetweenSubsArrowKey() throws InterruptedException {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
         Thread.sleep(4000);//yeah
+        System.out.println(driver.getCurrentUrl());
         String firstImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
-        PageActions.swipeLeft(driver, 2);
+        action.sendKeys(Keys.ARROW_RIGHT).perform();
         Thread.sleep(4000);// right
+        System.out.println(driver.getCurrentUrl());
+        driver.navigate().refresh();
+        Thread.sleep(4000);
         String secondImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         Assert.assertNotEquals(firstImage, secondImage, "ImageChanceBetweenSubsArrowKey - Found the same image after navigating right");
+        Thread.sleep(5000);//
         action.sendKeys(Keys.ARROW_RIGHT).perform();
-        Thread.sleep(2000);// i know
+        action.sendKeys(Keys.ARROW_RIGHT).perform();
+
+        Thread.sleep(5000);
+        driver.navigate().refresh();//refreshes because the image doesn't load when you do it in Selenium even though it works manually
+
+        Thread.sleep(5000);// i know
         String thirdImage = modal.modalCard().findElement(By.cssSelector("img[id^='submission-image-']")).getAttribute("id").replace("submission-image-", "");
         Assert.assertNotEquals(thirdImage, secondImage, "ImageChanceBetweenSubsArrowKey - Found the same image after navigating right second time");
         action.sendKeys(Keys.ARROW_LEFT).perform();

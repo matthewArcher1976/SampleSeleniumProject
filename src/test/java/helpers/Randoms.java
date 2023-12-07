@@ -8,7 +8,7 @@ public class Randoms {
         String RANDCHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder randomString = new StringBuilder();
         Random rnd = new Random();
-        while (randomString.length() < i) { // length of the random string.
+        while (randomString.length() < i) {
             int index = (int) (rnd.nextFloat() * RANDCHARS.length());
             randomString.append(RANDCHARS.charAt(index));
         }

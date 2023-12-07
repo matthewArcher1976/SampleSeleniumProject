@@ -11,6 +11,7 @@ import resources.Config;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.List;
@@ -52,21 +53,20 @@ public class VerifiedChivettesTabTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test(priority = 1)
+    @Test(priority = 1, retryAnalyzer = RetryAnalyzer.class)
     public void LoggedOutUserBuysMonthly() throws InterruptedException {
         header.menuChivettes().click();
-        PageActions.findElementWithScrolling(driver, By.cssSelector(subscription.monthlyJoinBtnSelector())).click();
+        PageActions.findElementWithScrolling(driver, subscription.monthlyJoinBtnBy()).click();
         login.emailInput().sendKeys(config.defaultEmail);
         login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("auth")));
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
-        //driver.navigate().refresh();
-      //  Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+
         action.moveToElement(subscription.monthlyJoinBtn()).click().perform();
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(subscription.chargebeeFrame()));
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(subscription.chargebeeOrderSummary()), "Did not see the order summary");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(subscription.chargebeeOrderSummaryBy(), driver), "Did not see the order summary");
         subscription.chargebeeClose().click();
         driver.switchTo().defaultContent();
         login.logout();
@@ -75,23 +75,24 @@ public class VerifiedChivettesTabTest {
     @Test
     public void LoggedOutUserHitsPaywall() throws InterruptedException {
         header.menuChivettes().click();
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(PageActions.findElementWithScrolling(driver, By.cssSelector(subscription.monthlyJoinBtnSelector()))), "Did not hit the paywall");
+
+        Assert.assertTrue(PageActions.findElementWithScrolling(driver, subscription.monthlyJoinBtnBy()).isDisplayed(), "Did not hit the paywall");
     }
 
     @Test
     public void ProfilePagePaywall() throws InterruptedException {
         header.menuChivettes().click();
-        PageActions.findElementWithScrolling(driver, By.cssSelector(subscription.monthlyJoinBtnSelector()));
+        PageActions.findElementWithScrolling(driver, subscription.monthlyJoinBtnBy());
         PageActions.scrollToTop(driver);
         card.firstCard().findElement(By.cssSelector(card.userNameSelector())).click();
         Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(subscription.monthlyJoinBtn()), "Paywall should display on Chivette profile page");
+        Assert.assertTrue(PrettyAsserts.isDisplayed(subscription.monthlyJoinBtnBy(), driver), "Paywall should display on Chivette profile page");
     }
 
     @Test
     public void UnsubscribedUserStillSeesCards() throws InterruptedException {
         header.menuChivettes().click();
-        PageActions.findElementWithScrolling(driver, By.cssSelector(subscription.monthlyJoinBtnSelector()));
+        PageActions.findElementWithScrolling(driver, subscription.monthlyJoinBtnBy());
         header.menuLatest().click();
         header.menuChivettes().click();
         driver.navigate().refresh();

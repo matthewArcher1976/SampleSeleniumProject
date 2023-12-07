@@ -65,6 +65,18 @@ public class PageActions {
 	        }
 	    }
 	}
+	public static void scrollRight(WebDriver driver, int times) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		for (int i = 0; i < times; i++) {
+			js.executeScript("window.scrollBy(200, 0)"); // Adjust the value 200 as needed
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public static void scrollToTop(WebDriver driver) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollTo(0, 0)");

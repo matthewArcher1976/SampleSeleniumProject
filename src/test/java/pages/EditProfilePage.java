@@ -230,8 +230,8 @@ public class EditProfilePage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[contains(text(),' Not pumped to check your email? Well, my friend ')]")));
     }
 
-    public WebElement hotnessText() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'Show me Hotness in theCHIVE App')]")));
+    public String hotnessText() {
+        return "Show me Hotness in theCHIVE App";
     }
 
     public WebElement hotnessToggle() {
@@ -365,7 +365,9 @@ public class EditProfilePage {
     public WebElement privacyInfoIcon() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-circle-info")));
     }
-
+    public By privacyInfoIconBy() {
+        return By.className("fa-circle-info");
+    }
     public WebElement privacyPrivateBold() {
         return helpers.Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//strong[contains(text(),'Features lost by having a private profile:')]")));
     }
@@ -426,8 +428,8 @@ public class EditProfilePage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[data-id='profile-tab-button']")));
     }
 
-    public WebElement privacyToggleText() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'Make my profile private')]")));
+    public String  privacyToggleText() {
+        return "Make my profile private";
     }
 
     public WebElement saveEmailPrefBtn() {
@@ -455,7 +457,7 @@ public class EditProfilePage {
     }
 
     public WebElement tipURLInput(){
-        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("tipUrl")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("tip_url")));
     }
     public WebElement twitterBadURL() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'The twitter format is invalid.')]")));
@@ -471,6 +473,9 @@ public class EditProfilePage {
 
     public WebElement updateSuccess() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
+    }
+    public By updateSuccessBy() {
+        return By.className("alert-success");
     }
 
     public WebElement uploadFailToast() {

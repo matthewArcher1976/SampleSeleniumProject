@@ -28,11 +28,21 @@ public class TopChiversPage {
     public WebElement ChivetteAvatar(){
         return Waiter.wait(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[style*='background-image']")));
     }
-    public String ChivetteAvatarSelector(){
-        return "div[style*='background-image']";
+    public By ChivetteAvatarBy(){
+
+        return By.cssSelector("div[style*='background-image']");
     }
     public WebElement firstRow(){
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-']:not([class='text-lg group-hover:text-primary break-all']):not([id*='position']):not([id^='leaderboard-row-points-'])")));
+    }
+    public WebElement FollowBtn() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='btn-follow-']"))).findElement(By.className("btn"));
+    }
+    public By FollowBtnBy() {
+        return By.cssSelector("button[id*='follow-btn']");
+    }
+    public WebElement topChiversHeader() {
+        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-award")));
     }
     public WebElement followCheck() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-check")));
@@ -95,15 +105,7 @@ public class TopChiversPage {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='tag-']")));
     }
 
-    public WebElement FollowBtn() {
-        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='btn-follow-']"))).findElement(By.className("btn"));
-    }
-    public String FollowBtnSelector() {
-        return "button[id*='follow-btn']";
-    }
-    public WebElement topChiversHeader() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-award")));
-    }
+
 
     public WebElement topChiversPosition() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-position-']")));

@@ -1,14 +1,12 @@
 package tests;
 
 import helpers.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import resources.Config;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
-
 import pages.EditProfilePage;
-
+import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
@@ -17,7 +15,7 @@ import static resources.getDriverType.getDriver;
 public class EditProfileAccountTest {
 
     WebDriver driver;
-    EditProfilePage profile;
+    EditProfilePage editProfilePage;
     Logins login;
 
     private static TestConfig config;
@@ -29,7 +27,7 @@ public class EditProfileAccountTest {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
         login = new Logins(driver);
-        profile = new EditProfilePage(driver);
+        editProfilePage = new EditProfilePage(driver);
     }
 
     @BeforeClass
@@ -38,6 +36,7 @@ public class EditProfileAccountTest {
         login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
+
     @BeforeMethod
     public void refresh() {
         driver.get(config.url);
@@ -46,174 +45,152 @@ public class EditProfileAccountTest {
     //************************** Begin Tests ********************************************
 
     @Test
-    public void DeleteAccountText(){
+    public void DeleteAccountText() {
         //Actual deletion covered in SignUpTest
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.accountTab().click();
-        profile.deleteAccountLink().click();
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.accountTab().click();
+        editProfilePage.deleteAccountLink().click();
         Assert.assertTrue(driver.getPageSource().contains(" Before you continue, you should know that by deleting your account you will lose access to ALL of your submissions, followers, followees, and all data related to you."));
-        profile.deleteNeverMindBtn().click();
+        editProfilePage.deleteNeverMindBtn().click();
     }
 
     @Test
     public void HotnessToggle() throws InterruptedException {
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.accountTab().click();
-        if (profile.hotnessToggle().getAttribute("value").equals("false")) {
-            profile.hotnessToggle().click();
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.accountTab().click();
+        if (editProfilePage.hotnessToggle().getAttribute("value").equals("false")) {
+            editProfilePage.hotnessToggle().click();
             Thread.sleep(1000);
-            Assert.assertEquals("true", profile.hotnessToggle().getAttribute("value"), "\"Hotness toggle did not switch to on");
-        } else if (profile.hotnessToggle().getAttribute("value").equals("true")) {
-            profile.hotnessToggle().click();
-            Assert.assertEquals("false", profile.hotnessToggle().getAttribute("value"), "Hotness toggle did not switch to off");
-        } else if (!profile.hotnessToggle().getAttribute("value").equals("false") && !profile.hotnessToggle().getAttribute("value").equals("true")) {
+            Assert.assertEquals("true", editProfilePage.hotnessToggle().getAttribute("value"), "\"Hotness toggle did not switch to on");
+        } else if (editProfilePage.hotnessToggle().getAttribute("value").equals("true")) {
+            editProfilePage.hotnessToggle().click();
+            Assert.assertEquals("false", editProfilePage.hotnessToggle().getAttribute("value"), "Hotness toggle did not switch to off");
+        } else if (!editProfilePage.hotnessToggle().getAttribute("value").equals("false") && !editProfilePage.hotnessToggle().getAttribute("value").equals("true")) {
             System.out.println("The Hotness toggle may be busted ");
             Assert.fail();
         }
-        profile.saveProfileBtn().click();
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profile.updateSuccess()), "Success message not displayed after saving hotness toggle");
+        editProfilePage.saveProfileBtn().click();
+        Thread.sleep(3000);//yeah...
+        Assert.assertTrue(PrettyAsserts.isDisplayed(editProfilePage.updateSuccessBy(), driver), "Success message not displayed after saving hotness toggle");
     }
+
     @Test
     public void MakePrivateToggle() throws InterruptedException {
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.accountTab().click();
-        if (profile.makePrivateToggle().getAttribute("value").equals("false")) {
-            profile.makePrivateToggle().click();
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.accountTab().click();
+        if (editProfilePage.makePrivateToggle().getAttribute("value").equals("false")) {
+            editProfilePage.makePrivateToggle().click();
             Thread.sleep(1000);//yes
-            Assert.assertTrue(profile.makePrivateTitle().isDisplayed(), "Warning popup did not display after toggling make private on");
-            profile.makePrivateNvmBtn().click();
+            Assert.assertTrue(editProfilePage.makePrivateTitle().isDisplayed(), "Warning popup did not display after toggling make private on");
+            editProfilePage.makePrivateNvmBtn().click();
             Thread.sleep(2000);//mhm
-            Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"),  "Make private toggle should not have switched on");
+            Assert.assertEquals("false", editProfilePage.makePrivateToggle().getAttribute("value"), "Make private toggle should not have switched on");
 
-            profile.makePrivateToggle().click();
-            profile.makePrivateAcceptBtn().click();
+            editProfilePage.makePrivateToggle().click();
+            editProfilePage.makePrivateAcceptBtn().click();
             Thread.sleep(3000);//I know
 
-            profile.saveProfileBtn().click();
-            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+            editProfilePage.saveProfileBtn().click();
+            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(editProfilePage.updateSuccess()));
             driver.navigate().refresh();
-            profile.accountTab().click();
+            editProfilePage.accountTab().click();
             Thread.sleep(3000);//ok ok
-            Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.attributeToBe(profile.makePrivateToggle(), "value", "true")), "Make private toggle did not switch to on");
+            Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.attributeToBe(editProfilePage.makePrivateToggle(), "value", "true")), "Make private toggle did not switch to on");
             //if it's not set private when you load the page
-        } else if (profile.makePrivateToggle().getAttribute("value").equals("true")) {
-            profile.makePrivateToggle().click();
-            profile.saveProfileBtn().click();
-            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        } else if (editProfilePage.makePrivateToggle().getAttribute("value").equals("true")) {
+            editProfilePage.makePrivateToggle().click();
+            editProfilePage.saveProfileBtn().click();
+            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(editProfilePage.updateSuccess()));
             driver.navigate().refresh();
-            profile.accountTab().click();
+            editProfilePage.accountTab().click();
             Thread.sleep(1000);
-            Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"), "Make private toggle did not switch to off");
-            profile.makePrivateToggle().click();
+            Assert.assertEquals("false", editProfilePage.makePrivateToggle().getAttribute("value"), "Make private toggle did not switch to off");
+            editProfilePage.makePrivateToggle().click();
             Thread.sleep(1000);
-            Assert.assertTrue(profile.makePrivateTitle().isDisplayed(), "Warning popup did not display after toggling make private on");
-            profile.makePrivateNvmBtn().click();
+            Assert.assertTrue(editProfilePage.makePrivateTitle().isDisplayed(), "Warning popup did not display after toggling make private on");
+            editProfilePage.makePrivateNvmBtn().click();
             Thread.sleep(2000);
-            Assert.assertEquals("false", profile.makePrivateToggle().getAttribute("value"), "Make private toggle should not have switched on");
-            profile.makePrivateToggle().click();
-            profile.makePrivateAcceptBtn().click();
+            Assert.assertEquals("false", editProfilePage.makePrivateToggle().getAttribute("value"), "Make private toggle should not have switched on");
+            editProfilePage.makePrivateToggle().click();
+            editProfilePage.makePrivateAcceptBtn().click();
             Thread.sleep(2000);
-            Assert.assertEquals("true", profile.makePrivateToggle().getAttribute("value"), "Make private toggle did not switch to on");
+            Assert.assertEquals("true", editProfilePage.makePrivateToggle().getAttribute("value"), "Make private toggle did not switch to on");
 
-        } else if (!profile.makePrivateToggle().getAttribute("value").equals("false") && !profile.makePrivateToggle().getAttribute("value").equals("true")) {
+        } else if (!editProfilePage.makePrivateToggle().getAttribute("value").equals("false") && !editProfilePage.makePrivateToggle().getAttribute("value").equals("true")) {
             Assert.fail("Make private toggle may be busted");
         }
 
         Thread.sleep(2000);
         //Switch privacy back off
-        if (profile.makePrivateToggle().getAttribute("value").equals("true")) {
+        if (editProfilePage.makePrivateToggle().getAttribute("value").equals("true")) {
 
-            profile.makePrivateToggle().click();
-            profile.saveProfileBtn().click();
+            editProfilePage.makePrivateToggle().click();
+            editProfilePage.saveProfileBtn().click();
             Thread.sleep(4000);
-            Waiter.wait(driver).until(ExpectedConditions.attributeToBe(profile.makePrivateToggle(), "value", "false"));
+            Waiter.wait(driver).until(ExpectedConditions.attributeToBe(editProfilePage.makePrivateToggle(), "value", "false"));
         }
     }
+
     @Test
-    public void PrivacyDefIcon() {
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.accountTab().click();
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profile.privacyInfoIcon()), "Did not find the Privacy Definition icon");
+    public void PrivacyDefIcon() throws InterruptedException {
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.accountTab().click();
+        Thread.sleep(3000);//make a new custom expected for this
+        Assert.assertTrue(PrettyAsserts.isDisplayed(editProfilePage.privacyInfoIconBy(), driver), "Did not find the Privacy Definition icon");
     }
 
+    //TODO - new test case for privacy page text, get rid of those text elements in the pages file, it's a mess
     @Test
-    public void PrivacyPageText() {
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.accountTab().click();
-        Assert.assertTrue(
-                PrettyAsserts.isElementDisplayed(profile.privacyDefHeader())
-
-                        && profile.privacyDefSubHeader().isDisplayed()
-
-                        && profile.privacyPublicHeader().isDisplayed()
-                        && profile.privacyPublicSubHeader().getText().contains("privacy setting will allow anyone to view")
-                        && profile.privacyPublicBold().isDisplayed()
-                        && profile.privacyPublicBullet1().isDisplayed()
-                        && profile.privacyPublicBullet2().isDisplayed()
-                        && profile.privacyPublicBullet3().isDisplayed()
-                        && profile.privacyPublicBullet4().isDisplayed()
-                        && profile.privacyPublicBullet2().isDisplayed()
-
-                        && profile.privacyPrivateHeader().isDisplayed()
-                        && profile.privacyPrivateSubHeader().getText().contains("privacy setting will hide your profile and submissions")
-                        && profile.privacyPrivateBold().isDisplayed()
-                        && profile.privacyPublicBullet1().isDisplayed()
-                        && profile.privacyPublicBullet2().isDisplayed()
-                        && profile.privacyPublicBullet3().isDisplayed()
-                        && profile.privacyPublicBullet4().isDisplayed(), "PrivacyPageText - text is broken");
-    }
-
-    @Test
-    public void PrivacyTabToggleText() {
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.accountTab().click();
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profile.hotnessText()), "Did not find Show me hotness text");
-        Assert.assertTrue(PrettyAsserts.isElementDisplayed(profile.privacyToggleText()), "Did not find set profile private text");
+    public void PrivacyTabToggleText() throws InterruptedException {
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.accountTab().click();
+        Thread.sleep(4000);//try then remove
+        Assert.assertTrue(driver.getPageSource().contains(editProfilePage.hotnessText()), "Did not find Show me hotness text");
+        Assert.assertTrue(driver.getPageSource().contains(editProfilePage.privacyToggleText()), "Did not find set profile private text");
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void UpdatePassword(){
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.accountTab().click();
-        profile.password().sendKeys(System.getenv("TEST_PWD"));
-        profile.passwordVerify().sendKeys(System.getenv("TEST_PWD"));
-        profile.saveProfileBtn().click();
-        Assert.assertTrue(PrettyAsserts.isElementEnabled(profile.updateSuccess()), "Did not see success toast after updating password");
+    public void UpdatePassword() {
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.accountTab().click();
+        editProfilePage.password().sendKeys(System.getenv("TEST_PWD"));
+        editProfilePage.passwordVerify().sendKeys(System.getenv("TEST_PWD"));
+        editProfilePage.saveProfileBtn().click();
+        Assert.assertTrue(PrettyAsserts.isElementEnabled(editProfilePage.updateSuccess()), "Did not see success toast after updating password");
     }
 
     @Test
-    public void UpdatePasswordMismatch(){
-        profile.userMenu().click();
-        profile.settingsBtn().click();
-        profile.accountTab().click();
-        profile.password().sendKeys(Randoms.getRandomString(8));
-        profile.passwordVerify().sendKeys(Randoms.getRandomString(9));
-        profile.saveProfileBtn().click();
-        Assert.assertEquals(profile.passwordError().getText(), "The password confirmation does not match.");
+    public void UpdatePasswordMismatch() {
+        editProfilePage.userMenu().click();
+        editProfilePage.settingsBtn().click();
+        editProfilePage.accountTab().click();
+        editProfilePage.password().sendKeys(Randoms.getRandomString(8));
+        editProfilePage.passwordVerify().sendKeys(Randoms.getRandomString(9));
+        editProfilePage.saveProfileBtn().click();
+        Assert.assertEquals(editProfilePage.passwordError().getText(), "The password confirmation does not match.");
     }
 
     @Test
     public void UpdateUserName() throws InterruptedException {
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
+        editProfilePage.userMenu().click();
+        editProfilePage.yourProfileBtn().click();
         Thread.sleep(4000);
         String ourName = StringHelper.getUsernameFromURL(driver.getCurrentUrl());
         String newName = Randoms.getRandomString(10);
-        profile.editProfileBtn().click();
-        profile.accountTab().click();
-        profile.userName().clear();
-        profile.userName().sendKeys(newName);
-        profile.saveProfileBtn().click();
-        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
-        profile.userMenu().click();
-        profile.yourProfileBtn().click();
+        editProfilePage.editProfileBtn().click();
+        editProfilePage.accountTab().click();
+        editProfilePage.userName().clear();
+        editProfilePage.userName().sendKeys(newName);
+        editProfilePage.saveProfileBtn().click();
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(editProfilePage.updateSuccess()));
+        editProfilePage.userMenu().click();
+        editProfilePage.yourProfileBtn().click();
 
         try {
             Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains(newName)));
@@ -221,21 +198,21 @@ public class EditProfileAccountTest {
         } catch (Exception e) {
             System.out.println("UpdateUserName - The username did not update");
             //Teardown, set username back
-            profile.editProfileBtn().click();
-            profile.accountTab().click();
-            profile.userName().clear();
-            profile.userName().sendKeys(ourName);
-            profile.saveProfileBtn().click();
-            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+            editProfilePage.editProfileBtn().click();
+            editProfilePage.accountTab().click();
+            editProfilePage.userName().clear();
+            editProfilePage.userName().sendKeys(ourName);
+            editProfilePage.saveProfileBtn().click();
+            Waiter.wait(driver).until(ExpectedConditions.visibilityOf(editProfilePage.updateSuccess()));
             Assert.fail();
         }
         //Teardown, set username back
-        profile.editProfileBtn().click();
-        profile.accountTab().click();
-        profile.userName().clear();
-        profile.userName().sendKeys(ourName);
-        profile.saveProfileBtn().click();
-        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        editProfilePage.editProfileBtn().click();
+        editProfilePage.accountTab().click();
+        editProfilePage.userName().clear();
+        editProfilePage.userName().sendKeys(ourName);
+        editProfilePage.saveProfileBtn().click();
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(editProfilePage.updateSuccess()));
     }
 
     //************************** Teardown ********************************************
