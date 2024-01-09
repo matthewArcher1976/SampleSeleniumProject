@@ -13,8 +13,6 @@ import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
-import java.util.List;
-
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
@@ -57,7 +55,7 @@ public class SubmissionModalTest {
     //************************** Tests ******************************************
 
     @Test()
-    public void ClickTagForTagPage() throws InterruptedException {
+    public void ClickTagForTagPage() {
        card.firstCard().click();
        String tag = modal.tag().getText();
        modal.tag().click();

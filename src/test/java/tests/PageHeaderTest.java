@@ -4,7 +4,6 @@ import helpers.CustomExpectedConditions;
 import helpers.Logins;
 import helpers.Waiter;
 import helpers.WindowUtil;
-import io.github.sukgu.Shadow;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;

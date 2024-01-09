@@ -14,7 +14,6 @@ import pages.TopChiversPage;
 import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
-import resources.TestRunner;
 
 import java.util.ArrayList;
 import java.util.HashSet;

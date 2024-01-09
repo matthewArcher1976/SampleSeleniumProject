@@ -180,7 +180,7 @@ public class EditProfileAccountTest {
     }
 
     @Test
-    public void UpdateUserName() throws InterruptedException {
+    public void UpdateUserName() {
         editProfilePage.userMenu().click();
         editProfilePage.yourProfileBtn().click();
         Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
