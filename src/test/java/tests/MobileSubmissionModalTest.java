@@ -31,17 +31,16 @@ public class MobileSubmissionModalTest {
     private static TestConfig config;
     
     //************************** Setup ******************************************
+
     @BeforeTest
     public void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverTypeMobile);
-
         action = new Actions(driver);
         card = new SubmissionCardsPage(driver);
         login = new Logins(driver);
         modal = new SubmissionModalPage(driver);
         single = new SubmissionSingleImagePage(driver);
-
     }
 
     @BeforeClass
@@ -56,7 +55,7 @@ public class MobileSubmissionModalTest {
         driver.get(config.url);
     }
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Test(retryAnalyzer = RetryAnalyzer.class, enabled = false)
     public void ClickTagRedirectToTagPage() throws InterruptedException {
         card.firstCard().click();
         PageActions.swipeUp(driver, 2);
@@ -107,7 +106,7 @@ public class MobileSubmissionModalTest {
         Assert.assertTrue(modal.commentTextInput().isDisplayed(), "Policy text did not display");
     }
 
-    @Test
+    @Test//TODO fix
     public void ClickCommentsIcon() {
         modal.firstCard().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));

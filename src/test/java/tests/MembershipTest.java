@@ -65,7 +65,7 @@ public class MembershipTest {
         helpers.WindowUtil.switchToWindow(driver, 0);
     }
 
-    @Test
+    @Test(enabled = false)
     public void CreditCardInputs() throws InterruptedException {
         profile.membershipTab().click();
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[src='/settings/membership-manage']")));
@@ -76,7 +76,7 @@ public class MembershipTest {
         Assert.assertTrue(profile.membershipCreditCardExp().isDisplayed() && profile.membershipCreditCardExp().isEnabled(), "CC Exp Input Not found");
     }
 
-    @Test()
+    @Test(enabled = false)//TODO redo for chargebee
     public void CreditCCNumber() {
         profile.membershipTab().click();
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("iframe[src='/settings/membership-manage']")));

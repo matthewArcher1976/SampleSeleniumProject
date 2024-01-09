@@ -25,25 +25,31 @@ public class TopChiversPage {
         ));
     }
 
-    public WebElement ChivetteAvatar(){
+    public WebElement ChivetteAvatar() {
         return Waiter.wait(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[style*='background-image']")));
     }
-    public By ChivetteAvatarBy(){
+
+    public By ChivetteAvatarBy() {
 
         return By.cssSelector("div[style*='background-image']");
     }
-    public WebElement firstRow(){
+
+    public WebElement firstRow() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-']:not([class='text-lg group-hover:text-primary break-all']):not([id*='position']):not([id^='leaderboard-row-points-'])")));
     }
+
     public WebElement FollowBtn() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='btn-follow-']"))).findElement(By.className("btn"));
     }
+
     public By FollowBtnBy() {
         return By.cssSelector("button[id*='follow-btn']");
     }
+
     public WebElement topChiversHeader() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-award")));
     }
+
     public WebElement followCheck() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-check")));
     }
@@ -51,16 +57,20 @@ public class TopChiversPage {
     public WebElement followCircle() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-circle-plus")));
     }
-    public WebElement points(){
+
+    public WebElement points() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='leaderboard-row-points-']")));
     }
-    public int pointsNumber(){
+
+    public int pointsNumber() {
         String points = Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='leaderboard-row-points-']"))).getText();
         return Integer.parseInt(points);
     }
-    public String pointsSelector(){
+
+    public String pointsSelector() {
         return "div[id^='leaderboard-row-points-']";
     }
+
     public WebElement recentlyVerifiedUser() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='row-recently-verified-username-']")));
     }
@@ -105,8 +115,6 @@ public class TopChiversPage {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='tag-']")));
     }
 
-
-
     public WebElement topChiversPosition() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-position-']")));
     }
@@ -126,7 +134,8 @@ public class TopChiversPage {
     public WebElement UserName() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='leaderboard-row-username-']")));
     }
-    public String UserNameSelector(){
+
+    public String UserNameSelector() {
         return "div[id^='leaderboard-row-username-']";
     }
 

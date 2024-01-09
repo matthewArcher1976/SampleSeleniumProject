@@ -1,10 +1,7 @@
 package tests;
 
 
-import helpers.CustomExpectedConditions;
-import helpers.Logins;
-import helpers.PrettyAsserts;
-import helpers.Waiter;
+import helpers.*;
 import io.github.sukgu.Shadow;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -39,6 +36,7 @@ public class MobileLoginModalTest {
     public final String USER_NAME = "DeleteMeTest";
 
     //*********************** Setup *********************************
+
     @BeforeClass
     public void setConfig() throws Exception {
         config = Config.getConfig();
@@ -133,8 +131,6 @@ public class MobileLoginModalTest {
         login.signIn().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("following")));
         header.userMenu().click();
-
-
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
@@ -145,7 +141,6 @@ public class MobileLoginModalTest {
         login.signIn().click();
         Thread.sleep(4000);
         Assert.assertTrue(PrettyAsserts.isDisplayed(upload.dragDropMobileBy(), driver), "Did not go to submit page on login");
-
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
@@ -195,7 +190,7 @@ public class MobileLoginModalTest {
         Assert.assertTrue(login.errorText().getText().contains("The value must be equal to the other value"));
     }
 
-    @Test
+    @Test(enabled = false)//making accounts has caused fuckage even with the teardown
     public void SignupWithEmail() throws InterruptedException {
         header.loginBtn().click();
         login.signUpTab().click();
@@ -227,7 +222,7 @@ public class MobileLoginModalTest {
         header.loginBtn().click();
         login.signUpTab().click();
         login.userName().sendKeys(USER_NAME);
-        login.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
+        login.emailInput().sendKeys("thechivetest+" + Randoms.getRandomString(10) + "@gmail.com");
         login.birthdayInput().click();
         login.birthdayInput().sendKeys("12122020");
         login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
@@ -235,7 +230,7 @@ public class MobileLoginModalTest {
         login.termsCheckbox().click();
         login.createAccountBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast()));
-        Assert.assertTrue(login.notificationToast().getText().contains("You should have 18 years to use the site"));
+        Assert.assertTrue(login.notificationToast().getText().contains("You should have 18 years to use the site"), "found " + login.notificationToast().getText());
     }
 
     @Test
@@ -252,7 +247,7 @@ public class MobileLoginModalTest {
         header.loginBtn().click();
         login.signUpTab().click();
         login.userName().sendKeys("TheChiveTest");
-        login.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
+        login.emailInput().sendKeys("thechivetest+" + Randoms.getRandomString(10) + "@gmail.com");
         login.birthdayInput().click();
         login.birthdayInput().sendKeys("12121990");
         login.passwordInput().sendKeys(System.getenv("TEST_PWD"));

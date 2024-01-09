@@ -474,6 +474,7 @@ public class EditProfilePage {
     public WebElement updateSuccess() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("alert-success")));
     }
+
     public By updateSuccessBy() {
         return By.className("alert-success");
     }
@@ -482,24 +483,28 @@ public class EditProfilePage {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("Vue-Toastification__toast--error")));
     }
 
+    public By uploadFailToastBy() {
+        return By.className("Vue-Toastification__toast--error");
+    }
+
     public WebElement userMenu() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar")));
     }
 
     public WebElement userName() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("username")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("username")));
     }
 
     public WebElement verifiedCheck() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("label-verified")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("label-verified")));
     }
 
     public WebElement websiteInput() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("website")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("website")));
     }
 
     public WebElement yourProfileBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.linkText("Your Profile")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.linkText("Your Profile")));
     }
 
 

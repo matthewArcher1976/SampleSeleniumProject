@@ -83,7 +83,8 @@ public class CommentsTest {
         Assert.assertTrue(comments.enterEmailLabel().isDisplayed(), "Did not find the Please enter your email label");
         Assert.assertTrue(comments.enterPasswordLabel().isDisplayed(), "Did not find the Please enter your password label");
     }
-    @Test(retryAnalyzer = RetryAnalyzer.class)
+
+    @Test(retryAnalyzer = RetryAnalyzer.class)//TODO - scrap this? Testing a 3rd parts plugin here
     public void LeaveGuestComment() throws InterruptedException {
         card.firstCard().click();
         PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();

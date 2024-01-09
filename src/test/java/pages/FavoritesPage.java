@@ -11,12 +11,12 @@ import java.util.List;
 public class FavoritesPage {
 
     private final WebDriver driver;
-
     public FavoritesPage(WebDriver driver) {
         this.driver = driver;
     }
 
     //***********************  Web Elements  **********************
+
     public List<WebElement> allCards() {
         return driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image'])"));
     }

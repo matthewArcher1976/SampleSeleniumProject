@@ -1,20 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
-    <parameter name="name" value="matt"/>
-    <parameter name="password" value="${env.TEST_PWD}" />
-
-    <listeners>
-        <listener class-name="listeners.SauceLabsListener"/>
-    </listeners>
+<suite name="iChiveTests">
     <test verbose="2" name="iChiveTests">
+        <classes>
 
-        <packages>
-
-            <package name="tests"/>
-
-        </packages>
-
+            <class name="tests.AdsTest"/>
+            <class name="tests.BannedUserTest"/>
+            <class name="tests.BlockUserTest"/>
+            <class name="tests.ChivettesTest"/>
+            <class name="tests.CommentsTest"/>
+            <class name="tests.DopamineDumpTest"/>
+            <class name="tests.EditProfileAccountTest"/>
+            <class name="tests.EditProfileEmailsTest"/>
+            <class name="tests.EditProfileSocialLinksTest"/>
+            <class name="tests.EditProfileTest"/>
+            <class name="tests.FavoritesTest"/>
+            <!--class name="tests.HelloWorldTest"/ testing test, disregard-->
+            <class name="tests.ImageUploadTest"/>
+            <class name="tests.LoginFaceBookTest"/>
+            <class name="tests.LoginGoogleTest"/>
+            <class name="tests.LoginModalTest"/>
+            <class name="tests.MembershipTest"/>
+            <class name="tests.MobileLoginModalTest"/>
+            <class name="tests.MobileSubmissionModalTest"/>
+            <class name="tests.MobileViewHeaderTest"/>
+            <class name="tests.NotificationsTest"/>
+            <class name="tests.PageHeaderTest"/>
+            <class name="tests.PrivateUserTest"/>
+            <class name="tests.ProfilePointsTest"/>
+            <class name="tests.ProfileTest"/>
+            <class name="tests.SearchAndFiltersTest"/>
+            <class name="tests.SignupTest"/>
+            <class name="tests.SubmissionCardsTest"/>
+            <class name="tests.SubmissionModalTest"/>
+            <class name="tests.SubmissionSingleImageTest"/>
+            <class name="tests.TopChiversTest"/>
+            <class name="tests.VerifiedChivettesTabTest"/>
+        </classes>
     </test>
-
 </suite>

@@ -17,7 +17,6 @@ public class EditProfileAccountTest {
     WebDriver driver;
     EditProfilePage editProfilePage;
     Logins login;
-
     private static TestConfig config;
 
     //************************** Setup ******************************************
@@ -57,6 +56,7 @@ public class EditProfileAccountTest {
 
     @Test
     public void HotnessToggle() throws InterruptedException {
+
         editProfilePage.userMenu().click();
         editProfilePage.settingsBtn().click();
         editProfilePage.accountTab().click();
@@ -71,9 +71,11 @@ public class EditProfileAccountTest {
             System.out.println("The Hotness toggle may be busted ");
             Assert.fail();
         }
+
         editProfilePage.saveProfileBtn().click();
         Thread.sleep(3000);//yeah...
         Assert.assertTrue(PrettyAsserts.isDisplayed(editProfilePage.updateSuccessBy(), driver), "Success message not displayed after saving hotness toggle");
+
     }
 
     @Test
@@ -144,6 +146,7 @@ public class EditProfileAccountTest {
     }
 
     //TODO - new test case for privacy page text, get rid of those text elements in the pages file, it's a mess
+
     @Test
     public void PrivacyTabToggleText() throws InterruptedException {
         editProfilePage.userMenu().click();
@@ -180,7 +183,7 @@ public class EditProfileAccountTest {
     public void UpdateUserName() throws InterruptedException {
         editProfilePage.userMenu().click();
         editProfilePage.yourProfileBtn().click();
-        Thread.sleep(4000);
+        Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
         String ourName = StringHelper.getUsernameFromURL(driver.getCurrentUrl());
         String newName = Randoms.getRandomString(10);
         editProfilePage.editProfileBtn().click();
@@ -213,6 +216,18 @@ public class EditProfileAccountTest {
         editProfilePage.userName().sendKeys(ourName);
         editProfilePage.saveProfileBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(editProfilePage.updateSuccess()));
+    }
+
+    @Test(enabled = false)//TODO - get it working
+    public void UpdateUserNameInvalid() throws InterruptedException {
+        editProfilePage.userMenu().click();
+        editProfilePage.yourProfileBtn().click();
+        Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
+        Thread.sleep(4000);
+        editProfilePage.accountTab().click();
+        editProfilePage.userName().sendKeys("Test%$");
+        editProfilePage.saveProfileBtn().click();
+        Assert.assertTrue(PrettyAsserts.isDisplayed(editProfilePage.uploadFailToastBy(), driver));
     }
 
     //************************** Teardown ********************************************

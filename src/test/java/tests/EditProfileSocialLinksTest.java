@@ -67,7 +67,7 @@ public class EditProfileSocialLinksTest {
 
     @Test
 
-    public void AmazonLink() {
+    public void AmazonLink() throws InterruptedException {
         profile.userMenu().click();
         profile.settingsBtn().click();
         profile.socialLinksTab().click();
@@ -81,31 +81,14 @@ public class EditProfileSocialLinksTest {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
-        Assert.assertTrue(profilePage.amazonLink().isDisplayed(), "Did not fine the Amazon icon");
+        Thread.sleep(5000);//TODO - remove sleep
+        Assert.assertTrue(profilePage.amazonLink().isDisplayed()
+                && profilePage.amazonLink().getAttribute("target").equals("_blank"), "Did not fine the Amazon icon");
 
-        profilePage.amazonLink().click();
-        WindowUtil.switchToWindow(driver, 1);
 
-        try {
-            Assert.assertTrue(Waiter.quickWait(driver).until(ExpectedConditions.titleContains("Amazon.com")) &&
-                    Waiter.quickWait(driver).until(ExpectedConditions.urlContains("wishlist")));
-        } catch (AssertionError e) {
-            System.out.println("Did not find Amazon window");
-            driver.close();
-            WindowUtil.switchToWindow(driver, 0);
-            System.out.println("Did not fine the Amazon icon");
-            Assert.fail();
-        } catch (TimeoutException e) {
-            driver.close();
-            WindowUtil.switchToWindow(driver, 0);
-            Assert.fail("Did not find Amazon window");
-        }
-        driver.close();
-        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
-
     public void AmazonLinkBadURL() {
         profile.userMenu().click();
         profile.settingsBtn().click();

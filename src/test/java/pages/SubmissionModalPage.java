@@ -1,5 +1,6 @@
 package pages;
 
+import helpers.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -21,6 +22,14 @@ public class SubmissionModalPage {
 
     public List<WebElement> allCards() {
         return driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
+    }
+
+    public WebElement blurredImage(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[class*='blur-md']")));
+    }
+
+    public By blurredImageBy(){
+        return By.cssSelector("img[class*='blur-md']");
     }
 
     public WebElement cardWithTag() throws InterruptedException {

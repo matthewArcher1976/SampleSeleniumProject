@@ -92,8 +92,7 @@ public class NotificationsTest {
 
     @AfterClass
     public void TearDown() {
-        driver1.close();
-        driver2.close();
+
         driver1.quit();
         driver2.quit();
     }

@@ -15,7 +15,7 @@ public class CustomExpectedConditions {
             boolean notEmpty = false;
             assert driver != null;
             List <WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
-            if(allCards.size() > 10){
+            if(allCards.size() > 16){
                 notEmpty = true;
             }
             return notEmpty;
@@ -45,7 +45,6 @@ public class CustomExpectedConditions {
                                 "document.head.appendChild(script);"
                 );
             }
-
 
             // Wait for jQuery to load
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));

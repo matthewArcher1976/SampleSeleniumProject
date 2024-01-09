@@ -32,19 +32,14 @@ public class TestImageGetter {
                 URL url = new URL(imageUrl);
                 try (InputStream inputStream = url.openStream()) {
                     Path localFilePath = Path.of("/Users/mattarcher/Downloads/stockdownloads/stock" + Randoms.getRandomString(15) +".jpg");
-
                     // Save the image to the local directory
                     Files.copy(inputStream, localFilePath, StandardCopyOption.ATOMIC_MOVE);
-
                     System.out.println("Image saved successfully to: " + localFilePath);
                     i++;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
-
 }

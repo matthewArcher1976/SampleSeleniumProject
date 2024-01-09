@@ -54,6 +54,7 @@ public class ProfilePage {
     public By earnPointsPhotoFeaturedBy() {
         return By.className("lion-loyalty-panel-rule-item--submission_featured_thechive");
     }
+
     public By earnPointsSiteVisitedBy() {
         return By.className("lion-loyalty-panel-rule-item--site_visited");
     }
@@ -121,11 +122,17 @@ public class ProfilePage {
     public WebElement morePointsPurchase() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--$purchase")));
     }
+
     public WebElement morePointsReferral() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--referral")));
     }
+
     public WebElement morePointsVisitChivery() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("lion-loyalty-panel-rule-item--pageview")));
+    }
+
+    public WebElement newForumPostBtn(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("new-post")));
     }
     public WebElement nftSubmitButton() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[class='btn float-right btn-primary']")));
@@ -204,6 +211,24 @@ public class ProfilePage {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("user_profile_points")));
     }
 
+    public WebElement postCancelBtn(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("modal-cancel-button")));
+    }
+
+    public WebElement postCreateBtn(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("modal-confirm-button")));
+    }
+
+    public WebElement postMessageInput(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("post-message")));
+    }
+    public WebElement postToast(){
+        return Waiter.wait(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className("Vue-Toastification__toast--success")));
+    }
+    public WebElement postTitleInput(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("post-title")));
+    }
+
     public WebElement privacyTermsLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.linkText("Terms & Privacy")));
     }
@@ -236,13 +261,19 @@ public class ProfilePage {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("user_profile_following")));
     }
 
+    public WebElement tabForum(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("user_profile_posts")));
+    }
+
     public WebElement tiktokLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("social-button-tiktok")));
     }
-    public WebElement TipLink(){
+
+    public WebElement TipLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[href*='venmo.com'], a[href*='cash.app']")));
     }
-    public By TipLinkBy(){
+
+    public By TipLinkBy() {
         return By.cssSelector("a[href*='venmo.com'], a[href*='cash.app']");
     }
 

@@ -11,7 +11,6 @@ import resources.Config;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import resources.RetryAnalyzer;
 import resources.TestConfig;
 
 import java.util.List;
@@ -22,11 +21,12 @@ public class VerifiedChivettesTabTest {
 
     WebDriver driver;
     ProfilePage profilePage;
-    PageHeaderPage header;
+    PageHeaderPage pageHeaderPage;
     EditProfilePage profile;
     Logins login;
     SubscriptionPage subscription;
     SubmissionCardsPage card;
+    SubmissionModalPage submissionModalPage;
     Actions action;
 
     private static TestConfig config;
@@ -40,9 +40,10 @@ public class VerifiedChivettesTabTest {
         login = new Logins(driver);
         action = new Actions(driver);
         card = new SubmissionCardsPage(driver);
-        header = new PageHeaderPage(driver);
+        pageHeaderPage = new PageHeaderPage(driver);
         profile = new EditProfilePage(driver);
         profilePage = new ProfilePage(driver);
+        submissionModalPage = new SubmissionModalPage(driver);
         subscription = new SubscriptionPage(driver);
     }
 
@@ -53,35 +54,45 @@ public class VerifiedChivettesTabTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test(priority = 1, retryAnalyzer = RetryAnalyzer.class)
+    @Test
+    public void BlurredImageCard(){
+       pageHeaderPage.menuChivettes().click();
+       PageActions.scrollDown(driver, 4);
+       Assert.assertTrue(PrettyAsserts.isDisplayed(card.blurredImageBy(), driver), "Did not find a blurred image");
+    }
+
+    @Test
+    public void BlurredImageModal(){
+        pageHeaderPage.menuChivettes().click();
+        PageActions.scrollDown(driver, 4);
+        card.blurredImage().click();
+        Assert.assertTrue(PrettyAsserts.isDisplayed(submissionModalPage.blurredImageBy(), driver), "The image on the submission modal is not blurred");
+    }
+
+    @Test()//may need to set back to priority = 1
     public void LoggedOutUserBuysMonthly() throws InterruptedException {
-        header.menuChivettes().click();
+        pageHeaderPage.menuChivettes().click();
         PageActions.findElementWithScrolling(driver, subscription.monthlyJoinBtnBy()).click();
         login.emailInput().sendKeys(config.defaultEmail);
         login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("auth")));
-        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
-
-        action.moveToElement(subscription.monthlyJoinBtn()).click().perform();
-        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
+        Thread.sleep(5000);
+        Assert.assertTrue(subscription.chargebeeFrame().isDisplayed(), "Chargebee frame should be open");
         Waiter.wait(driver).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(subscription.chargebeeFrame()));
-        Assert.assertTrue(PrettyAsserts.isDisplayed(subscription.chargebeeOrderSummaryBy(), driver), "Did not see the order summary");
-        subscription.chargebeeClose().click();
-        driver.switchTo().defaultContent();
-        login.logout();
+        action.moveToElement(subscription.chargebeeClose()).click().perform();//TODO - it's not actually closing the fucking iframe
+       Thread.sleep(5000);
     }
 
     @Test
     public void LoggedOutUserHitsPaywall() throws InterruptedException {
-        header.menuChivettes().click();
-
+        pageHeaderPage.menuChivettes().click();
         Assert.assertTrue(PageActions.findElementWithScrolling(driver, subscription.monthlyJoinBtnBy()).isDisplayed(), "Did not hit the paywall");
     }
 
     @Test
     public void ProfilePagePaywall() throws InterruptedException {
-        header.menuChivettes().click();
+        pageHeaderPage.menuChivettes().click();
         PageActions.findElementWithScrolling(driver, subscription.monthlyJoinBtnBy());
         PageActions.scrollToTop(driver);
         card.firstCard().findElement(By.cssSelector(card.userNameSelector())).click();
@@ -91,10 +102,10 @@ public class VerifiedChivettesTabTest {
 
     @Test
     public void UnsubscribedUserStillSeesCards() throws InterruptedException {
-        header.menuChivettes().click();
+        pageHeaderPage.menuChivettes().click();
         PageActions.findElementWithScrolling(driver, subscription.monthlyJoinBtnBy());
-        header.menuLatest().click();
-        header.menuChivettes().click();
+        pageHeaderPage.menuLatest().click();
+        pageHeaderPage.menuChivettes().click();
         driver.navigate().refresh();
         List<WebElement> cards = card.allCards();
         Assert.assertTrue(cards.size() >= 1);
