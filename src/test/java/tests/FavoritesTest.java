@@ -1,5 +1,7 @@
 package tests;
 
+import helpers.PageActions;
+import helpers.Waiter;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.interactions.Actions;
 import resources.Config;
@@ -52,7 +54,7 @@ public class FavoritesTest {
     @BeforeTest
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, System.getenv("TEST_PWD"));
+        login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
 
@@ -71,7 +73,7 @@ public class FavoritesTest {
         String yourName = ("@" + helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()));
         header.menuLatest().click();
         Thread.sleep(5000);//yes
-        helpers.PageActions.scrollDown(driver, 1);
+        PageActions.scrollDown(driver, 1);
         String submissionID = "";
         List<WebElement> cards = favorites.allCards();
         for (WebElement card : cards) {
@@ -81,7 +83,7 @@ public class FavoritesTest {
                 }catch (ElementClickInterceptedException e){//the gif spinner glitches it, just skp it an pick another card
                     continue;
                 }
-                helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
+                Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
                 submissionID = Integer.toString(helpers.StringHelper.getIntFromMixedString(driver.getCurrentUrl()));
                 modal.closeModal().click();
                 Thread.sleep(3000);
@@ -93,11 +95,11 @@ public class FavoritesTest {
 
         header.userMenu().click();
         header.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(yourName.replace("@", "")));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains(yourName.replace("@", "")));
         profile.tabFavorite().click();
-        helpers.PageActions.scrollDown(driver, 3);
+        PageActions.scrollDown(driver, 3);
         Thread.sleep(5000);
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("favorites"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("favorites"));
         boolean cardFound = false;
         cards = favorites.allCards();
         for (WebElement card : cards) {
@@ -129,18 +131,18 @@ public class FavoritesTest {
         }
         login.logout();
         header.menuLatest().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("login")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("login")));
         driver.navigate().refresh();
         Assert.assertFalse(favorites.isHeartFilled(), "The favorite icon should not be filled for logged out user");
     }
 
-    @Test
+    @Test//TODO - this test is broken
     public void NoDupesInFavorites() throws InterruptedException {
         header.userMenu().click();
         header.yourProfileBtn().click();
         profile.tabFavorite().click();
         Thread.sleep(2000);//yes
-        helpers.PageActions.scrollDown(driver, 2);
+        PageActions.scrollDown(driver, 2);
         List<WebElement> cards = favorites.allCards();
         Set<String> ids = new HashSet<>();
         boolean hasDuplicates = false;
@@ -148,6 +150,7 @@ public class FavoritesTest {
             String id = card.getAttribute("id");
             if (!ids.add(id)) {
                 hasDuplicates = true;
+                System.out.println("Dupe is is " + id);
                 break;
             }
         }

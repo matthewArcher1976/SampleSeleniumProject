@@ -8,22 +8,25 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class SubscriptionPage {
     WebDriver driver;
-    public SubscriptionPage(WebDriver driver){
+
+    public SubscriptionPage(WebDriver driver) {
         this.driver = driver;
     }
 
     //******************** Web Elements ***********************
-    public WebElement chargebeeClose(){
-        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[data-cb-id='cb_close']")));
+    public WebElement chargebeeClose() {
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("cb-hp__close-icon")));
     }
-    public WebElement chargebeeFrame(){
+
+    public WebElement chargebeeFrame() {
         return Waiter.wait(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("iframe[id='cb-frame']")));
     }
 
-    public WebElement chargebeeOrderSummary(){
+    public WebElement chargebeeOrderSummary() {
         return Waiter.wait(driver).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[data-cb-id='cart_summary']")));
     }
-    public By chargebeeOrderSummaryBy(){
+
+    public By chargebeeOrderSummaryBy() {
         return By.cssSelector("div[data-cb-id='cart_summary']");
     }
 
@@ -31,13 +34,15 @@ public class SubscriptionPage {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[data-price-id='myCHIVE-Subscription-USD-Monthly']")));
     }
 
-    public By monthlyJoinBtnBy(){
+    public By monthlyJoinBtnBy() {
         return By.cssSelector("button[data-price-id='myCHIVE-Subscription-USD-Monthly']");
     }
-    public WebElement payWallSignIn(){
+
+    public WebElement payWallSignIn() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[contains(text(),'Sign in here!')]")));
     }
-    public WebElement subscriptionFooter(){
+
+    public WebElement subscriptionFooter() {
         return Waiter.quickWait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("section[class*='fixed bottom']")));
     }
 

@@ -56,7 +56,7 @@ public class LoginGoogleTest {
         header.loginBtn().click();
         loginModal.loginGoogle().click();
         Waiter.wait(driver).until(ExpectedConditions.titleContains("Google"));
-        loginModal.googleEmailInput().sendKeys(config.unpaidEmail);
+        loginModal.googleEmailInput().sendKeys(config.defaultEmail);
         loginModal.googleEmailNext().click();
         Thread.sleep(5000);//I need this even with the wait for not staleness for some reason
         Waiter.wait(driver).until(ExpectedConditions.urlContains("pwd"));

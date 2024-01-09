@@ -336,8 +336,6 @@ public class SearchAndFiltersTest {
 
     //************************** Teardown ********************************************
 
-
-
     @AfterClass
     public void TearDown() {
         driver.quit();

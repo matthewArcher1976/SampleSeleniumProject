@@ -131,7 +131,7 @@ public class ProfileTest {
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlToBe(profileURL)), "Clicking user name did not return user to profile page, found " + profileURL);
     }
 
-    @Test()
+    @Test()//TODO - something about this mess
     public void EditButtonNotDisplayed() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();

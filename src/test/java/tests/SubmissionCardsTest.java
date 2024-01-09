@@ -1,24 +1,18 @@
 package tests;
 
-import helpers.CustomExpectedConditions;
-import helpers.Waiter;
-import pages.PageHeaderPage;
-import pages.SearchAndFiltersPage;
-import resources.Config;
-import helpers.StringHelper;
-import helpers.Logins;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import helpers.*;
+import io.github.sukgu.Shadow;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import pages.ProfilePage;
-import pages.SubmissionCardsPage;
+import pages.*;
+import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -34,9 +28,11 @@ public class SubmissionCardsTest {
     PageHeaderPage header;
     ProfilePage profile;
     SearchAndFiltersPage search;
+    SubmissionModalPage modal;
+    Shadow shadow;
 
     private static TestConfig config;
-
+    final String TAG = "sexychivers";
     //************************** Setup ******************************************
 
     @BeforeTest
@@ -49,15 +45,17 @@ public class SubmissionCardsTest {
         login = new Logins(driver);
         header = new PageHeaderPage(driver);
         profile = new ProfilePage(driver);
+        modal = new SubmissionModalPage(driver);
         search = new SearchAndFiltersPage(driver);
+        shadow = new Shadow(driver);
     }
+
 
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-      login.unpaidLogin(config.unpaidEmail, System.getenv("TEST_PWD"));
-       Thread.sleep(1000);
-
+        login.unpaidLogin(config.unpaidEmail, System.getenv("TEST_PWD"));
+        Thread.sleep(1000);
     }
 
     @BeforeMethod
@@ -84,27 +82,8 @@ public class SubmissionCardsTest {
         Assert.assertTrue(driver.getCurrentUrl().contains(id) && card.disqusSection().isDisplayed(), "The comment page did not load");
     }
 
-    @Test(enabled = false)//she's gone, daddy gone
-    public void DownVoteButton() throws InterruptedException {
-        //Check upvote button first
-        if (card.upvoteBtn().getAttribute("class").contains("text-white")) {
-            card.upvoteBtn().click();
-        }
-        Thread.sleep(4000);
-        if (card.downvoteBtn().getAttribute("class").contains("text-white")) {
-            card.downvoteBtn().click();
-            Thread.sleep(2000);
-            Assert.assertFalse(card.downvoteBtn().getAttribute("class").contains("text-white"), "Downvote button did not turn green after clicking it");
-            Assert.assertTrue(card.upvoteBtn().getAttribute("class").contains("text-white"), "After clicking downvote the upvote button is green");
-        }
-        //Uncheck the upvote button
-        card.downvoteBtn().click();
-        Thread.sleep(2000);//yes
-        Assert.assertTrue(helpers.Waiter.wait(driver).until((ExpectedConditions.attributeContains(card.downvoteBtn(), "class", "text-white"))), "Checked upvote button did not turn white after clicking it");
-    }
-
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void FavoriteLikedCard(){
+    public void FavoriteLikedCard() {
         WebElement ourCard = card.cardIsUpvoted();
         int likes = Integer.parseInt(ourCard.findElement(By.cssSelector("div[id^='vote-counter-']")).getText());
         ourCard.findElement(By.className("fa-heart")).click();
@@ -172,9 +151,9 @@ public class SubmissionCardsTest {
     public void MouseOverGIF() throws InterruptedException {
         helpers.PageActions.scrollDown(driver, 3);
         WebElement ourGIF = card.firstGIF();
-        if (ourGIF == null){
+        if (ourGIF == null) {
             System.out.println("No gifs, skipping");
-        }else {
+        } else {
             String ourGIFid = ourGIF.getAttribute("id");
             action.moveToElement(ourGIF).build().perform();
             Thread.sleep(7000);//yeah i know
@@ -195,7 +174,7 @@ public class SubmissionCardsTest {
     public void OverlayDownvote() {
         WebElement ourCard = card.cardNotDownvoted();
         ourCard.findElement(By.className("fa-thumbs-down")).click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(card.voteDownOverlay())).isDisplayed(),"Downvote overlay not found");
+        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(card.voteDownOverlay())).isDisplayed(), "Downvote overlay not found");
     }
 
     @Test(enabled = false)
@@ -221,6 +200,7 @@ public class SubmissionCardsTest {
                 && card.reportSpam().isEnabled()
                 && card.reportCopyright().isEnabled()
                 && card.reportOther().isEnabled(), "ReportPost - report modal buttons not found or enabled");
+
     }
 
     @Test
@@ -228,6 +208,63 @@ public class SubmissionCardsTest {
         card.reportBtn().click();
         Assert.assertTrue(card.reportModalText().getAttribute("innerText").contains("Does this kind of stuff bother you? Does it contain stuff it shouldn't? Let us know, we'll take care of it.")
                 && card.reportModalHeader().getAttribute("innerText").contains("Report"), "Didn't find the report modal text");
+    }
+
+
+    @Test
+    public void ReturnToPlaceAfterProfileView() {
+        PageActions.scrollDown(driver, 7);
+        Waiter.wait(driver).until(CustomExpectedConditions.cardsLoaded());
+
+        List<WebElement> allCards = card.allCards();
+        int i = allCards.size();
+        WebElement lastCard = allCards.get(i - 1);
+        String cardID = lastCard.getAttribute("id");
+        Point initialPoint = lastCard.getLocation();
+
+        lastCard.findElement(By.cssSelector("a[data-username]")).click();
+        Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
+        driver.navigate().back();
+        Waiter.wait(driver).until(CustomExpectedConditions.cardsLoaded());
+
+        Point currentPoint = driver.findElement(By.id(cardID)).getLocation();
+        Assert.assertEquals(initialPoint, currentPoint, "User is not in same place after navigation back");
+
+    }
+
+    @Test()
+    public void SingleTagPage() throws InterruptedException {
+
+        driver.get(config.url + "tag/" + TAG);
+
+        Waiter.longWait(driver).until(ExpectedConditions.urlContains(TAG));
+        Waiter.customWait(driver, CustomExpectedConditions.cardsLoaded());
+        Thread.sleep(3000);//still need it
+        List<WebElement> cards = modal.allCards();
+        int count = 0;
+        int size = cards.size();
+        action.moveToElement(modal.firstCard()).click().perform();
+        Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
+        for (WebElement card : cards) {
+            try {
+                List<WebElement> allTags = modal.tags();
+                boolean tagFound = false;
+                for (WebElement tag : allTags) {
+                    if (tag.getText().contains(TAG)) {
+                        tagFound = true;
+                        break;
+                    }
+                }
+                Assert.assertTrue(tagFound, card.getAttribute("id") + " did not contain the tagName " + TAG);
+                while (count < size - 1) { //so it doesn't try to click the right arrow again on the last card
+                    action.sendKeys(Keys.ARROW_RIGHT).perform();
+                    Thread.sleep(2000);
+                    count++;
+                }
+            } catch (AssertionError e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Test

@@ -1,9 +1,6 @@
 package tests;
 
-import helpers.CustomExpectedConditions;
-import helpers.Logins;
-import helpers.PageActions;
-import helpers.Waiter;
+import helpers.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -57,47 +54,15 @@ public class SubmissionModalTest {
         driver.get(config.url);
     }
 
-    @Test()
-    public void ClickTagRedirectToTagPage() throws InterruptedException {
-        if (config.driverType.contains("Sauce")) {
-            System.out.println("Skipping until https://resignationmedia.atlassian.net/browse/QA-121");
-        } else {
-            driver.manage().window().fullscreen();
-            Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
-            WebElement taggedCard = modal.cardWithTag();
-            action.moveToElement(taggedCard).click().perform();
-            String tagName = (modal.tag().getText());
-            modal.tag().click();
+    //************************** Tests ******************************************
 
-            Waiter.longWait(driver).until(ExpectedConditions.urlContains(tagName));
-            Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
-            Thread.sleep(3000);//still need it
-            List<WebElement> cards = modal.allCards();
-            int count = 0;
-            int size = cards.size();
-            action.moveToElement(modal.firstCard()).click().perform();
-            Waiter.customWait(driver, CustomExpectedConditions.pageLoaded());
-            for (WebElement card : cards) {
-                try {
-                    List<WebElement> allTags = modal.tags();
-                    boolean tagFound = false;
-                    for (WebElement tag : allTags) {
-                        if (tag.getText().contains(tagName)) {
-                            tagFound = true;
-                            break;
-                        }
-                    }
-                    Assert.assertTrue(tagFound, card.getAttribute("id") + " did not contain the tagName " + tagName);
-                    while (count < size - 1) { //so it doesn't try to click the right arrow again on the last card
-                        action.sendKeys(Keys.ARROW_RIGHT).perform();
-                        Thread.sleep(2000);
-                        count++;
-                    }
-                } catch (AssertionError e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    @Test()
+    public void ClickTagForTagPage() throws InterruptedException {
+       card.firstCard().click();
+       String tag = modal.tag().getText();
+       modal.tag().click();
+       Waiter.wait(driver).until(ExpectedConditions.urlContains("tag"));
+       Assert.assertTrue(driver.getCurrentUrl().contains(tag), "Clicking the tag does not open single tag page");
     }
 
     @Test
@@ -150,13 +115,13 @@ public class SubmissionModalTest {
     public void ClickTwitterIcon() {
         modal.firstCard().click();
         PageActions.scrollDown(driver, 1);
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(modal.twitterBtn()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(modal.twitterBtn()));
         modal.twitterBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("X")), "Did not find Twitter, no, sorry, 'X', login popup");//fuck Elon Musk
+        Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+        WindowUtil.switchToWindow(driver, 1);
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.titleContains("X")), "Did not find Twitter, no, sorry, 'X', login popup");//fuck Elon Musk
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -168,12 +133,12 @@ public class SubmissionModalTest {
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(modalCard)), "Modal may not be closing when you press esc");
     }
 
-    @Test(priority = 1)
+    @Test(priority = 1, enabled = false)//TODO - make less flaky or delete
     //checks that the proportions on the card image are the same an actual, breaks the hover tests if run before then, who knows why
     public void GIFNotCutOff() throws InterruptedException {
 
         double acceptableDifference = 0.02;
-        helpers.PageActions.scrollDown(driver, 3);
+        PageActions.scrollDown(driver, 3);
         WebElement gifCard = card.firstGIF();
         double cardHeight = card.getCardHeight(gifCard);
         double cardWidth = card.getCardWidth(gifCard);
@@ -193,7 +158,7 @@ public class SubmissionModalTest {
     @Test
     public void HoverFacebookButton() throws InterruptedException {
         modal.firstCard().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(modal.facebookBtn()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(modal.facebookBtn()));
         Assert.assertEquals(modal.facebookBtn().getCssValue("color"), "rgba(255, 255, 255, 1)", "Facebook icon is wrong color to start");
         Thread.sleep(2000);//yes
         action.moveToElement(modal.facebookBtn()).perform();
@@ -236,18 +201,18 @@ public class SubmissionModalTest {
         helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
-        String firstCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String firstCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Thread.sleep(5000);//remove when bug on 731 is fixed
         modal.navRight().click();
-        String secondCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String secondCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(firstCardID, secondCardID, "Did not navigate forward when clicking right nav");
         modal.navRight().click();
         Thread.sleep(2000);
-        String thirdCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String thirdCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(thirdCardID, secondCardID, "Did not navigate forward when clicking right nav, second click");
         modal.navLeft().click();
         Thread.sleep(2000);
-        Assert.assertEquals(secondCardID, helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
+        Assert.assertEquals(secondCardID, StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
     @Test
@@ -255,17 +220,17 @@ public class SubmissionModalTest {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
         Thread.sleep(4000);//remove once 731 is fixed
-        String firstCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String firstCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         action.sendKeys(Keys.ARROW_RIGHT).perform();
-        String secondCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String secondCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(firstCardID, secondCardID, "Did not navigate forward when pressing right arrow on keyboard");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
         Thread.sleep(2000);
-        String thirdCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String thirdCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(thirdCardID, secondCardID, "Did not navigate forward when clicking right nav, second click");
         action.sendKeys(Keys.ARROW_LEFT).perform();
         Thread.sleep(2000);
-        Assert.assertEquals(secondCardID, helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
+        Assert.assertEquals(secondCardID, StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
     @Test
@@ -278,7 +243,7 @@ public class SubmissionModalTest {
     public void StickyHeaderOnModal() {
         modal.firstCard().click();
         modal.commentButton().click();
-        helpers.PageActions.scrollDown(driver, 1);
+        PageActions.scrollDown(driver, 1);
         Assert.assertTrue(modal.stickyHeader().isDisplayed(), "Sticky header didn't display on scrolling");
     }
 

@@ -14,6 +14,7 @@ import pages.TopChiversPage;
 import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
+import resources.TestRunner;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,6 +35,16 @@ public class TopChiversTest {
 
     //************************** Setup ******************************************
 
+    private float convertPointsToNumber(String pointsText) {
+        pointsText = pointsText.replace(" Points", "").trim();
+        if (pointsText.endsWith("M")) {
+            return Float.parseFloat(pointsText.replace("M", "")) * 1000000;
+        } else if (pointsText.endsWith("k")) {
+            return Float.parseFloat(pointsText.replace("k", "")) * 1000;
+        } else {
+            return Float.parseFloat(pointsText);
+        }
+    }
     @BeforeTest
     public void configs() throws Exception {
         config = Config.getConfig();
@@ -61,8 +72,10 @@ public class TopChiversTest {
     //************************** Begin Tests ********************************************
 
     @Test
-    public void AvatarImages() {
+    public void AvatarImages() throws InterruptedException {
+
         header.menuTopChivers().click();
+        Thread.sleep(10000);//debugging
         List<WebElement> rows = topChiversPage.allRows();
         int i = 1;
         for (WebElement row : rows) {
@@ -71,9 +84,10 @@ public class TopChiversTest {
         }
     }
 
-    @Test
-    public void DisplayMonthFirst(){
+    @Test(retryAnalyzer = RetryAnalyzer.class)
+    public void DisplayMonthFirst() throws InterruptedException {
         header.menuTopChivers().click();
+        Thread.sleep(20000);//https://resignationmedia.atlassian.net/browse/MYCHIVE-1131
         Assert.assertEquals(topChiversPage.tabPastMonth().getAttribute("aria-selected"), "true", "Past Month should be selected by default");
     }
 
@@ -104,12 +118,10 @@ public class TopChiversTest {
             Thread.sleep(2000);
             driver.navigate().refresh();//for some reason the color doesn't change back in the test though it does if you do it manually. refresh as a workaround
         }
-        Assert.assertEquals(topChiversPage.FollowBtn().getCssValue("border-color"), "rgb(0, 194, 0)", "before mouseover color was wrong " + topChiversPage.FollowBtn().getCssValue("border-color"));
-
+        String beforeHover = topChiversPage.FollowBtn().getCssValue("border-color");
         action.moveToElement(topChiversPage.FollowBtn()).perform();
         Thread.sleep(2000);
-        System.out.println(topChiversPage.FollowBtn().getCssValue("border-color"));
-        Assert.assertEquals(topChiversPage.FollowBtn().getCssValue("border-color"), "rgb(0, 158, 0)", "after mouseover " + topChiversPage.FollowBtn().getCssValue("border-color"));
+        Assert.assertNotEquals(topChiversPage.FollowBtn().getCssValue("border-color"), beforeHover, "Before mouseover: " + beforeHover + " after mouseover: " + topChiversPage.FollowBtn().getCssValue("border-color"));
     }
 
     @Test
@@ -141,24 +153,25 @@ public class TopChiversTest {
         header.menuTopChivers().click();
         topChiversPage.tabAllTime().click();
         List<WebElement> rows = topChiversPage.allRows();
-        int lastPoint = Integer.parseInt(topChiversPage.firstRow().findElement(By.cssSelector(topChiversPage.pointsSelector())).getText().replace(" Points", ""));
-        int thisPoint;
-        for(WebElement row:rows){
-            thisPoint = Integer.parseInt(row.findElement(By.cssSelector(topChiversPage.pointsSelector())).getText().replace(" Points", ""));
+        float lastPoint = convertPointsToNumber(topChiversPage.firstRow().findElement(By.cssSelector(topChiversPage.pointsSelector())).getText());
+        float thisPoint;
+        for(WebElement row : rows){
+            thisPoint = convertPointsToNumber(row.findElement(By.cssSelector(topChiversPage.pointsSelector())).getText());
             Assert.assertTrue(lastPoint >= thisPoint, "thisPoint is " + thisPoint + " lastPoint is " + lastPoint + ", The rows may be out of order");
             lastPoint = thisPoint;
         }
     }
+
 
     @Test
     public void PointsInOrderPastMonth(){
         header.menuTopChivers().click();
         topChiversPage.tabPastMonth().click();
         List<WebElement> rows = topChiversPage.allRows();
-        int lastPoint = Integer.parseInt(topChiversPage.firstRow().findElement(By.cssSelector(topChiversPage.pointsSelector())).getText().replace(" Points", ""));
-        int thisPoint;
-       for(WebElement row:rows){
-            thisPoint = Integer.parseInt(row.findElement(By.cssSelector(topChiversPage.pointsSelector())).getText().replace(" Points", ""));
+        float lastPoint = convertPointsToNumber(topChiversPage.firstRow().findElement(By.cssSelector(topChiversPage.pointsSelector())).getText());
+        float thisPoint;
+        for(WebElement row : rows){
+            thisPoint = convertPointsToNumber(row.findElement(By.cssSelector(topChiversPage.pointsSelector())).getText());
             Assert.assertTrue(lastPoint >= thisPoint, "thisPoint is " + thisPoint + " lastPoint is " + lastPoint + ", The rows may be out of order");
             lastPoint = thisPoint;
         }

@@ -2,6 +2,7 @@ package pages;
 
 import helpers.PageActions;
 import helpers.PrettyAsserts;
+import helpers.Waiter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -67,6 +68,14 @@ public class SubmissionCardsPage {
         }
         return firstNotUpvotedCard;
     }
+
+    public WebElement blurredImage(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("blur-md")));
+    }
+    public By blurredImageBy(){
+        return By.className("blur-md");
+    }
+
     public WebElement cardFromUser(String userName) throws InterruptedException {
         Actions action = new Actions(driver);
         PageActions.scrollDown(driver, 1);

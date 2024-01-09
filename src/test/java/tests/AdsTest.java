@@ -78,7 +78,7 @@ public class AdsTest {
         Assert.assertTrue(PrettyAsserts.isDisplayed(ads.adFrame(), driver), "Did not find an ad frame on Latest");
     }
 
-    @Test
+    @Test(enabled = false)//TODO - make it log in with a subscribed user, adds won't show now
     public void AdsOnVerifiedChivettes() {
         header.menuChivettes().click();
         PageActions.scrollDown(driver, 2);

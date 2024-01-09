@@ -39,7 +39,6 @@ public class ChivettesTest {
         profilePage = new ProfilePage(driver);
         editProfilePage = new EditProfilePage(driver);
         subscriptionPage = new SubscriptionPage(driver);
-
     }
 
     @BeforeClass
@@ -61,6 +60,18 @@ public class ChivettesTest {
         editProfilePage.userMenu().click();
         editProfilePage.yourProfileBtn().click();
         Assert.assertTrue(profilePage.chivetteIcon().isDisplayed(), "Did not find Chivette icon by username");
+    }
+
+    @Test(retryAnalyzer = RetryAnalyzer.class, enabled = false)
+    public void CreateForumPost(){
+        pageHeaderPage.userMenu().click();
+        pageHeaderPage.yourProfileBtn().click();
+        profilePage.tabForum().click();
+        profilePage.newForumPostBtn().click();
+        profilePage.postTitleInput().sendKeys("Automated test post ID:" + Randoms.getRandomString(5));
+        profilePage.postMessageInput().sendKeys("This test post was brought to you be The Department of Automated Testing and the Ad Council");
+        profilePage.postCreateBtn().click();
+        Assert.assertTrue(profilePage.postToast().isDisplayed(), "Post no toast");
     }
 
     @Test()

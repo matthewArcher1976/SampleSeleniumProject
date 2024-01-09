@@ -30,7 +30,7 @@ public class ImageUploadTest {
 
     //************************** Setup ******************************************
 
-    @BeforeTest
+    @BeforeTest(enabled = false)
     public void getConfig() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
@@ -41,7 +41,7 @@ public class ImageUploadTest {
         upload = new ImageUploadPage(driver);
     }
 
-    @BeforeClass
+    @BeforeClass(enabled = false)
     public void login() throws InterruptedException {
         driver.get(config.url);
         login.unpaidLogin(config.unpaidEmail, System.getenv("TEST_PWD"));

@@ -71,7 +71,7 @@ public class ProfilePointsTest {
         profilePage.pointsEarnPoints().click();
         profilePage.morePointsFacebook().click();
         Assert.assertEquals(profilePage.lionModalTitle().getText(), "Like us on Facebook", "Missing or incorrect title on Facebook item");
-        Assert.assertEquals(profilePage.lionGotoSite().getAttribute("href"), "https://www.instagram.com/thechive/", "Expected a link to our Instagram page, found" + profilePage.lionGotoSite().getAttribute("href"));
+        Assert.assertEquals(profilePage.lionGotoSite().getAttribute("href"), "https://www.instagram.com/thechive/", "Expected a link to our Instagram page, found " + profilePage.lionGotoSite().getAttribute("href"));
         driver.navigate().back();
     }
 
@@ -83,7 +83,7 @@ public class ProfilePointsTest {
         profilePage.pointsEarnPoints().click();
         profilePage.morePointsInstagram().click();
         Assert.assertEquals(profilePage.lionModalTitle().getText(), "Follow us on Instagram", "Missing or incorrect title on instagram item");
-        Assert.assertEquals(profilePage.lionGotoSite().getAttribute("href"), "https://www.instagram.com/thechive/", "Expected a link to our Instagram page, found" + profilePage.lionGotoSite().getAttribute("href"));
+        Assert.assertEquals(profilePage.lionGotoSite().getAttribute("href"), "https://www.instagram.com/thechive/", "Expected a link to our Instagram page, found " + profilePage.lionGotoSite().getAttribute("href"));
         driver.navigate().back();
     }
 
@@ -104,7 +104,7 @@ public class ProfilePointsTest {
         profilePage.pointsTab().click();
         profilePage.pointsEarnPoints().click();
         profilePage.morePointsReferral().click();
-        Assert.assertEquals(profilePage.lionModalDescription().getText(), "Refer a friend", "Expected Refer a friend, found: " + profilePage.lionModalDescription().getText());
+        Assert.assertEquals(profilePage.lionModalDescription().getText(), "Earn 1,000 points every time you refer a friend who spends over $40", "Expected Refer a friend, found: " + profilePage.lionModalDescription().getText());
         //TODO - complete test when https://resignationmedia.atlassian.net/browse/MYCHIVE-1125 is fixed
     }
     @Test

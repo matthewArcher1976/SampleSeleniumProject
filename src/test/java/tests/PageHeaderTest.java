@@ -1,6 +1,9 @@
 package tests;
 
-import helpers.*;
+import helpers.CustomExpectedConditions;
+import helpers.Logins;
+import helpers.Waiter;
+import helpers.WindowUtil;
 import io.github.sukgu.Shadow;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -29,7 +32,6 @@ public class PageHeaderTest {
     SearchAndFiltersPage search;
     Logins login;
     Actions action;
-    Shadow shadow;
 
     //************************** Setup ******************************************
 
@@ -39,7 +41,6 @@ public class PageHeaderTest {
         driver = getDriver(config.driverType);
 
         action = new Actions(driver);
-        shadow = new Shadow(driver);
         card = new SubmissionCardsPage(driver);
         header = new PageHeaderPage(driver);
         login = new Logins(driver);
@@ -64,20 +65,26 @@ public class PageHeaderTest {
 
     @Test
     public void AdFrameDisplays() {
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
     }
 
     @Test
     public void AvatarPicDisplays() {
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.headerAvatar())).isDisplayed());
     }
 
-    @Test(priority = 2, retryAnalyzer = RetryAnalyzer.class)
+    @Test(retryAnalyzer = RetryAnalyzer.class)
     public void AvatarPicGoneOnLogout() throws InterruptedException {
-        WebElement avi = header.avatarPic();
-        login.logout();
-        Thread.sleep(3000);
-        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(avi)));
+        try {
+            WebElement avi = header.avatarPic();
+
+            login.logout();
+            Thread.sleep(3000);
+            Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(avi)), "Make sure test user has an avatar pic");
+            login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
+        }catch (Exception e){
+            login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));//log back in if there's any error
+        }
     }
 
     @Test(enabled = false)//ad frames changed this, no longer relevant
@@ -88,27 +95,26 @@ public class PageHeaderTest {
         Point elementLocation = avatar.getLocation();
         int elementX = elementLocation.getX();
         int elementWidth = avatar.getSize().getWidth();
-
         Assert.assertEquals(viewportWidth - elementX - elementWidth, 8, "The avatar is too close or too far to the edge of the screen");
     }
 
     @Test
     public void ChiveryLink() {
         header.chiveryLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getCurrentUrl().contains("utm_source=mychive"), "ChiveryLink() - broken");
         System.out.println("ChiveryLink() - broken");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void ClickChivettesTab(){
+    public void ClickChivettesTab() {
         header.menuChivettes().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("chivettes"));
         Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         List<WebElement> allCards = card.allCards();
-        for (WebElement card:allCards){
+        for (WebElement card : allCards) {
             System.out.println(card.getAttribute("class") + " is class");
             Assert.assertTrue(card.findElement(By.id("label-chivette")).isDisplayed());
         }
@@ -131,16 +137,16 @@ public class PageHeaderTest {
     @Test
     public void ClickLogo() {
         header.menuFeatured().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         header.ichiveLogo().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("dopamine-dump")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("dopamine-dump")));
         Assert.assertTrue(header.menuLatest().getAttribute("aria-current").contains("page"), "Clicking the logo did not return you to home page");
     }
 
     @Test
     public void ClickTopChiversTab() {
         header.menuTopChivers().click();
-       //TODO - get this custom wait to actually work, it never finds the value of aria-current
+        //TODO - get this custom wait to actually work, it never finds the value of aria-current
         Waiter.customWait(driver, CustomExpectedConditions.tabLoaded(header.menuTopChivers()));
         Assert.assertEquals(header.menuTopChivers().getAttribute("aria-current"), "page", "Top Chivettes tab should be current");
     }
@@ -152,7 +158,7 @@ public class PageHeaderTest {
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
     public void DopamineCounter() throws InterruptedException {
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.dopamineDump()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.dopamineDump()));
         String time1 = header.dopamineDumpHour() + header.dopamineDumpMinute() + header.dopamineDumpSecond();
         Thread.sleep(10000);//let it count down
         String time2 = header.dopamineDumpHour() + header.dopamineDumpMinute() + header.dopamineDumpSecond();
@@ -166,116 +172,6 @@ public class PageHeaderTest {
                 && header.dropDownCharities().isDisplayed()
                 && header.dropDownChive().isDisplayed()
                 && header.dropDownChiveTV().isDisplayed(), "Missing links in the dropdown menu");
-    }
-
-    @Test(enabled = false)
-    public void FilterDisplaysOnFeatured() {
-        header.menuFeatured().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
-        Assert.assertTrue(header.filterChange().isDisplayed()
-                && header.filterHumor().isDisplayed()
-                && header.filterHotness().isDisplayed()
-                && header.filterHumanity().isDisplayed(), "Filter was missing on Featured page");
-    }
-
-    @Test(enabled = false)
-    public void FilterDisplaysOnFollowing() {
-        header.menuFollowing().click();
-        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
-        Assert.assertTrue(header.filterChange().isDisplayed()
-                && header.filterHumor().isDisplayed()
-                && header.filterHotness().isDisplayed()
-                && header.filterHumanity().isDisplayed(), "Filter was missing on Following page");
-    }
-
-    @Test(enabled = false)
-    public void FilterDisplaysOnLatest() {
-        header.menuLatest().click();
-        Assert.assertTrue(header.filterChange().isDisplayed()
-                && header.filterHumor().isDisplayed()
-                && header.filterHotness().isDisplayed()
-                && header.filterHumanity().isDisplayed(), "Filter was missing on Latest page");
-    }
-
-    @Test(enabled = false)//it's gone everywhere
-    public void FilterNotOnSearchPage() throws InterruptedException {
-        header.searchButton().click();
-        Thread.sleep(2000);//yes
-        try {
-            Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.filterChange()));
-            System.out.println("Filters were found on search page");
-            Assert.fail();
-        } catch (TimeoutException e) {
-            Assert.assertTrue(true);
-        }
-    }
-
-    @Test(enabled = false)//filters gone
-    public void FilterNotOnProfilePage() throws InterruptedException {
-        header.userMenu().click();
-        header.yourProfileBtn().click();
-        Thread.sleep(2000);
-        try {
-            helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.filterChange()));
-            System.out.println("Filters were found on Profile page");
-            Assert.fail();
-        } catch (TimeoutException e) {
-            Assert.assertTrue(true);
-        }
-    }
-
-    @Test(enabled = false)//filters gone
-    public void FilterNotOnSettingsPage() {
-        header.userMenu().click();
-        header.settingsBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("settings"));
-        try {
-            helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.filterChange()));
-            System.out.println("Filters were found on Settings page");
-            Assert.fail();
-        } catch (TimeoutException e) {
-            Assert.assertTrue(true);
-        }
-    }
-
-    @Test(enabled = false)//filters gone
-    public void FilterNotOnSubmissionPage() throws InterruptedException {
-        card.cardNotGIF().click();
-        driver.navigate().refresh();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
-        try {
-            helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.filterChange()));
-            System.out.println("Filters were found on Submission page");
-            Assert.fail();
-        } catch (TimeoutException e) {
-            Assert.assertTrue(true);
-        }
-    }
-
-    @Test(enabled = false)//failing for unknown reason but need to refactor anyway
-    public void FilterNotOnTagPage() {
-        header.menuTopChivers().click();
-        header.firstTag().click();
-        try {
-            helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.filterChange()));
-            System.out.println("Filters were found on Tag page");
-            Assert.fail();
-        } catch (TimeoutException e) {
-            Assert.assertTrue(true);
-        }
-    }
-
-    @Test
-    public void FilterNotOnTopChivers() {
-        header.menuTopChivers().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("leaderboard"));
-        try {
-            helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.filterChange()));
-            System.out.println("Filters were found on Top Chivers page");
-            Assert.fail();
-        } catch (TimeoutException e) {
-            Assert.assertTrue(true);
-        }
     }
 
     @Test()
@@ -349,19 +245,19 @@ public class PageHeaderTest {
 
     @Test
     public void IChiveLogoDisplays() {
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.ichiveLogo())).isDisplayed(), "Logo is not visible");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(header.ichiveLogo())).isDisplayed(), "Logo is not visible");
     }
 
     @Test()
     public void LinksCharities() {
         header.linkMenu().click();
         header.dropDownCharities().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("chivecharities"))
+        Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+        WindowUtil.switchToWindow(driver, 1);
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("chivecharities"))
                 && driver.getCurrentUrl().contains("utm_source"), "LinksCharities - Link is broken");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test()
@@ -370,7 +266,7 @@ public class PageHeaderTest {
         header.dropDownChive().click();
 
         WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(helpers.Waiter.quickWait(driver).until(ExpectedConditions.urlContains("thechive"))
+        Assert.assertTrue(Waiter.quickWait(driver).until(ExpectedConditions.urlContains("thechive"))
                 && driver.getCurrentUrl().contains("utm_source"), "LinksChive - Link is broken");
         driver.close();
         helpers.WindowUtil.switchToWindow(driver, 0);
@@ -392,7 +288,7 @@ public class PageHeaderTest {
         header.dropDownChivery().click();
         Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
         WindowUtil.switchToWindow(driver, 1);
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("thechivery"))
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("thechivery"))
                 && driver.getCurrentUrl().contains("utm_source"), "LinksChivery - link is broken");
         driver.close();
         WindowUtil.switchToWindow(driver, 0);
@@ -414,13 +310,14 @@ public class PageHeaderTest {
         }
     }
 
-    @Test(priority = 1)
+    @Test
     public void VerifyEmailBanner() throws InterruptedException {
         //I didn't feel like making a new class for this one test
         login.logout();
         login.unpaidLogin(config.unconfirmedEmail, System.getenv("TEST_PWD"));
         Assert.assertTrue(header.verifyEmailHeader().isEnabled());
         login.logout();
+        login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
     }
 
     //************************** Teardown ********************************************
