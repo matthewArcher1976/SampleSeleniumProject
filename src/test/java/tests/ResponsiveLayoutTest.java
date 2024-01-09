@@ -1,7 +1,7 @@
 package tests;
 
 import helpers.CustomExpectedConditions;
-import helpers.Logins;
+
 import helpers.Waiter;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
