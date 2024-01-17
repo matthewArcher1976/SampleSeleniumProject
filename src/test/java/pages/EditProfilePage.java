@@ -260,7 +260,7 @@ public class EditProfilePage {
 
     public WebElement makePrivateWarningPopup() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h3[id^='headlessui-dialog-panel']")));
-    }//TODO - get that warning text too
+    }
 
     public WebElement makePrivateTitle() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()=' Confirmation ']")));
@@ -504,7 +504,7 @@ public class EditProfilePage {
     }
 
     public WebElement yourProfileBtn() {
-        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.linkText("Your Profile")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.partialLinkText("Your Profile")));
     }
 
 

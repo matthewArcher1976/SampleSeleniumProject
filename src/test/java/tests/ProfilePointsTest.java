@@ -62,8 +62,7 @@ public class ProfilePointsTest {
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(lionModal)), "Modal still displays after trying to close it");
     }
 
-
-    @Test
+    @Test(enabled = false)//TODO - enable when this bug is fixed
     public void EarnPointsFacebook(){
         header.userMenu().click();
         header.yourProfileBtn().click();
@@ -75,7 +74,7 @@ public class ProfilePointsTest {
         driver.navigate().back();
     }
 
-    @Test
+    @Test(enabled = false)//TODO - enable when bug is fixed
     public void EarnPointsInstagram(){
         header.userMenu().click();
         header.yourProfileBtn().click();

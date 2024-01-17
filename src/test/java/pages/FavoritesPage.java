@@ -1,5 +1,6 @@
 package pages;
 
+import helpers.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,11 +23,11 @@ public class FavoritesPage {
     }
 
     public WebElement firstCard() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("bg-charleston")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("bg-charleston")));
     }
 
     public WebElement toggleFave() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='toggle-favorite']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='toggle-favorite']")));
     }
 
     //**************** Actions/Helpers ***************************
@@ -47,7 +48,7 @@ public class FavoritesPage {
         return filled;
     }
 
-    public boolean isHeartFilledCard(WebElement card) {
+    public Boolean isHeartFilledCard(WebElement card) {
         WebElement heart = card.findElement(By.cssSelector("[id^='toggle-favorite']")).findElement(By.className("fa-heart"));
         String s = heart.getAttribute("class");
         Boolean filled = null;

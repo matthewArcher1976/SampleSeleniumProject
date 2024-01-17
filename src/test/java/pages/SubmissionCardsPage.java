@@ -27,7 +27,6 @@ public class SubmissionCardsPage {
 
     public List<WebElement> allCards() {
         return driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
-
     }
 
     public List<WebElement> allFeaturedCards() {
@@ -58,7 +57,6 @@ public class SubmissionCardsPage {
             if (firstNotUpvotedCard != null) {
                 break;
             } else {
-
                 PageActions.scrollDown(driver, 2);
             }
         }
@@ -145,7 +143,7 @@ public class SubmissionCardsPage {
 
     public WebElement cardNotGIF() throws InterruptedException {
         Actions a = new Actions(driver);
-        helpers.PageActions.scrollDown(driver, 2);
+        PageActions.scrollDown(driver, 2);
         Thread.sleep(2000);
         WebElement notGIFCard = null;
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
@@ -161,7 +159,7 @@ public class SubmissionCardsPage {
 
     public WebElement cardNotMine(String userName) throws InterruptedException {
         Actions action = new Actions(driver);
-        helpers.PageActions.scrollDown(driver, 2);
+        PageActions.scrollDown(driver, 2);
         Thread.sleep(2000);
         WebElement notMyCard = null;
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
@@ -187,7 +185,7 @@ public class SubmissionCardsPage {
             if (firstNotUpvotedCard != null) {
                 break;
             } else {
-                helpers.PageActions.scrollDown(driver, 2);
+                PageActions.scrollDown(driver, 2);
             }
         }
         if (firstNotUpvotedCard == null) {
@@ -202,16 +200,16 @@ public class SubmissionCardsPage {
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
         WebElement firstCardWithTag = null;
         for (WebElement card : allCards) {
-            helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(card)).click();
+            Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(card)).click();
             Thread.sleep(2000);
-            WebElement cardAfterClick = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id='" + card.getAttribute("id") + "']")));
+            WebElement cardAfterClick = Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id='" + card.getAttribute("id") + "']")));
             try {
                 driver.findElement(By.className("badge-outline"));
                 firstCardWithTag = cardAfterClick;
-                helpers.PageActions.hitEscape(driver);
+                PageActions.hitEscape(driver);
                 break;
             } catch (NoSuchElementException e) {
-                helpers.PageActions.hitEscape(driver);
+                PageActions.hitEscape(driver);
             }
         }
         return firstCardWithTag;
@@ -219,21 +217,21 @@ public class SubmissionCardsPage {
 
     //get one with more than one tag on it
     public WebElement cardWithTags() throws InterruptedException {
-        helpers.PageActions.scrollDown(driver, 3);
+        PageActions.scrollDown(driver, 3);
         Thread.sleep(2000);
         List<WebElement> allCards = driver.findElements(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"));
         WebElement cardWithMultipleTags = null;
         List<WebElement> tags;
         for (WebElement card : allCards) {
-            helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(card)).click();
+            Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(card)).click();
             Thread.sleep(2000);
-            WebElement cardAfterClick = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id='" + card.getAttribute("id") + "']")));
+            WebElement cardAfterClick = Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id='" + card.getAttribute("id") + "']")));
             try {
                 driver.findElement(By.className("badge-outline")); //.cssSelector("div")).getAttribute("class").contains("overflow-hidden"))
                 tags = driver.findElements(By.cssSelector("div[id^='tag-']"));
                 if (tags.size() > 1 && !card.findElement(By.cssSelector("div")).getAttribute("class").contains("overflow-hidden")) {
                     cardWithMultipleTags = cardAfterClick;
-                    helpers.PageActions.hitEscape(driver);
+                    PageActions.hitEscape(driver);
                     break;
                 } else {
                     helpers.PageActions.hitEscape(driver);
@@ -246,55 +244,55 @@ public class SubmissionCardsPage {
     }
 
     public WebElement chivetteIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("label-chivette")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("label-chivette")));
     }
 
     public WebElement commentBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='comment']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='comment']")));
     }
 
     public WebElement commentIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='comment']"))).findElement(By.className("fa-comment"));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='comment']"))).findElement(By.className("fa-comment"));
     }
 
     public WebElement createBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-create")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-create")));
     }
 
     public WebElement disqusSection() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("disqus_thread")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("disqus_thread")));
     }
 
     public WebElement downvoteBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-thumbs-down")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-thumbs-down")));
     }
 
     public WebElement faceBookBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-facebook-f")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-facebook-f")));
     }
 
     public WebElement favoriteBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("[id^='toggle-favorite-']"))).findElement(By.className("fa-heart"));
+        return Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("[id^='toggle-favorite-']"))).findElement(By.className("fa-heart"));
     }
 
     public WebElement favoriteOverlay() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='card-image-overlay']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='card-image-overlay']")));
     }
     public WebElement featuredCommentIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-comment")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-comment")));
     }
     public WebElement featuredIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Featured on myCHIVE']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[alt='Featured on myCHIVE']")));
     }
 
     public WebElement firstCard() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])")));
+        return Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])")));
     }
 
     public WebElement firstCardEnhanced() {
         WebElement first = null;
         try {
-            first = helpers.Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("[id^='submission-image']")));
+            first = Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("[id^='submission-image']")));
         } catch (ElementClickInterceptedException e) {
             driver.findElement(By.className("overflow-hidden")).click();
         }
@@ -331,63 +329,71 @@ public class SubmissionCardsPage {
     }
 
     public WebElement imageLoadingSpinner() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("animate-spin")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("animate-spin")));
     }
 
     public WebElement reportBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-flag")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-flag")));
     }
 
     public WebElement reportCopyright() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("report-copyright")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("report-copyright")));
     }
 
     public WebElement reportModalHeader() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("header"))).findElement(By.cssSelector("div"));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("header"))).findElement(By.cssSelector("div"));
     }
 
     public WebElement reportModalText() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[class*='bg-dark-char']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[class*='bg-dark-char']")));
     }
 
     public WebElement reportOffensive() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("report-offensive")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("report-offensive")));
     }
 
     public WebElement reportOther() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("report-other")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("report-other")));
     }
 
     public WebElement reportSpam() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("report-spam")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("report-spam")));
     }
 
     public WebElement submissionTitle() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"))).findElement(By.className("text-sm"));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='submission-']:not([id='submission-create']):not([id='submission-list']):not([id^='submission-image-'])"))).findElement(By.className("text-sm"));
     }
 
     public WebElement tag() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("badge-outline")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("badge-outline")));
+    }
+
+    public WebElement cardAtPosition(int xCoordinate, int yCoordinate){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        return (WebElement) js.executeScript(
+                "return document.elementFromPoint(arguments[0], arguments[1]);",
+                xCoordinate,
+                yCoordinate);
     }
 
     public WebElement upvoteBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-thumbs-up")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-thumbs-up")));
     }
     public String upvoteBtnClass() {
         return "fa-thumbs-up";
     }
     public WebElement userName() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[data-username]")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[data-username]")));
     }
     public String userNameSelector(){
         return "a[data-username]";
     }
     public WebElement verifiedIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("label-verified")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("label-verified")));
     }
 
     public WebElement voteCounter() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='vote-counter-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='vote-counter-']")));
     }
 
     public WebElement voteDownOverlay() {

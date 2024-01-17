@@ -8,8 +8,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
+
 public class CustomExpectedConditions {
 
+    public static ExpectedCondition<Boolean> booleanReturns(final Boolean booleanMethod, final Boolean expectedValue) {
+        return driver ->{
+            boolean foundValue = false;
+            if (booleanMethod == expectedValue){
+                foundValue = expectedValue;
+            }
+            return foundValue;
+        };
+    }
     public static ExpectedCondition<Boolean> cardsLoaded(){
         return driver -> {
             boolean notEmpty = false;

@@ -4,7 +4,6 @@ import org.openqa.selenium.*;
 import org.testng.Assert;
 
 public class PrettyAsserts {
-    //TODO - fix PrettyAsserts to accept a string for the locator instead of the WebElement since it doesn't work this way
 
     public static boolean isIconSelected(WebElement element) {
         String s = element.getAttribute("class");
