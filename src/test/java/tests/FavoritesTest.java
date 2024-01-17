@@ -1,18 +1,13 @@
 package tests;
 
-import helpers.PageActions;
-import helpers.Waiter;
-import org.openqa.selenium.ElementClickInterceptedException;
+import helpers.*;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import resources.Config;
-import helpers.Logins;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
+import resources.Config;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
 
@@ -32,7 +27,7 @@ public class FavoritesTest {
     Logins login;
     PageHeaderPage header;
     ProfilePage profile;
-    SubmissionCardsPage cards;
+    SubmissionCardsPage submissionCardsPage;
     SubmissionModalPage modal;
 
     //************************** Setup ******************************************
@@ -44,7 +39,7 @@ public class FavoritesTest {
         action = new Actions(driver);
         login = new Logins(driver);
 
-        cards = new SubmissionCardsPage(driver);
+        submissionCardsPage = new SubmissionCardsPage(driver);
         favorites = new FavoritesPage(driver);
         header = new PageHeaderPage(driver);
         modal = new SubmissionModalPage(driver);
@@ -65,29 +60,15 @@ public class FavoritesTest {
 
     //************************** Begin Tests ********************************************
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void FavoriteDisplaysOnProfile() throws InterruptedException {
-        driver.manage().window().fullscreen();
-        header.userMenu().click();
-        header.yourProfileBtn().click();
-        String yourName = ("@" + helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()));
-        header.menuLatest().click();
-        Thread.sleep(5000);//yes
-        PageActions.scrollDown(driver, 1);
+    @Test
+    public void FavoriteDisplaysOnProfile()  {
+
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         String submissionID = "";
         List<WebElement> cards = favorites.allCards();
         for (WebElement card : cards) {
+            submissionID = StringHelper.getIntFromMixedStringAsString(card.getAttribute("id"));
             if (!favorites.isHeartFilledCard(card)) {
-                try {
-                    card.findElement(By.cssSelector("[id^='submission-image']")).click();
-                }catch (ElementClickInterceptedException e){//the gif spinner glitches it, just skp it an pick another card
-                    continue;
-                }
-                Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
-                submissionID = Integer.toString(helpers.StringHelper.getIntFromMixedString(driver.getCurrentUrl()));
-                modal.closeModal().click();
-                Thread.sleep(3000);
-                System.out.println(submissionID + " is our submission id");
                 card.findElement(By.cssSelector("[id='toggle-favorite-" + submissionID + "']")).click();
                 break;
             }
@@ -95,10 +76,9 @@ public class FavoritesTest {
 
         header.userMenu().click();
         header.yourProfileBtn().click();
-        Waiter.wait(driver).until(ExpectedConditions.urlContains(yourName.replace("@", "")));
+        Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
         profile.tabFavorite().click();
-        PageActions.scrollDown(driver, 3);
-        Thread.sleep(5000);
+        Waiter.wait(driver).until(CustomExpectedConditions.pageLoaded());
         Waiter.wait(driver).until(ExpectedConditions.urlContains("favorites"));
         boolean cardFound = false;
         cards = favorites.allCards();
@@ -112,18 +92,23 @@ public class FavoritesTest {
     }
 
     @Test
+    public void FavoriteOnProfileNew() {
+
+        Assert.assertTrue(PrettyAsserts.isDisplayed(By.className("fff"), driver));
+    }
+
+    @Test
     public void FaveIconFillsWhenClicked() {
-        WebElement ourCard = cards.cardNotFavorited();
-        String id = cards.cardNotFavorited().getAttribute("id");
+        WebElement ourCard = submissionCardsPage.cardNotFavorited();
+        String id = submissionCardsPage.cardNotFavorited().getAttribute("id");
         Assert.assertEquals(ourCard.findElement(By.className("fa-heart")).getCssValue("color"), "rgba(255, 255, 255, 1)", "Background color of icon should be rgba(255, 255, 255, 1) when not favorited");
         ourCard.findElement(By.className("fa-heart")).click();
         ourCard = driver.findElement(By.id(id));
         Assert.assertEquals(ourCard.findElement(By.className("fa-heart")).getCssValue("color"), "rgba(0, 195, 0, 1)", "Background color of icon should be rgba(0, 195, 0, 1) when favorited");
-
     }
 
-    @Test(priority = 2)
-    public void FavoriteGoneOnLogout()   {
+    @Test()
+    public void FavoriteGoneOnLogout() {
 
         boolean filled = favorites.isHeartFilled();
         if (!filled) {
@@ -136,7 +121,7 @@ public class FavoritesTest {
         Assert.assertFalse(favorites.isHeartFilled(), "The favorite icon should not be filled for logged out user");
     }
 
-    @Test//TODO - this test is broken
+    @Test//
     public void NoDupesInFavorites() throws InterruptedException {
         header.userMenu().click();
         header.yourProfileBtn().click();
@@ -147,6 +132,7 @@ public class FavoritesTest {
         Set<String> ids = new HashSet<>();
         boolean hasDuplicates = false;
         for (WebElement card : cards) {
+            System.out.println(card.getAttribute("id"));
             String id = card.getAttribute("id");
             if (!ids.add(id)) {
                 hasDuplicates = true;
@@ -158,8 +144,44 @@ public class FavoritesTest {
     }
     //************************** Teardown ********************************************
 
+    @SuppressWarnings("BusyWait")
     @AfterClass
+    public void unFavorite() {
+        driver.get(config.url);
+        try {
+            List<WebElement> cards = submissionCardsPage.allCards();
+            System.out.println(cards.size() + " is the side of cards");
+            //  PageActions.scrollToTop(driver);
+            for (int i = 0; i < cards.size() - 1; i++) {
+                if (i % 2 == 0) {
+                   // System.out.println(cards.get(i).getAttribute("id") + " is our card and heart filled is " + favorites.isHeartFilledCard(cards.get(i)));
+                    if (favorites.isHeartFilledCard(cards.get(i))) {
+                        String submissionID = StringHelper.getIntFromMixedStringAsString(cards.get(i).getAttribute("id"));
+                        cards.get(i).findElement(By.cssSelector("[id='toggle-favorite-" + submissionID + "']")).click();
+                        Thread.sleep(4000);//for now yes
+                    }
+                }
+            }
+        } catch (Exception e) {
+            driver.quit();
+        }
+    }
+
+    @AfterMethod
+    public void relogIfLoggedOut() throws InterruptedException {
+        try {
+            driver.findElement(By.className(header.notificationIconClassname()));
+        }catch (NoSuchElementException e){
+            login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
+        }
+    }
+
+    @AfterTest
     public void TearDown() {
-        driver.close();
+        try {
+            driver.quit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

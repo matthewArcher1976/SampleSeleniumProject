@@ -28,9 +28,7 @@ public class PageHeaderPage {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("avatar"))).findElement(By.className("rounded-full")).findElement(By.cssSelector("img"));
     }
 
-    public WebElement notificationIcon(){
-        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-bell")));
-    }
+
 
     public WebElement chiveryLink() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-cart-shopping")));
@@ -157,7 +155,12 @@ public class PageHeaderPage {
     public WebElement menuTopChivers() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Top-Chivettes")));
     }
-
+    public WebElement notificationIcon(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-bell")));
+    }
+    public String notificationIconClassname(){
+        return "fa-bell";
+    }
     public WebElement privateUserIcon() {
         return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-user-secret")));
     }
