@@ -1,6 +1,5 @@
 package tests;
 
-
 import helpers.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -135,9 +134,9 @@ public class ProfileTest {
     public void EditButtonNotDisplayed() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        String userName = ("@" + helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()));
+        String userName = ("@" + StringHelper.getIdFromUrl(driver.getCurrentUrl()));
         header.menuLatest().click();
-        helpers.PageActions.scrollDown(driver, 1);
+        PageActions.scrollDown(driver, 1);
         List<WebElement> allPosts = profilePage.allCards();
         for (WebElement post : allPosts) {
             if (!post.getText().contains(userName) && post.getText().contains("@")) {
@@ -322,7 +321,7 @@ public class ProfileTest {
         profilePage.tabFollowers().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("followers"));
         int first = profilePage.allFollowers().size();
-        helpers.PageActions.scrollDown(driver, 3);
+        PageActions.scrollDown(driver, 3);
         Thread.sleep(2000);
         int second = profilePage.allFollowers().size();
         Assert.assertTrue(second > first, "Follower cards not seem to be loading when you scroll down");
@@ -377,7 +376,7 @@ public class ProfileTest {
     public void ProfileIs404() {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        String badUser = helpers.Randoms.getRandomString(20);
+        String badUser = Randoms.getRandomString(20);
         driver.get(config.url + badUser);
         Waiter.wait(driver).until(ExpectedConditions.urlContains(badUser));
         Assert.assertTrue(profilePage.profile404text().getText().contains("Whatever you were hoping to find isn't here.") && profilePage.profile404GIF().isDisplayed(), "Did not see the 404 page for a bad profile url");
@@ -388,10 +387,10 @@ public class ProfileTest {
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         profilePage.privacyTermsLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getCurrentUrl().contentEquals("https://www.chivemediagroup.com/legal/terms?utm_source=mychive"), "Privacy Policy link broken");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
@@ -401,7 +400,7 @@ public class ProfileTest {
         driver.navigate().refresh(); //not sure why this is needed; it was grabbing the cards from favorites even though I was never on there
         Thread.sleep(2000);
         List<WebElement> userPosts = profilePage.allCards();
-        String userName = ("@" + helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()));
+        String userName = ("@" + StringHelper.getIdFromUrl(driver.getCurrentUrl()));
         for (WebElement post : userPosts) {
             Assert.assertTrue(post.getText().contains(userName), "Found someone else's post in user's profile");
         }

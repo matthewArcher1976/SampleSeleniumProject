@@ -1,7 +1,8 @@
 package tests;
 
-import resources.Config;
 import helpers.Logins;
+import helpers.Waiter;
+import resources.Config;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -72,7 +73,7 @@ public class ImageUploadTest {
     @Test(enabled = false, priority = 1)
     public void Submit() throws InterruptedException {
         header.submitBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submit"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("submit"));
         // Locate the file drop area element
         WebElement dropArea = upload.dragDrop(); // Replace with your element locator
         // Path to the file to upload

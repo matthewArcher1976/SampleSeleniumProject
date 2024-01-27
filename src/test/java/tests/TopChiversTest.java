@@ -264,11 +264,11 @@ public class TopChiversTest {
     public void SocialLinksFacebook() throws InterruptedException {
         header.menuTopChivers().click();
         topChiversPage.socialFacebookLink().click();
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Thread.sleep((1000));
         Assert.assertTrue(driver.getCurrentUrl().contains("facebook"), "Expected facebook.com, found url: " + driver.getCurrentUrl());
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -279,7 +279,7 @@ public class TopChiversTest {
         Assert.assertTrue(driver.getCurrentUrl().contains("instagram"), "Expected instagram.com, found url: " + driver.getCurrentUrl());
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -290,7 +290,7 @@ public class TopChiversTest {
         Thread.sleep(2000);
         Assert.assertTrue(driver.getCurrentUrl().contains("twitter"), "Expected twitter.com, found url: " + driver.getCurrentUrl());
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test

@@ -11,15 +11,7 @@ import java.util.List;
 
 public class CustomExpectedConditions {
 
-    public static ExpectedCondition<Boolean> booleanReturns(final Boolean booleanMethod, final Boolean expectedValue) {
-        return driver ->{
-            boolean foundValue = false;
-            if (booleanMethod == expectedValue){
-                foundValue = expectedValue;
-            }
-            return foundValue;
-        };
-    }
+
     public static ExpectedCondition<Boolean> cardsLoaded(){
         return driver -> {
             boolean notEmpty = false;
@@ -77,20 +69,6 @@ public class CustomExpectedConditions {
             return currentUrl.matches(".+mychive\\.com/.+");
         };
     }
-    public static ExpectedCondition<Boolean> textToDisappear(final By locator, final String text) {
-        return new ExpectedCondition<>() {
-            @Override
-            public Boolean apply(WebDriver driver) {
-                WebElement element = driver.findElement(locator);
-                String elementText = element.getText().trim();
-                return !elementText.contains(text);
-            }
 
-            @Override
-            public String toString() {
-                return String.format("text ('%s') to disappear from element found by %s", text, locator);
-            }
-        };
-    }
 
 }

@@ -30,7 +30,7 @@ public class Logins extends LoginModalPage {
 		login.emailInput().sendKeys(unpaidEmail);
 		login.passwordInput().sendKeys(unpaidPassword);
 		login.signIn().click();
-		Thread.sleep(3000);//for now
+
 	}
 
 	public void logout(){

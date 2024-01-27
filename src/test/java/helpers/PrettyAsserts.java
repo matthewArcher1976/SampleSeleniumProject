@@ -5,6 +5,7 @@ import org.testng.Assert;
 
 public class PrettyAsserts {
 
+
     public static boolean isIconSelected(WebElement element) {
         String s = element.getAttribute("class");
         Boolean filled = null;

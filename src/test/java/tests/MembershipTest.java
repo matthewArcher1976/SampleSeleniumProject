@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.WindowUtil;
 import resources.Config;
 import helpers.Logins;
 import helpers.Waiter;
@@ -56,13 +57,13 @@ public class MembershipTest {
     public void ClickMembershipButton() {
         profile.membershipTab().click();
         profile.addMembershipBtn().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2)), "Did not find second window on clicking Membership");
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2)), "Did not find second window on clicking Membership");
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getTitle().contains("Membership")
                 && driver.getCurrentUrl().contains("membership")
                 && driver.getCurrentUrl().contains("utm_source"));
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test(enabled = false)

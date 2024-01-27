@@ -194,17 +194,17 @@ public class MobileSubmissionModalTest {
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
         Thread.sleep(4000);//yeah
-        String firstCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String firstCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         action.sendKeys(Keys.ARROW_RIGHT).perform();
-        String secondCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String secondCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(firstCardID, secondCardID, "Did not navigate forward when pressing right arrow on keyboard");
         action.sendKeys(Keys.ARROW_RIGHT).perform();
         Thread.sleep(2000);//it's fine
-        String thirdCardID = helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl());
+        String thirdCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());
         Assert.assertNotEquals(thirdCardID, secondCardID, "Did not navigate forward when clicking right nav, second click");
         action.sendKeys(Keys.ARROW_LEFT).perform();
         Thread.sleep(2000);//is what it is
-        Assert.assertEquals(secondCardID, helpers.StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
+        Assert.assertEquals(secondCardID, StringHelper.getIdFromUrl(driver.getCurrentUrl()), "Did not navigate back from third to second card");
     }
 
     @Test
@@ -217,7 +217,7 @@ public class MobileSubmissionModalTest {
     public void StickyHeaderOnModal() {
         modal.firstCard().click();
         modal.commentButton().click();
-        helpers.PageActions.scrollDown(driver, 1);
+        PageActions.scrollDown(driver, 1);
         Assert.assertTrue(modal.stickyHeader().isDisplayed(), "Sticky header didn't display on scrolling");
     }
 

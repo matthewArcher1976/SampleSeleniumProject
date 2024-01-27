@@ -17,7 +17,6 @@ public class UserNameBlacklist {
         wordList.add("chive-nation");
         wordList.add("contact");
         wordList.add("dopamine");
-        wordList.add("dopamines");
         wordList.add("dopamine-dump");
         wordList.add("dump");
         wordList.add("dumps");

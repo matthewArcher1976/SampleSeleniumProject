@@ -24,7 +24,7 @@ public class AdsTest {
 
     private static TestConfig config;
 
-    //************************** Setup ******************************************
+    //***************************** Setup ******************************************
 
     @BeforeTest
     public void configs() throws Exception {

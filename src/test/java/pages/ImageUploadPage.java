@@ -10,6 +10,7 @@ public class ImageUploadPage {
     WebDriver driver;
 
     public ImageUploadPage(WebDriver driver) {
+
         this.driver = driver;
     }
 

@@ -25,7 +25,8 @@ public class ResponsiveLayoutTest {
      * Test for vertical spacing only works for the top row of cards, after that the order of the cards in allCards() does not
      * always match the placement on screen, ie cardLocations(i+4) should be right below cardLocations(i) but it's not. allCards()
      * is numeric order of the values of allCards.get(i).getAttribute("id"), but on screen they're not always ordered that way.
-     * The actual layout seems to be affected by the card dimensions and therefore not consistent enough to make a robust test
+     * The actual layout changes with the card dimensions and therefore not consistent enough to make a robust test that way. Try
+     * finding the card below with Dimension/Point and see if it's robust enough
     */
     WebDriver driver;
     private static TestConfig config;

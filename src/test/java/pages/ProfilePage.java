@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 
 public class ProfilePage {
-    //TODO - profile page, not the edit
+
     private final WebDriver driver;
 
     public ProfilePage(WebDriver driver) {

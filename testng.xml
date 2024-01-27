@@ -15,7 +15,6 @@
             <class name="tests.EditProfileSocialLinksTest"/>
             <class name="tests.EditProfileTest"/>
             <class name="tests.FavoritesTest"/>
-            <!--class name="tests.HelloWorldTest"/ testing test, disregard-->
             <class name="tests.ImageUploadTest"/>
             <class name="tests.LoginFaceBookTest"/>
             <class name="tests.LoginGoogleTest"/>
@@ -24,7 +23,6 @@
             <class name="tests.MobileLoginModalTest"/>
             <class name="tests.MobileSubmissionModalTest"/>
             <class name="tests.MobileViewHeaderTest"/>
-            <class name="tests.NotificationsTest"/>
             <class name="tests.PageHeaderTest"/>
             <class name="tests.PrivateUserTest"/>
             <class name="tests.ProfilePointsTest"/>

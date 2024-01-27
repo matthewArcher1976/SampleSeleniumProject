@@ -1,9 +1,9 @@
 package tests;
 
+import helpers.Logins;
 import helpers.Waiter;
 import helpers.WindowUtil;
 import resources.Config;
-import helpers.Logins;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -122,7 +122,7 @@ public class EditProfileSocialLinksTest {
         profile.amazonInput().clear();
         profile.amazonInput().sendKeys("https://amazon.com/registry/wishlist/28NX67QM7I7D3");
         profile.saveProfileBtn().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.amazonInputInactive())).isDisplayed(), "Did not find the short link");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.amazonInputInactive())).isDisplayed(), "Did not find the short link");
     }
 
     @Test
@@ -133,7 +133,7 @@ public class EditProfileSocialLinksTest {
         profile.facebookInput().clear();
         profile.facebookInput().sendKeys("asdf");
         profile.saveProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
         Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
@@ -169,7 +169,7 @@ public class EditProfileSocialLinksTest {
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.userMenu().click();
         profile.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
+        Waiter.wait(driver).until(ExpectedConditions.not(ExpectedConditions.urlContains("settings")));
 
         Assert.assertTrue(profilePage.facebookLink().isDisplayed(), "Did not find facebook button");
 
@@ -321,7 +321,7 @@ public class EditProfileSocialLinksTest {
         Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
         WindowUtil.switchToWindow(driver, 1);
 
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(tiktokHandle)), "Did not find Tiktok window");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains(tiktokHandle)), "Did not find Tiktok window");
 
         driver.close();
         WindowUtil.switchToWindow(driver, 0);
@@ -335,7 +335,7 @@ public class EditProfileSocialLinksTest {
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("https://www.tiktok.com/qwerty/asdf");
         profile.saveProfileBtn().click();
-        Assert.assertTrue(helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(profile.tiktokBadURL())).isDisplayed(), "Should have rejected bad Tiktok link");
+        Assert.assertTrue(Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(profile.tiktokBadURL())).isDisplayed(), "Should have rejected bad Tiktok link");
     }
 
     @Test
@@ -346,7 +346,7 @@ public class EditProfileSocialLinksTest {
         profile.tikTokInput().clear();
         profile.tikTokInput().sendKeys("@asdf");
         profile.saveProfileBtn().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess())).isDisplayed());
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess())).isDisplayed());
     }
 
     @Test
@@ -368,10 +368,10 @@ public class EditProfileSocialLinksTest {
         profilePage.tiktokLink().click();
         WindowUtil.switchToWindow(driver, 1);
 
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(tiktokHandle)), "Did not find Tiktok window");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains(tiktokHandle)), "Did not find Tiktok window");
 
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test

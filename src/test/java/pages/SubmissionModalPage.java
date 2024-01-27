@@ -1,10 +1,8 @@
 package pages;
 
 import helpers.Waiter;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
@@ -13,6 +11,7 @@ import java.util.List;
 public class SubmissionModalPage {
 
     WebDriver driver;
+    Actions actions;
 
     public SubmissionModalPage(WebDriver driver) {
         this.driver = driver;
@@ -44,11 +43,11 @@ public class SubmissionModalPage {
             try {
                 driver.findElement(By.className("badge-outline"));
                 firstCardWithTag = cardAfterClick;
-                helpers.PageActions.hitEscape(driver);
+                actions.sendKeys(Keys.ESCAPE);
 
                 break;
             } catch (NoSuchElementException e) {
-                helpers.PageActions.hitEscape(driver);
+                actions.sendKeys(Keys.ESCAPE);
                 Thread.sleep(3000);
             }
         }

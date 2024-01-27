@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.Waiter;
 import resources.Config;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -10,7 +9,7 @@ import pages.LoginModalPage;
 import pages.PageHeaderPage;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
-
+import helpers.Waiter;
 import static resources.getDriverType.getDriver;
 
 @Listeners(listeners.SauceLabsListener.class)
@@ -44,7 +43,7 @@ public class LoginGoogleTest {
     public void GoogleCreateAccount() {
         header.loginBtn().click();
         loginModal.loginGoogle().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("Google"));
+        Waiter.wait(driver).until(ExpectedConditions.titleContains("Google"));
         loginModal.googleCreateAccount().click();
         loginModal.googleFirstName().sendKeys("Matt");
         loginModal.googleLastName().sendKeys("Archer");

@@ -14,7 +14,7 @@ public class MobileViewPage {
         this.driver = driver;
     }
 
-    //******************** Elements ***********************
+    //******************** WebElements ***********************
 
     public WebElement hamburgerMenu() {
         return Waiter.wait(driver).until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[id*='headlessui-disclosure-button-']")));

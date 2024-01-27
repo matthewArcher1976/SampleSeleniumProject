@@ -15,7 +15,6 @@ public class LoginModalPage {
         this.setDriver(driver);
     }
 
-    //this was created by Eclipse
     public WebDriver getDriver() {
         return driver;
     }

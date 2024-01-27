@@ -1,8 +1,6 @@
 package helpers;
 
 import java.time.Duration;
-import java.util.function.BooleanSupplier;
-
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +10,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 
 public class Waiter {
+
 	public static FluentWait<WebDriver> longWait(WebDriver driver) {
 		return new FluentWait<>(driver)
 				.withTimeout(Duration.ofSeconds(20))
@@ -56,20 +55,5 @@ public class Waiter {
 	            .ignoring(NoSuchElementException.class)
 				.ignoring(StaleElementReferenceException.class);
 	}
-	
-	public static void waitUntilBooleanMethodReturns(WebDriver driver, final BooleanSupplier booleanMethod, final boolean expectedValue) {
-	    // Define the FluentWait
-	    FluentWait<WebDriver> wait = new FluentWait<>(driver)
-	            .withTimeout(Duration.ofSeconds(20))
-	            .pollingEvery(Duration.ofMillis(500))
-	            .ignoring(NoSuchElementException.class)
-				.ignoring(StaleElementReferenceException.class);
-
-	    // Wait for the boolean method to return the expected value
-	    wait.until(driver1 -> booleanMethod.getAsBoolean() == expectedValue);
-	}
-
-
-
 
 }

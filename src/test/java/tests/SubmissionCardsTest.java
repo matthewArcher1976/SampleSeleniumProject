@@ -93,7 +93,7 @@ public class SubmissionCardsTest {
     public void FollowingShowsFollowedUsers() throws InterruptedException {
         header.menuFollowing().click();
         helpers.PageActions.scrollDown(driver, 1);
-        driver.navigate().refresh();//I don't know why but it's getting random usernames if I don't refresh
+        driver.navigate().refresh();//It's getting random usernames if I don't refresh
         Set<String> followedUsers = card.getAllUserNames();
         for (String user : followedUsers) {
             driver.get(config.url + user.replace("@", ""));
@@ -161,10 +161,9 @@ public class SubmissionCardsTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void MouseOverReportBtn() throws InterruptedException {
+    public void MouseOverReportBtn(){
         Actions a = new Actions(driver);
         a.moveToElement(card.reportBtn()).perform();
-        Thread.sleep(1000);
         Assert.assertEquals(card.reportBtn().getCssValue("color"), "rgba(0, 195, 0, 1)", "Report button color did not change on mouseover");
     }
 
@@ -177,18 +176,16 @@ public class SubmissionCardsTest {
     }
 
     @Test(enabled = false)
-    public void OverlayFavorite() throws InterruptedException {
+    public void OverlayFavorite()  {
         WebElement ourCard = card.cardNotFavorited();
         ourCard.findElement(By.className("fa-heart")).click();
-        Thread.sleep(1000);//yes
         Assert.assertTrue(card.voteUpOverlay().isDisplayed(), "Upvote overlay not found");
     }
 
     @Test(enabled = false)
-    public void OverlayUpvote() throws InterruptedException {
+    public void OverlayUpvote() {
         WebElement ourCard = card.cardNotUpvoted();
         ourCard.findElement(By.className("fa-thumbs-up")).click();
-        Thread.sleep(1000);//yes
         Assert.assertTrue(card.voteUpOverlay().isDisplayed(), "Upvote overlay not found");
     }
 
@@ -283,7 +280,7 @@ public class SubmissionCardsTest {
         String subID = ourCard.getAttribute("id");
         int subInt = StringHelper.getIntFromMixedString(subID);
         ourCard.click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
         String url = driver.getCurrentUrl();
         int urlInt = StringHelper.getIntFromMixedString(url);
         Assert.assertEquals(subInt, urlInt, "The post id didn't match the url");

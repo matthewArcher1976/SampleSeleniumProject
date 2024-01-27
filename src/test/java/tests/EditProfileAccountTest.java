@@ -218,12 +218,11 @@ public class EditProfileAccountTest {
         Waiter.wait(driver).until(ExpectedConditions.visibilityOf(editProfilePage.updateSuccess()));
     }
 
-    @Test(enabled = false)//TODO - get it working
-    public void UpdateUserNameInvalid() throws InterruptedException {
+    @Test(enabled = false)//TODO - get this test working
+    public void UpdateUserNameInvalid() {
         editProfilePage.userMenu().click();
         editProfilePage.yourProfileBtn().click();
         Waiter.wait(driver).until(CustomExpectedConditions.profileLoaded());
-        Thread.sleep(4000);
         editProfilePage.accountTab().click();
         editProfilePage.userName().sendKeys("Test%$");
         editProfilePage.saveProfileBtn().click();

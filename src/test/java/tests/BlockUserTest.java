@@ -1,10 +1,14 @@
 package tests;
 
+
+
+import helpers.Logins;
 import helpers.PageActions;
+import helpers.StringHelper;
 import helpers.Waiter;
 import org.openqa.selenium.interactions.Actions;
 import resources.Config;
-import helpers.Logins;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -68,7 +72,7 @@ public class BlockUserTest {
         String userName = search.firstUser().getText().replace("@", "");
         PageActions.scrollDown(driver, 2);
         action.moveToElement(search.firstUser()).click().perform();//fixes click intercepted error
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         blocked.blockBtn().click();
         try {
             Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.attributeContains(blocked.blockBtn().findElement(By.cssSelector("svg")), "class", "fa-check")));
@@ -93,7 +97,7 @@ public class BlockUserTest {
         Waiter.wait(driver).until(ExpectedConditions.urlContains(userName));
         //Setup
         String userURL = driver.getCurrentUrl();
-        String blockedUser = helpers.StringHelper.getIdFromUrl(userURL);
+        String blockedUser = StringHelper.getIdFromUrl(userURL);
         blocked.blockBtn().click();
 
         try {
@@ -107,7 +111,7 @@ public class BlockUserTest {
         //Test if this user is found in the search
         search.searchInput().sendKeys(SEARCH_TERM);
         search.searchInput().sendKeys(Keys.ENTER);
-        helpers.PageActions.scrollDown(driver, 1);
+        PageActions.scrollDown(driver, 1);
         List<WebElement> users = search.allUserCards();
         for (WebElement user : users) {
             try {
@@ -121,7 +125,7 @@ public class BlockUserTest {
         //teardown
         driver.get(userURL);
         blocked.blockBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.attributeContains(blocked.blockBtn().findElement(By.cssSelector("svg")), "class", "fa-ban"));
+        Waiter.wait(driver).until(ExpectedConditions.attributeContains(blocked.blockBtn().findElement(By.cssSelector("svg")), "class", "fa-ban"));
     }
 
     //************************* Teardown ***************************

@@ -1,12 +1,12 @@
 package tests;
 
-
+import helpers.Logins;
 import helpers.PrettyAsserts;
+import helpers.Randoms;
 import helpers.Waiter;
 import io.github.sukgu.Shadow;
 import org.openqa.selenium.interactions.Actions;
 import resources.Config;
-import helpers.Logins;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -70,8 +70,8 @@ public class LoginModalTest {
         header.loginBtn().click();
         Thread.sleep(2000);
         login.forgotPassword().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
-        login.emailInput().sendKeys("thechivetest+" + helpers.Randoms.getRandomString(10) + "@gmail.com");
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
+        login.emailInput().sendKeys("thechivetest+" + Randoms.getRandomString(10) + "@gmail.com");
         login.resetPasswordEmailMe().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We cannot find a user with that email address."), "ForgotPasswordInvalidEmail - error toast not found");
     }
@@ -81,7 +81,7 @@ public class LoginModalTest {
         header.loginBtn().click();
         Thread.sleep(2000);
         login.forgotPassword().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
         login.emailInput().sendKeys(config.unpaidEmail);
         login.resetPasswordEmailMe().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We have emailed your password reset link. If you do not find it in your inbox, please double check your spam folder.")
@@ -132,30 +132,25 @@ public class LoginModalTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void LoginOpensOnSubmit() throws InterruptedException {
+    public void LoginOpensOnSubmit() {
         header.submitBtn().click();
         login.emailInput().sendKeys(config.unpaidEmail);
         login.passwordInput().sendKeys(System.getenv("TEST_PWD"));
         login.signIn().click();
-        Thread.sleep(3000);
-        //TODO - figure out how to add implicit wait to PrettyAsserts to avoid having to use Thread.sleep
         Assert.assertTrue(PrettyAsserts.isDisplayed(upload.dragDropBy(), driver), "Did not go to submit page on login");
 
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
-    public void LoginOpensOnUpvote() throws InterruptedException {
+    public void LoginOpensOnUpvote() {
         card.firstCard().findElement(By.className("fa-thumbs-up")).click();
-        Thread.sleep(2000);
         Assert.assertTrue(login.signIn().isDisplayed(), "LoginOpensOnUpvote - didn't see login modal");
     }
 
     @Test
-    public void LoginOpensOnUpvoteModalView() throws InterruptedException {
+    public void LoginOpensOnUpvoteModalView() {
         card.firstCard().click();
-        Thread.sleep(2000);
         modal.modalLikeBtn().click();
-        Thread.sleep(2000);
         Assert.assertTrue(login.signIn().isDisplayed(), "Downvote on modal didn't prompt login");
     }
 

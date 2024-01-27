@@ -2,8 +2,6 @@ package resources;
 
 public class TestConfig {
 
-    public String adminEmail;
-    public String adminURL;
     public String bannedEmail;
     public String bannedUsername;
     public String chivetteEmail;
@@ -13,8 +11,6 @@ public class TestConfig {
     public String driverTypeMobile;
     public String facebookEmail;
     public String googleEmail;
-    public String natalie;
-
     public String paidEmail;
     public String privateEmail;
     public String privateUsername;

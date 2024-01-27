@@ -15,7 +15,7 @@ public class Randoms {
 		return randomString.toString();
     }
 	
-	//Get a day of the month
+	//Get a day of the month for date picker
 	public static String getRandomDay() {
 	    Random rnd = new Random();
 	    int randomNum = rnd.nextInt(10, 28) + 1;

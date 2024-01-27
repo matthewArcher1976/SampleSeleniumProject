@@ -24,7 +24,6 @@ public class SearchAndFiltersTest {
 
     WebDriver driver;
     private static TestConfig config;
-
     SearchAndFiltersPage search;
     Logins login;
     PageHeaderPage header;

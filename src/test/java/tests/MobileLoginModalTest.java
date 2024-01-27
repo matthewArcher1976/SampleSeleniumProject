@@ -75,7 +75,7 @@ public class MobileLoginModalTest {
         Thread.sleep(2000);
         login.forgotPassword().click();
         Waiter.wait(driver).until(ExpectedConditions.urlContains("forgot-password"));
-        login.emailInput().sendKeys("thechivetest+" + helpers.Randoms.getRandomString(10) + "@gmail.com");
+        login.emailInput().sendKeys("thechivetest+" + Randoms.getRandomString(10) + "@gmail.com");
         login.resetPasswordEmailMe().click();
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.visibilityOf(login.notificationToast())).getText().contains("We cannot find a user with that email address."), "ForgotPasswordInvalidEmail - error toast not found");
     }

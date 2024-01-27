@@ -19,7 +19,6 @@ public class PrivateUserTest {
     PageHeaderPage header;
     EditProfilePage profile;
 
-
     //************************** Setup ******************************************
 
     @BeforeTest

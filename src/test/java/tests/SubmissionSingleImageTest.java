@@ -35,14 +35,13 @@ public class SubmissionSingleImageTest {
     Logins login;
     private static TestConfig config;
 
-    //************************** Setup ******************************************
+    //******************************** Setup ******************************************
 
     @BeforeTest
     public void configs() throws Exception {
         config = Config.getConfig();
         driver = getDriver(config.driverType);
         login = new Logins(driver);
-
         action = new Actions(driver);
         card = new SubmissionCardsPage(driver);
         header = new PageHeaderPage(driver);

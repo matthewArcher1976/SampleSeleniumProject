@@ -13,7 +13,8 @@ public class SubscriptionPage {
         this.driver = driver;
     }
 
-    //******************** Web Elements ***********************
+    //***************************** Web Elements ***********************
+
     public WebElement chargebeeClose() {
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("cb-hp__close-icon")));
     }

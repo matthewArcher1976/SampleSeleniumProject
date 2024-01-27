@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.Waiter;
 import resources.Config;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -44,11 +45,11 @@ public class LoginFaceBookTest {
     public void FaceBookLoginValid() {
         header.loginBtn().click();
         login.loginFacebook().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.titleContains("Facebook"));
+        Waiter.wait(driver).until(ExpectedConditions.titleContains("Facebook"));
         login.facebookEmail().sendKeys(config.facebookEmail);
         login.facebookPassword().sendKeys(System.getenv("TEST_PWD"));
         login.facebookLoginBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(1));
+        Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(1));
         Assert.assertTrue(header.userMenu().isDisplayed(), "FaceBookLoginValid - User is not logged in");
     }
 

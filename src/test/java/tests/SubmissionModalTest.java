@@ -56,18 +56,18 @@ public class SubmissionModalTest {
 
     @Test()
     public void ClickTagForTagPage() {
-       card.firstCard().click();
-       String tag = modal.tag().getText();
-       modal.tag().click();
-       Waiter.wait(driver).until(ExpectedConditions.urlContains("tag"));
-       Assert.assertTrue(driver.getCurrentUrl().contains(tag), "Clicking the tag does not open single tag page");
+        card.firstCard().click();
+        String tag = modal.tag().getText();
+        modal.tag().click();
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("tag"));
+        Assert.assertTrue(driver.getCurrentUrl().contains(tag), "Clicking the tag does not open single tag page");
     }
 
     @Test
     public void ClickCommentsIcon() throws InterruptedException {
         driver.manage().window().fullscreen();
         modal.firstCard().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
         modal.commentIcon().click();
         Dimension size = modal.image().getSize();
         int screenWidth = size.getWidth();
@@ -82,7 +82,7 @@ public class SubmissionModalTest {
     public void ClickCommentsButton() throws InterruptedException {
         driver.manage().window().fullscreen();
         modal.firstCard().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("submission"));
         modal.commentButton().click();
         Dimension size = modal.image().getSize();
         int screenWidth = size.getWidth();
@@ -97,8 +97,8 @@ public class SubmissionModalTest {
     public void ClickFBIcon() {
         modal.firstCard().click();
         modal.facebookBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
+        WindowUtil.switchToWindow(driver, 1);
         try {
             Assert.assertTrue(driver.getCurrentUrl().contains("facebook"), "Did not find FB window");
         } catch (Exception e) {
@@ -106,7 +106,7 @@ public class SubmissionModalTest {
             Assert.fail("ClickFBIcon failed");
         }
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -196,7 +196,7 @@ public class SubmissionModalTest {
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
     public void NavBetweenSubs() throws InterruptedException {
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
+        Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[id^='submission-']"), 5));
         WebElement card = modal.firstCard();
         action.moveToElement(card).click().perform();
         String firstCardID = StringHelper.getIdFromUrl(driver.getCurrentUrl());

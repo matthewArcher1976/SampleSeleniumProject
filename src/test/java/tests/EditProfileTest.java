@@ -67,15 +67,15 @@ public class EditProfileTest {
         profile.membershipTab().click();
         profile.addMembershipBtn().click();
         Waiter.quickWait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         try {
             Assert.assertTrue(driver.getCurrentUrl().contains("membership"));
             driver.close();
-            helpers.WindowUtil.switchToWindow(driver, 0);
+            WindowUtil.switchToWindow(driver, 0);
         } catch (AssertionError e) {
             System.out.println("Did not find Membership page");
             driver.close();
-            helpers.WindowUtil.switchToWindow(driver, 0);
+            WindowUtil.switchToWindow(driver, 0);
             Assert.fail();
         }
     }
@@ -117,7 +117,7 @@ public class EditProfileTest {
         String year = Randoms.getRandomYear();
         String month = Randoms.getRandomMonth();
         String day = Randoms.getRandomDay();
-        String birthday = profile.monthToNumber(month) + helpers.Randoms.formatDay(day) + year;
+        String birthday = profile.monthToNumber(month) + Randoms.formatDay(day) + year;
         System.out.println(birthday + " is birthday");
         profile.birthDayInput().click();
         profile.birthDayInput().sendKeys(birthday);
@@ -134,10 +134,10 @@ public class EditProfileTest {
         Thread.sleep(2000);
         profilePage.cmgLink().click();
         Waiter.wait(driver).until(ExpectedConditions.numberOfWindowsToBe(2));
-        helpers.WindowUtil.switchToWindow(driver, 1);
+        WindowUtil.switchToWindow(driver, 1);
         Assert.assertTrue(driver.getCurrentUrl().contains("https://www.chivemediagroup.com/?utm_source=mychive"), "CMG Link broken");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
     @Test
@@ -216,7 +216,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.accountTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while active should be rgba(0, 158, 0, 1), found: " + profile.accountTab().getCssValue("color"));
         //Active
         profile.accountTab().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("account"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("account"));
         action.moveToElement(profile.membershipTab()).perform();//need to pull the cursor off the account tab from before
         Assert.assertEquals(profile.accountTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while inactive should be rgba(0, 195, 0, 1), found: " + profile.accountTab().getCssValue("color"));
         action.moveToElement(profile.accountTab()).perform();
@@ -233,7 +233,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.emailTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while active should be rgba(0, 158, 0, 1), found: " + profile.emailTab().getCssValue("color"));
         //Active
         profile.emailTab().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("email-preferences"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("email-preferences"));
         action.moveToElement(profile.membershipTab()).perform();//need to pull the cursor off the membership tab from before
         Assert.assertEquals(profile.emailTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while inactive should be rgba(0, 195, 0, 1), found: " + profile.emailTab().getCssValue("color"));
         action.moveToElement(profile.emailTab()).perform();
@@ -250,7 +250,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.membershipTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while active should be rgba(0, 158, 0, 1), found: " + profile.membershipTab().getCssValue("color"));
         //Active
         profile.membershipTab().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("membership"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("membership"));
         action.moveToElement(profile.profileTab()).perform();//need to pull the cursor off the membership tab from before
         Assert.assertEquals(profile.membershipTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while inactive should be rgba(0, 195, 0, 1), found: " + profile.membershipTab().getCssValue("color"));
         action.moveToElement(profile.membershipTab()).perform();
@@ -267,7 +267,7 @@ public class EditProfileTest {
         Assert.assertEquals(profile.profileTab().getCssValue("color"), "rgba(0, 158, 0, 1)", "Color on hover while active should be rgba(0, 158, 0, 1), found: " + profile.profileTab().getCssValue("color"));
         //Inactive
         profile.socialLinksTab().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("social"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("social"));
         Assert.assertEquals(profile.profileTab().getCssValue("color"), "rgba(207, 207, 207, 1)", "Color on hover while inactive should be rgba(207, 207, 207, 1), found: " + profile.profileTab().getCssValue("color"));
         action.moveToElement(profile.profileTab()).perform();
         Assert.assertEquals(profile.profileTab().getCssValue("color"), "rgba(0, 195, 0, 1)", "Color on hover while inactive should be rgba(0, 158, 0, 1), found: " + profile.profileTab().getCssValue("color"));
@@ -284,7 +284,7 @@ public class EditProfileTest {
         //Active
         driver.navigate().refresh();
         profile.socialLinksTab().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("profile"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("profile"));
         action.moveToElement(profile.profileTab()).perform();//need to pull the cursor off the social tab from before
 
         Thread.sleep(2000);//yes
@@ -362,7 +362,7 @@ public class EditProfileTest {
     @Test
     public void UpdateFirstName() {
 
-        String nameAfter = helpers.Randoms.getRandomString(10);
+        String nameAfter = Randoms.getRandomString(10);
         profile.userMenu().click();
         profile.settingsBtn().click();
         profile.firstNameInput().clear();
@@ -377,7 +377,7 @@ public class EditProfileTest {
     public void UpdateLastName() {
         profile.userMenu().click();
         profile.settingsBtn().click();
-        String nameAfter = helpers.Randoms.getRandomString(10);
+        String nameAfter = Randoms.getRandomString(10);
         profile.lastNameInput().clear();
         profile.lastNameInput().sendKeys(nameAfter);
         profile.saveProfileBtn().click();
@@ -391,7 +391,7 @@ public class EditProfileTest {
         profile.userMenu().click();
         profile.settingsBtn().click();
         profile.firstNameInput().clear();
-        profile.firstNameInput().sendKeys(helpers.Randoms.getRandomString(10));
+        profile.firstNameInput().sendKeys(Randoms.getRandomString(10));
         profile.saveProfileBtn().click();
         Assert.assertTrue(profile.updateSuccess().isDisplayed(), "Did not see the Your profile has been successfully updated! message");
     }

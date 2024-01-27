@@ -63,7 +63,7 @@ public class ChivettesTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class, enabled = false)
-    public void CreateForumPost(){
+    public void CreateForumPost() {
         pageHeaderPage.userMenu().click();
         pageHeaderPage.yourProfileBtn().click();
         profilePage.tabForum().click();

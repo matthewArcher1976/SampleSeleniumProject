@@ -17,7 +17,6 @@ import java.util.Set;
 
 import static resources.getDriverType.getDriver;
 
-@Listeners(listeners.SauceLabsListener.class)
 @Test(retryAnalyzer = RetryAnalyzer.class)
 public class FavoritesTest {
     private static TestConfig config;

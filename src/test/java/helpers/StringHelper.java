@@ -6,12 +6,8 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
 public class StringHelper {
-
+	//for pulling user and submission ID's out of our URLs
 	public static int getIntFromMixedString(String s) {
 	    try (Scanner in = new Scanner(s).useDelimiter("[^0-9]+")) {
 	        if (in.hasNextInt()) {
@@ -42,20 +38,6 @@ public class StringHelper {
 	    return lastPart;
 	}
 
-    public static void printElementCSSStyles(WebDriver driver, WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        String computedStyles = (String) js.executeScript("var styles = window.getComputedStyle(arguments[0]);" +
-                "var result = ''; for (var i = 0; i < styles.length; i++) {" +
-                "result += styles[i] + ': ' + styles.getPropertyValue(styles[i]) + ';\\n';} return result;", element);
-
-        System.out.println("CSS Styles:");
-
-        if (computedStyles.isEmpty()) {
-            System.out.println("No styles found for the element.");
-        } else {
-            System.out.println(computedStyles);
-        }
-    }
     
     public static String getUsernameFromURL(String url) {
 		url = url.replaceAll("/+$", "");

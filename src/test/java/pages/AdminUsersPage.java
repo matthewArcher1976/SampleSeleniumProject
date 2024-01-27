@@ -19,9 +19,7 @@ public class AdminUsersPage {
 
     //******************** Elements ***********************
 
-    public WebElement actionsDropdown() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("select[dusk='action-select']")));
-    }
+
 
     public Select actionsDropdownSelect() {
         return new Select(helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("select[dusk='action-select']"))));

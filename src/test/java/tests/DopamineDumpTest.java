@@ -1,9 +1,13 @@
 package tests;
 
+
+
+import helpers.Logins;
+import helpers.PageActions;
+import helpers.Waiter;
 import org.openqa.selenium.interactions.Actions;
 import resources.Config;
-import helpers.Logins;
-import helpers.Waiter;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,14 +23,13 @@ import java.util.List;
 import java.util.Set;
 
 import static resources.getDriverType.getDriver;
-@Listeners(listeners.SauceLabsListener.class)
 public class DopamineDumpTest {
 
     WebDriver driver;
     Actions action;
     SubmissionCardsPage card;
     PageHeaderPage header;
-    Logins login;
+    Logins logins;
     private static TestConfig config;
 
     //************************** Setup ******************************************
@@ -38,13 +41,13 @@ public class DopamineDumpTest {
         action = new Actions(driver);
         card = new SubmissionCardsPage(driver);
         header = new PageHeaderPage(driver);
-        login = new Logins(driver);
+        logins = new Logins(driver);
     }
 
     @BeforeClass
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
+        logins.unpaidLogin(config.defaultEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
 
@@ -71,19 +74,19 @@ public class DopamineDumpTest {
 
     @Test
     public void FeaturedCardsDisplay() {
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 6));
+        Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 6));
         header.menuFeatured().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         Assert.assertTrue(card.featuredIcon().isDisplayed(), "FeaturedCardsDisplay - Did not see Featured icon");
     }
 
     @Test
     public void InfiniteScrollFeatured() {
         header.menuFeatured().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 0));
+        Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 0));
         int first = card.allFeaturedImages().size();
-        helpers.PageActions.scrollDown(driver, 3);
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 0));
+        PageActions.scrollDown(driver, 3);
+        Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 0));
         Assert.assertNotNull(Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), first)), "InfiniteScrollFeatured - Dopamine Dump cards do not seem to be loading when you scroll down");
     }
 
@@ -91,7 +94,7 @@ public class DopamineDumpTest {
     @Test
     public void NoDuplicates() {
         header.menuFeatured().click();
-        helpers.PageActions.scrollDown(driver, 3);
+        PageActions.scrollDown(driver, 3);
         List<WebElement> allCards = card.allFeaturedImages();
         Set<String> ids = new HashSet<>();
         boolean noDupes = true;
@@ -106,11 +109,11 @@ public class DopamineDumpTest {
 
     @Test
     public void SingleDumpPage() {
-        helpers.Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 6));
+        Waiter.wait(driver).until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("img[id^='submission-image-']"), 6));
         header.menuFeatured().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"));
         card.featuredIcon().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlMatches(".*/\\d+.*")), "SingleDumpPage - URL does not contain the dump number");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlMatches(".*/\\d+.*")), "SingleDumpPage - URL does not contain the dump number");
     }
 
     //************************* Teardown ***************************

@@ -1,5 +1,6 @@
 package pages;
 
+
 import helpers.Waiter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -33,7 +34,7 @@ public class FavoritesPage {
     //**************** Actions/Helpers ***************************
 
     public boolean isHeartFilled() {
-        WebElement heart = helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='toggle-favorite']"))).findElement(By.className("fa-heart"));
+        WebElement heart = Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='toggle-favorite']"))).findElement(By.className("fa-heart"));
         String s = heart.getAttribute("class");
         Boolean filled = null;
 

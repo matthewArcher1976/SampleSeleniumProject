@@ -1,10 +1,9 @@
 package tests;
 
-
-import helpers.Waiter;
-import resources.Config;
 import helpers.Logins;
 import helpers.PageActions;
+import helpers.Waiter;
+import resources.Config;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -60,7 +59,7 @@ public class EditProfileEmailsTest {
         PageActions.scrollDown(driver, 1);
         profile.emailCharities().click();
         profile.saveEmailPrefBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
         Assert.assertNotEquals(onOff, profile.emailCharities().isSelected(), "EmailCharities - change didn't save");
     }
@@ -73,7 +72,7 @@ public class EditProfileEmailsTest {
         PageActions.scrollDown(driver, 1);
         profile.emailChiveNation().click();
         profile.saveEmailPrefBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
         Assert.assertNotEquals(onOff, profile.emailChiveNation().isSelected(), "EmailChiveNation - change didn't save");
     }
@@ -84,7 +83,7 @@ public class EditProfileEmailsTest {
         Boolean onOff = profile.emailHotnessDaily().isSelected();
         profile.emailHotnessDaily().click();
         profile.saveEmailPrefBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
         Assert.assertNotEquals(onOff, profile.emailHotnessDaily().isSelected(), "EmailHotnessDaily - change didn't save");
     }
@@ -95,7 +94,7 @@ public class EditProfileEmailsTest {
         Boolean onOff = profile.emailHotnessWeekly().isSelected();
         profile.emailHotnessWeekly().click();
         profile.saveEmailPrefBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
         Assert.assertNotEquals(onOff, profile.emailHotnessWeekly().isSelected(), "EmailHotnessWeekly - change didn't save");
     }
@@ -107,7 +106,7 @@ public class EditProfileEmailsTest {
         PageActions.scrollDown(driver, 1);
         profile.emailHumanityDaily().click();
         profile.saveEmailPrefBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
         Assert.assertNotEquals(onOff, profile.emailHumanityDaily().isSelected(), "EmailHumanityDaily - change didn't save");
     }
@@ -119,7 +118,7 @@ public class EditProfileEmailsTest {
         PageActions.scrollDown(driver, 1);
         profile.emailHumanityWeekly().click();
         profile.saveEmailPrefBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
         Assert.assertNotEquals(onOff, profile.emailHumanityWeekly().isSelected(), "EmailHumanityWeekly - change didn't save");
     }
@@ -192,7 +191,7 @@ public class EditProfileEmailsTest {
         PageActions.scrollDown(driver, 1);
         profile.emailWilliamMurray().click();
         profile.saveEmailPrefBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
+        Waiter.wait(driver).until(ExpectedConditions.visibilityOf(profile.updateSuccess()));
         profile.emailTab().click();
         Assert.assertNotEquals(onOff, profile.emailWilliamMurray().isSelected(), "EmailWilliamMurray - change didn't save");
     }

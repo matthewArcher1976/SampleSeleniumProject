@@ -1,6 +1,7 @@
 package tests;
 
 import helpers.CustomExpectedConditions;
+import helpers.Randoms;
 import helpers.Waiter;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
@@ -58,11 +59,11 @@ public class SignupTest {
         Thread.sleep(2000);
         loginModal.signUpTab().click();
         Thread.sleep(2000);
-        loginModal.emailInput().sendKeys("thechivetest+" + helpers.Randoms.getRandomString(10) + "@gmail.com");
+        loginModal.emailInput().sendKeys("REDACTED" + Randoms.getRandomString(10) + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12121990");
-        loginModal.passwordInput().sendKeys("Chive1234");
-        loginModal.passwordConfirmInput().sendKeys("Chive1234");
+        loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
+        loginModal.passwordConfirmInput().sendKeys(System.getenv("TEST_PWD"));
         loginModal.termsCheckbox().click();
         Thread.sleep(2000);
         for (String word : wordList) {
@@ -123,7 +124,7 @@ public class SignupTest {
         header.loginBtn().click();
         loginModal.signUpTab().click();
         loginModal.userName().sendKeys(USER_NAME);
-        loginModal.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
+        loginModal.emailInput().sendKeys("REDACTED+" + USER_NAME + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12121990");
         loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
@@ -138,7 +139,7 @@ public class SignupTest {
         header.loginBtn().click();
         loginModal.signUpTab().click();
         loginModal.userName().sendKeys(USER_NAME);
-        loginModal.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
+        loginModal.emailInput().sendKeys("REDACTED+" + USER_NAME + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12121990");
         loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
@@ -165,7 +166,7 @@ public class SignupTest {
         header.loginBtn().click();
         loginModal.signUpTab().click();
         loginModal.userName().sendKeys(USER_NAME);
-        loginModal.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
+        loginModal.emailInput().sendKeys("REDACTED+" + USER_NAME + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12122020");
         loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));
@@ -189,8 +190,8 @@ public class SignupTest {
     public void UserNameTaken() {
         header.loginBtn().click();
         loginModal.signUpTab().click();
-        loginModal.userName().sendKeys("TheChiveTest");
-        loginModal.emailInput().sendKeys("thechivetest+" + USER_NAME + "@gmail.com");
+        loginModal.userName().sendKeys("REDACTED");
+        loginModal.emailInput().sendKeys("REDACTED+" + USER_NAME + "@gmail.com");
         loginModal.birthdayInput().click();
         loginModal.birthdayInput().sendKeys("12121990");
         loginModal.passwordInput().sendKeys(System.getenv("TEST_PWD"));

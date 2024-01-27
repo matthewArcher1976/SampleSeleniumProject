@@ -167,7 +167,7 @@ public class PageHeaderTest {
     @Test
     public void DropDownMenuItems() {
         header.dropDown().click();
-        Assert.assertTrue(helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.dropDownChivery())).isDisplayed()
+        Assert.assertTrue(Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.dropDownChivery())).isDisplayed()
                 && header.dropDownCharities().isDisplayed()
                 && header.dropDownChive().isDisplayed()
                 && header.dropDownChiveTV().isDisplayed(), "Missing links in the dropdown menu");
@@ -178,7 +178,7 @@ public class PageHeaderTest {
         Assert.assertEquals(header.menuFeatured().getCssValue("borderBottomColor"), "rgba(0, 0, 0, 0)", "Underline might be showing when you're not hovered over Latest");
         action.moveToElement(header.menuFeatured()).perform();
         Thread.sleep(1000);
-        Assert.assertEquals(helpers.Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.menuFeatured())).getCssValue("borderBottomColor"), "rgba(0, 195, 0, 1)", "Underline might not be showing when you're hovered over Featured");
+        Assert.assertEquals(Waiter.quickWait(driver).until(ExpectedConditions.visibilityOf(header.menuFeatured())).getCssValue("borderBottomColor"), "rgba(0, 195, 0, 1)", "Underline might not be showing when you're hovered over Featured");
     }
 
     @Test()
@@ -268,7 +268,7 @@ public class PageHeaderTest {
         Assert.assertTrue(Waiter.quickWait(driver).until(ExpectedConditions.urlContains("thechive"))
                 && driver.getCurrentUrl().contains("utm_source"), "LinksChive - Link is broken");
         driver.close();
-        helpers.WindowUtil.switchToWindow(driver, 0);
+        WindowUtil.switchToWindow(driver, 0);
     }
 
 

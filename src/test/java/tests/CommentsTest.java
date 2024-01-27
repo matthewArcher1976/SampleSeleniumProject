@@ -1,12 +1,8 @@
 package tests;
-
-import resources.Config;
 import helpers.Logins;
-import helpers.PageActions;
+import resources.Config;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.CommentsPage;
@@ -14,6 +10,7 @@ import pages.SubmissionCardsPage;
 import pages.SubmissionModalPage;
 import resources.RetryAnalyzer;
 import resources.TestConfig;
+import helpers.PageActions;
 
 import static resources.getDriverType.getDriver;
 
@@ -22,7 +19,7 @@ public class CommentsTest {
     WebDriver driver;
     Actions action;
     CommentsPage comments;
-    Logins login;
+    Logins logins;
     SubmissionModalPage modal;
     SubmissionCardsPage card;
     private static TestConfig config;
@@ -38,14 +35,14 @@ public class CommentsTest {
 
         card = new SubmissionCardsPage(driver);
         comments = new CommentsPage(driver);
-        login = new Logins(driver);
+        logins = new Logins(driver);
         modal = new SubmissionModalPage(driver);
     }
 
     @BeforeTest
     public void login() throws InterruptedException {
         driver.get(config.url);
-        login.unpaidLogin(config.unpaidEmail, System.getenv("TEST_PWD"));
+        logins.unpaidLogin(config.unpaidEmail, System.getenv("TEST_PWD"));
         Thread.sleep(1000);
     }
 
@@ -84,26 +81,6 @@ public class CommentsTest {
         Assert.assertTrue(comments.enterPasswordLabel().isDisplayed(), "Did not find the Please enter your password label");
     }
 
-    @Test(retryAnalyzer = RetryAnalyzer.class)//TODO - scrap this? Testing a 3rd parts plugin here
-    public void LeaveGuestComment() throws InterruptedException {
-        card.firstCard().click();
-        PageActions.findElementWithScrollingElement(driver, modal.commentButton()).click();
-        comments.switchToDisqusFrame();
-        comments.commentTextInput().sendKeys(helpers.Randoms.getRandomString(20));
-        comments.submitCommentBtn().click();
-        comments.submitCommentBtn().click();
-        comments.submitCommentBtn().click();
-        WebElement label = comments.enterNameLabel();
-        comments.guestCheckbox().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(label)), "Labels should close on clicking guest checkbox");
-        Thread.sleep(1000);
-        comments.nameInput().sendKeys("Tester");
-        Thread.sleep(1000);
-        comments.emailInput().sendKeys("thechivetest+" + helpers.Randoms.getRandomString(10) + "@gmail.com");
-        comments.switchToCaptchaFrame();
-        comments.captchaCheck().click();
-        //Not submitting it because spam
-    }
 
     //************************* Teardown ***************************
 

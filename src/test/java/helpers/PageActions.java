@@ -1,7 +1,6 @@
 package helpers;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Interactive;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
@@ -9,13 +8,7 @@ import org.openqa.selenium.interactions.Sequence;
 import java.time.Duration;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class PageActions {
-	
-	public static void hitEscape(WebDriver driver) {
-		Actions action = new Actions(driver);
-		action.sendKeys(Keys.ESCAPE).build().perform();
-	}//for in pages classes, may be a better way
 
 	public static WebElement findElementWithScrolling(WebDriver driver, By by) throws InterruptedException {
 	    boolean isElementFound = false;
@@ -65,38 +58,10 @@ public class PageActions {
 	        }
 	    }
 	}
-	public static void scrollRight(WebDriver driver, int times) {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		for (int i = 0; i < times; i++) {
-			js.executeScript("window.scrollBy(200, 0)"); // Adjust the value 200 as needed
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public static void scrollToTop(WebDriver driver) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollTo(0, 0)");
-	}
-
-	public static void swipeDown(WebDriver driver, int times) {
-		Dimension d = driver.manage().window().getSize();
-		int x = d.getWidth() / 2;
-		int startY = (int)(d.getHeight() * .20);
-		int endY = (int)(d.getHeight() * 0.8);
-
-		PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-		for (int i = 0; i < times; i++) {
-			Sequence scrollDown = new Sequence(finger, 1);
-			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(0), PointerInput.Origin.viewport(), x, startY));
-			scrollDown.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
-			scrollDown.addAction(finger.createPointerMove(Duration.ofMillis(1000), PointerInput.Origin.viewport(), x, endY));
-			scrollDown.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-			((Interactive) driver).perform(List.of(scrollDown));
-		}
 	}
 
 	public static void swipeUp(WebDriver driver, int times) {
@@ -114,6 +79,7 @@ public class PageActions {
 			((Interactive) driver).perform(List.of(scrollDown));
 		}
 	}
+	//Attempt at replacing the deprecated TouchActions
 	public static void swipeLeft(WebDriver driver, int times) {
 		Dimension d = driver.manage().window().getSize();
 		int y = d.getHeight()/2;

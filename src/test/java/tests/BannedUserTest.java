@@ -1,8 +1,8 @@
 package tests;
 
+import helpers.Logins;
 import helpers.Waiter;
 import resources.Config;
-import helpers.Logins;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
@@ -54,7 +54,7 @@ public class BannedUserTest {
     @Test(enabled = false)//we removed the contact
     public void BanedUserLinkTest() {
         banned.contactLink().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("contact"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("contact"));
         Assert.assertTrue(driver.getCurrentUrl().contains("contact"), "Contact page did not load");
         driver.navigate().back();
 
@@ -64,7 +64,7 @@ public class BannedUserTest {
     public void FeaturedBannedTest() {
         driver.get(config.url);
         header.menuFeatured().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Downvote button did not bring up banned screen");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Downvote button did not bring up banned screen");
         driver.navigate().back();
     }
 
@@ -72,8 +72,8 @@ public class BannedUserTest {
     public void FollowingBannedTest() {
         driver.get(config.url);
         header.menuFollowing().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Favorite button did not bring up banned screen");
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Favorite button did not bring up banned screen");
         driver.navigate().back();
     }
 
@@ -81,7 +81,7 @@ public class BannedUserTest {
     public void LatestBannedTest() {
         driver.get(config.url);
         header.menuLatest().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Comment button did not bring up banned screen");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Comment button did not bring up banned screen");
     }
 
     @Test
@@ -89,15 +89,15 @@ public class BannedUserTest {
         driver.get(config.url);
         header.userMenu().click();
         header.settingsBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
     }
 
     @Test
     public void SubmitButtonBannedTest() {
         driver.get(config.url);
         card.createBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
         Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
     }
 
@@ -105,8 +105,8 @@ public class BannedUserTest {
     public void TopChiversannedTest() {
         driver.get(config.url);
         header.menuTopChivers().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Favorite button did not bring up banned screen");
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Favorite button did not bring up banned screen");
     }
 
     @Test
@@ -114,8 +114,8 @@ public class BannedUserTest {
         driver.get(config.url);
         header.userMenu().click();
         header.yourProfileBtn().click();
-        helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
+        Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned"));
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("user-banned")), "Create button did not bring up banned screen");
     }
 
     //************************ Teardown ****************************

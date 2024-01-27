@@ -11,15 +11,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.v119.network.Network;
-import org.openqa.selenium.firefox.FirefoxDriver;
+
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.safari.SafariDriver;
 
-@SuppressWarnings({"unused", "MissingSerialAnnotation"})
 public class Drivers {
 
 
+	//
 	public static WebDriver ChromeDriver() {
 		ChromeOptions co = new ChromeOptions();
 		co.addArguments("--remote-allow-origins=*");//workaround a showstopping bug in ChromeDriver 112 
@@ -54,10 +53,11 @@ public class Drivers {
 		browserOptions.setPlatformName("Windows 11");
 	    browserOptions.setBrowserVersion("latest");
 	    Map<String, Object> sauceOptions = new HashMap<>();
-	    sauceOptions.put("username", "oauth-matt.archer-ff614");
-	    sauceOptions.put("accessKey", "48c2e9ca-6c85-470e-a332-588e7e6fde98");
+	    sauceOptions.put(System.getenv("SAUCE_USERNAME"), System.getenv("SAUCE_PASSWORD"));
+
+	    sauceOptions.put("accessKey", System.getenv("SAUCE_ACCESSKEY"));
 	    sauceOptions.put("build", "selenium-build-373YO");
-	    sauceOptions.put("name", "ugh");
+	    sauceOptions.put("name", "myCHIVE");
 		sauceOptions.put("screenResolution", "2560x1600");
 	    browserOptions.setCapability("sauce:options", sauceOptions);
 	    browserOptions.addArguments("--disable-blink-features=AutomationControlled");
@@ -91,12 +91,5 @@ public class Drivers {
         driver.manage().window().setSize(new Dimension(390, 844));
 		return driver;
     }
-	public static WebDriver FirefoxDriver(){
-		return new FirefoxDriver();
-	}
-	public static WebDriver SafariDriver() {
-		WebDriver driver = new SafariDriver();
-		driver.manage().window().setSize(new Dimension(1200, 1200));
-		return driver;
-	}
+
 }

@@ -24,7 +24,7 @@ public class ProfilePointsTest {
     PageHeaderPage header;
     Shadow shadow;
 
-    //************************************* Setup *********************************************
+    //**************************************** Setup ***********************************************
 
     @BeforeTest
     public void configs() throws Exception {

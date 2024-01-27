@@ -18,11 +18,12 @@ public class SubmissionCardsPage {
 
     WebDriver driver;
 
-
     public SubmissionCardsPage(WebDriver driver) {
         this.driver = driver;
     }
 
+    Actions actions;
+    
     //*********************** WebElements *******************************
 
     public List<WebElement> allCards() {
@@ -70,6 +71,11 @@ public class SubmissionCardsPage {
     public WebElement blurredImage(){
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("blur-md")));
     }
+
+    public WebElement tryIt(){
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("blur-md")));
+    }
+
     public By blurredImageBy(){
         return By.className("blur-md");
     }
@@ -206,10 +212,11 @@ public class SubmissionCardsPage {
             try {
                 driver.findElement(By.className("badge-outline"));
                 firstCardWithTag = cardAfterClick;
-                PageActions.hitEscape(driver);
+                actions.sendKeys(Keys.ESCAPE);
+               
                 break;
             } catch (NoSuchElementException e) {
-                PageActions.hitEscape(driver);
+                actions.sendKeys(Keys.ESCAPE);
             }
         }
         return firstCardWithTag;
@@ -231,13 +238,13 @@ public class SubmissionCardsPage {
                 tags = driver.findElements(By.cssSelector("div[id^='tag-']"));
                 if (tags.size() > 1 && !card.findElement(By.cssSelector("div")).getAttribute("class").contains("overflow-hidden")) {
                     cardWithMultipleTags = cardAfterClick;
-                    PageActions.hitEscape(driver);
+                    actions.sendKeys(Keys.ESCAPE);
                     break;
                 } else {
-                    helpers.PageActions.hitEscape(driver);
+                    actions.sendKeys(Keys.ESCAPE);
                 }
             } catch (NoSuchElementException e) {
-                helpers.PageActions.hitEscape(driver);
+                actions.sendKeys(Keys.ESCAPE);
             }
         }
         return cardWithMultipleTags;

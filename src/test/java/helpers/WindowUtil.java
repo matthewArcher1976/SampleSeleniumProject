@@ -11,5 +11,4 @@ import org.openqa.selenium.WebDriver;
         String[] array = handles.toArray(new String[0]);
         driver.switchTo().window(array[index]);
 		}
-		
 }

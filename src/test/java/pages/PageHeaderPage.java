@@ -1,5 +1,6 @@
 package pages;
 
+
 import helpers.Waiter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -35,16 +36,16 @@ public class PageHeaderPage {
     }
 
     public WebElement dopamineDumpCounter() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("countdown")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("countdown")));
     }
 
     public WebElement dopamineDump() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("dopamine-dump-counter")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("dopamine-dump-counter")));
     }
 
     public String dopamineDumpHour() {
         // Find the countdown element
-        WebElement countdownElement = helpers.Waiter.wait(driver)
+        WebElement countdownElement = Waiter.wait(driver)
                 .until(ExpectedConditions.presenceOfElementLocated(By.className("countdown")));
         List<WebElement> timeElements = countdownElement.findElements(By.tagName("span"));
         return timeElements.get(0).getAttribute("style").replaceAll("\\D", "");
@@ -52,7 +53,7 @@ public class PageHeaderPage {
 
     public String dopamineDumpMinute() {
         // Find the countdown element
-        WebElement countdownElement = helpers.Waiter.wait(driver)
+        WebElement countdownElement = Waiter.wait(driver)
                 .until(ExpectedConditions.presenceOfElementLocated(By.className("countdown")));
         List<WebElement> timeElements = countdownElement.findElements(By.tagName("span"));
         return timeElements.get(1).getAttribute("style").replaceAll("\\D", "");
@@ -60,7 +61,7 @@ public class PageHeaderPage {
 
     public String dopamineDumpSecond() {
         // Find the countdown element
-        WebElement countdownElement = helpers.Waiter.wait(driver)
+        WebElement countdownElement = Waiter.wait(driver)
                 .until(ExpectedConditions.presenceOfElementLocated(By.className("countdown")));
         List<WebElement> timeElements = countdownElement.findElements(By.tagName("span"));
         return timeElements.get(2).getAttribute("style").replaceAll("\\D", "");
@@ -135,25 +136,25 @@ public class PageHeaderPage {
     }
 
     public WebElement menuChivettes() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Verified-Chivettes")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Verified-Chivettes")));
     }
 
     public WebElement menuFeatured() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Featured")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Featured")));
     }
 
     public WebElement menuFollowing() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Following")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Following")));
     }
 
     public WebElement menuLatest() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Latest")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Latest")));
     }
     public String menuLatestId() {
         return "menu-Latest";
     }
     public WebElement menuTopChivers() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Top-Chivettes")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Top-Chivettes")));
     }
     public WebElement notificationIcon(){
         return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-bell")));
@@ -162,31 +163,31 @@ public class PageHeaderPage {
         return "fa-bell";
     }
     public WebElement privateUserIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-user-secret")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-user-secret")));
     }
 
     public WebElement privateUserText() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("p[class='m']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("p[class='m']")));
     }
 
     public WebElement searchButton() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("search-form-button")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("search-form-button")));
     }
 
     public WebElement settingsBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.partialLinkText("Settings")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.partialLinkText("Settings")));
     }
 
     public WebElement signoutBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), 'Sign out')]")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(), 'Sign out')]")));
     }
 
     public WebElement submitBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-create")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("submission-create")));
     }
 
     public WebElement trophyIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-trophy")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-trophy")));
     }
 
     public WebElement userMenu() {
@@ -198,15 +199,15 @@ public class PageHeaderPage {
     }
 
     public WebElement verifyEmailHeader() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//strong[contains(text(), 'Verify your email')]")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//strong[contains(text(), 'Verify your email')]")));
     }
 
     public WebElement yourProfileBtn() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.partialLinkText("Profile")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.partialLinkText("Profile")));
     }
 
     public List<WebElement> yourProfileByPosition() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("li.flex.items-center.hover\\:bg-primary.text-white.px-4.py-2.text-sm")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("li.flex.items-center.hover\\:bg-primary.text-white.px-4.py-2.text-sm")));
     }
 
 

@@ -5,9 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import java.util.List;
-
 
 @SuppressWarnings("unused")
 public class TopChiversPage {
@@ -47,7 +45,7 @@ public class TopChiversPage {
     }
 
     public WebElement topChiversHeader() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-award")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-award")));
     }
 
     public WebElement followCheck() {
@@ -80,19 +78,19 @@ public class TopChiversPage {
     }
 
     public WebElement shareIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("svg[data-icon='share']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("svg[data-icon='share']")));
     }
 
     public WebElement socialFacebookLink() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-facebook-f")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-facebook-f")));
     }
 
     public WebElement socialInstagramLink() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-instagram")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-instagram")));
     }
 
     public WebElement socialTwitterLink() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-twitter")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-twitter")));
     }
 
     public WebElement starIcon() {
@@ -116,23 +114,23 @@ public class TopChiversPage {
     }
 
     public WebElement topChiversPosition() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-position-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-position-']")));
     }
 
     public WebElement topChiversProfilePic() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-']"))).findElement(By.className("inline-block"));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-']"))).findElement(By.className("inline-block"));
     }
 
     public WebElement topChiversRow() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[id^='leaderboard-row-']")));
     }
 
     public WebElement topChiversTab() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Top-Chivers")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.id("menu-Top-Chivers")));
     }
 
     public WebElement UserName() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='leaderboard-row-username-']")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[id^='leaderboard-row-username-']")));
     }
 
     public String UserNameSelector() {
@@ -140,10 +138,10 @@ public class TopChiversPage {
     }
 
     public WebElement trendArrowIcon() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-arrow-trend-up")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.className("fa-arrow-trend-up")));
     }
 
     public WebElement trendingText() {
-        return helpers.Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'Top Chivers')]")));
+        return Waiter.wait(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'Top Chivers')]")));
     }
 }

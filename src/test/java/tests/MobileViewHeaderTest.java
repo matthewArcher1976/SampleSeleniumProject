@@ -89,22 +89,24 @@ public class MobileViewHeaderTest {
                 && top.isDisplayed(), "Menu Items did not display after clicking the menu");
 
         mobile.hamburgerMenu().click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(latest))
-                && helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(featured))
-                && helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(following))
-                && helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(top)), "Menu Items should not display after closing the menu");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.stalenessOf(latest))
+                && Waiter.wait(driver).until(ExpectedConditions.stalenessOf(featured))
+                && Waiter.wait(driver).until(ExpectedConditions.stalenessOf(following))
+                && Waiter.wait(driver).until(ExpectedConditions.stalenessOf(top)), "Menu Items should not display after closing the menu");
     }
 
     @Test
-    public void HomeButton(){
+    public void HomeButton() {
         String homeURL = driver.getCurrentUrl();
-        Assert.assertEquals(homeURL, header.homeButton().getAttribute("href"), "Clicking the myChive logo should return you home" );
+        Assert.assertEquals(homeURL, header.homeButton().getAttribute("href"), "Clicking the myChive logo should return you home");
     }
+
     @Test
     public void LinksChiveCharities() {
         header.linkMenu().click();
         Assert.assertEquals(shadow.getParentElement(header.dropDownChiveTV()).getAttribute("target"), "_blank", "Missing link to Chive TV");
     }
+
     @Test
     public void LinksChiveTV() {
         header.linkMenu().click();
@@ -128,8 +130,8 @@ public class MobileViewHeaderTest {
         mobile.hamburgerMenu().click();
         WebElement featured = mobile.mobileFeatured();
         featured.click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"))
-                && helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(featured)), "Menu should close and DD page should load");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("dopamine-dump"))
+                && Waiter.wait(driver).until(ExpectedConditions.stalenessOf(featured)), "Menu should close and DD page should load");
         mobile.hamburgerMenu().click();
         Thread.sleep(2000);//debug
         Assert.assertTrue(mobile.mobileLatest().getCssValue("borderBottomColor").equals("rgba(0, 195, 0, 0.1)")
@@ -143,8 +145,8 @@ public class MobileViewHeaderTest {
         mobile.hamburgerMenu().click();
         WebElement following = mobile.mobileFollowing();
         following.click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("following"))
-                && helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(following)), "Menu should close and Following page should load");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("following"))
+                && Waiter.wait(driver).until(ExpectedConditions.stalenessOf(following)), "Menu should close and Following page should load");
         mobile.hamburgerMenu().click();
         Thread.sleep(2000);
         Assert.assertTrue(mobile.mobileLatest().getCssValue("borderBottomColor").equals("rgba(0, 195, 0, 0.1)")
@@ -168,8 +170,8 @@ public class MobileViewHeaderTest {
         mobile.hamburgerMenu().click();
         WebElement top = mobile.mobileTop();
         top.click();
-        Assert.assertTrue(helpers.Waiter.wait(driver).until(ExpectedConditions.urlContains("leaderboard"))
-                && helpers.Waiter.wait(driver).until(ExpectedConditions.stalenessOf(top)), "Menu should close and Top Chivers page should load");
+        Assert.assertTrue(Waiter.wait(driver).until(ExpectedConditions.urlContains("leaderboard"))
+                && Waiter.wait(driver).until(ExpectedConditions.stalenessOf(top)), "Menu should close and Top Chivers page should load");
         mobile.hamburgerMenu().click();
         Thread.sleep(2000);//debug
         Assert.assertTrue(mobile.mobileLatest().getCssValue("borderBottomColor").equals("rgba(0, 195, 0, 0.1)")
@@ -191,7 +193,7 @@ public class MobileViewHeaderTest {
         try {//Did it this way to avoid using Thread.sleep
             Waiter.wait(driver).until(ExpectedConditions.urlContains("chivettes"));
             Assert.assertTrue(true);
-        }catch (TimeoutException e){
+        } catch (TimeoutException e) {
             Assert.fail("Chivette tab didn't load");
         }
     }

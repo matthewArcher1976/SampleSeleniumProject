@@ -12,7 +12,7 @@ public class AdsPage {
         this.driver = driver;
     }
 
-    //****************************** Elements **********************************
+    //****************************** WebElements **********************************
 
     public By adFrame() {
         return By.cssSelector("iframe[id*=google_ads_iframe]");
